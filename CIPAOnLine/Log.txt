@@ -1,0 +1,9 @@
+﻿- Criação da entidade Sindicato
+- Associação de Eleição com Sindicato
+- Alteração de EleicaoDTO para conter os atributos de Sindicato
+- Ajuste dos atrbitutos de Unidade
+- Ajuste de UnidadeDTO
+- Adição do Atributo Gestão em Eleicao
+- Criação da Entidade Etapa
+- Criação da Entidade PrazoEtapa
+- Associação de PrazoEtapa com Eleicao

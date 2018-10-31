@@ -1,0 +1,142 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Votação Online</title>
+
+    <link href="Assets/js/plugins/bootstrap-tagsinput-latest/src/bootstrap-tagsinput.css" rel="stylesheet">
+    <link href="Assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="Assets/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="Assets/css/animate.css" rel="stylesheet">
+    <link href="Assets/css/style.css" rel="stylesheet">
+    <link href="Assets/css/customs.css" rel="stylesheet">
+    <link href="Assets/css/fotos.css" rel="stylesheet">
+    <!-- <link href="Assets/js/plugins/datapicker/datepicker3.css" rel="stylesheet"> -->
+    <!-- Loader.css -->
+    <link href="Assets/js/plugins/loader.css/loaders.css" rel="stylesheet">
+
+    <link href="Assets/css/plugins/summernote/summernote.css" rel="stylesheet">
+    <link href="Assets/css/plugins/summernote/summernote-bs3.css" rel="stylesheet">
+
+</head>
+
+<body ng-app="cipaApp" ng-controller="globalCtrl as ctGlobal" ng-class="{'gray-bg': ctGlobal.currentState.current.name == 'login' || ctGlobal.currentState.current.name == 'cadastro' || ctGlobal.currentState.current.name == 'loginAdmin' || ctGlobal.currentState.current.name == 'recuperarSenha'}">
+
+    <div id="wrapper">
+
+        <div ui-view></div>
+
+
+    </div>
+
+    <!-- Mainly scripts -->
+    <script src="Assets/js/jquery-3.1.1.min.js"></script>
+    <script src="Assets/js/bootstrap.min.js"></script>
+    <script src="Assets/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="Assets/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+    <!-- Angular -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular.min.js"></script> -->
+    <script src="Assets/js/plugins/angular/angular.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.3/angular-ui-router.min.js"></script> -->
+    <script src="Assets/js/plugins/angular/angular-ui-router.min.js"></script>
+
+    <!-- ui.cpf -->
+    <script src="Assets/js/directives/uiCpfDirective.js"></script>
+
+    <!-- App -->
+    <script src="Assets/js/app.js"></script>
+
+    <!-- Routes -->
+    <script src="Assets/js/config/routeConfig.js"></script>
+
+    <script src="Assets/js/plugins/bootstrap-tagsinput-latest/src/bootstrap-tagsinput.js"></script>
+
+    <!-- APIs -->
+    <script src="Assets/js/APIs/emailsAPI.js"></script>
+    <script src="Assets/js/APIs/votosBrancosAPI.js"></script>
+    <script src="Assets/js/APIs/templatesEmailsAPI.js"></script>
+    <script src="Assets/js/APIs/autenticacaoAPI.js"></script>
+    <script src="Assets/js/APIs/eleicoesAPI.js"></script>
+    <script src="Assets/js/APIs/funcionariosAPI.js"></script>
+    <script src="Assets/js/APIs/usuariosAPI.js"></script>
+    <script src="Assets/js/APIs/candidatosAPI.js"></script>
+    <script src="Assets/js/APIs/votosAPI.js"></script>
+    <script src="Assets/js/APIs/unidadesAPI.js"></script>
+    <script src="Assets/js/APIs/etapasAPI.js"></script>
+    <script src="Assets/js/APIs/sindicatosAPI.js"></script>
+    <script src="Assets/js/APIs/gruposAPI.js"></script>
+    <script src="Assets/js/APIs/gestoresAPI.js"></script>
+
+    <!-- Directives -->
+    <script src="Assets/js/directives/uiDivEditable.js"></script>
+
+    <!-- Controllers -->
+    <!-- <script src="components/autenticacao/autenticacaoCtrl.js"></script> -->
+    <script src="Assets/components/globalCtrl.js"></script>
+    <script src="Assets/components/navContainer/navContainerCtrl.js"></script>
+    <script src="Assets/components/autenticacao/autenticacaoCtrl.js"></script>
+    <script src="Assets/components/email/emailCtrl.js"></script>
+    <script src="Assets/components/home/homeCtrl.js"></script>
+    <script src="Assets/components/dashboard/dashboardCtrl.js"></script>
+    <script src="Assets/components/eleicoes/eleicoesCtrl.js"></script>
+    <script src="Assets/components/cadastroFuncionarios/cadastroFuncionariosCtrl.js"></script>
+    <!-- <script src="Assets/components/validacaoCandidaturas/validacaoCandidaturasCtrl.js"></script> -->
+    <script src="Assets/components/validacaoCandidaturas/validacaoAprovadosCtrl.js"></script>
+    <script src="Assets/components/validacaoCandidaturas/validacaoReprovadosCtrl.js"></script>
+    <script src="Assets/components/validacaoCandidaturas/validacaoPendentesCtrl.js"></script>
+    <script src="Assets/components/votacao/votacaoCtrl.js"></script>
+    <script src="Assets/components/candidatura/candidaturaCtrl.js"></script>
+    <script src="Assets/components/usuarios/administradoresCtrl.js"></script>
+    <script src="Assets/components/baseGeral/baseGeralCtrl.js"></script>
+
+    <!-- Interceptors -->
+    <script src="Assets/js/config/interceptorsConfig.js"></script>
+    <script src="Assets/js/interceptors/errorInterceptor.js"></script>
+    <script src="Assets/js/interceptors/anexaTokenInterceptor.js"></script>
+
+    <!-- Filters -->
+    <script src="Assets/js/filters/capitalizeFilter.js"></script>
+    <script src="Assets/js/filters/ellipsisFilter.js"></script>
+
+    <!-- Values -->
+    <script src="Assets/js/values/configValue.js"></script>
+    <script src="Assets/js/values/stateValue.js"></script>
+    <script src="Assets/js/values/etapasValue.js"></script>
+
+    <!-- Service -->
+    <script src="Assets/js/services/sessionStorageService.js"></script>
+    <script src="Assets/js/services/sharedDataService.js"></script>
+    <script src="Assets/js/services/messagesService.js"></script>
+    <script src="Assets/js/services/uploadFileService.js"></script>
+
+    <!-- Loader.css -->
+    <script src="Assets/js/plugins/loader.css/loaders.css.js"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script src="Assets/js/inspinia.js"></script>
+    <script src="Assets/js/plugins/pace/pace.min.js"></script>
+
+    <!-- Data picker -->
+    <!-- <script src="Assets/js/plugins/datapicker/bootstrap-datepicker.js"></script> -->
+    <!-- Alert -->
+    <!-- <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> -->
+    <script src="Assets/js/plugins/sweet-alert/sweetalert.min.js"></script>
+
+    <!-- HighCharts -->
+    <script src="Assets/js/plugins/Highcharts5.0.1.4/code/highcharts.js"></script>
+    <script src="Assets/js/plugins/Highcharts5.0.1.4/code/modules/exporting.js"></script>
+
+    <!-- Peity -->
+    <script src="Assets/js/plugins/peity/jquery.peity.min.js"></script>
+
+    <!-- SUMMERNOTE -->
+    <script src="Assets/js/plugins/summernote/summernote.min.js"></script>
+
+
+
+</body>
+
+</html>

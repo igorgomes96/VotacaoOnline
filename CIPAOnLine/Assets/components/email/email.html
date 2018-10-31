@@ -1,0 +1,205 @@
+<!-- Fixo -->
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>Comunicados</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a ui-sref="navContainer.home">Home</a>
+            </li>
+            <li ng-class="{'active': !ct.codEleicao}">
+                <strong ng-hide="ct.codEleicao">Comunicados</strong>
+                <a ng-show="ct.codEleicao" ui-sref="navContainer.eleicoes">Comunicados</a>
+            </li>
+            <li class="active" ng-show="ct.codEleicao">
+                <strong>{{ct.codEleicao}}</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2">
+
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <!-- /Fixo -->
+
+    <!-- Filtro -->
+    <div class="row">
+
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label class="control-label" for="inputFiltroStatus">Status</label>
+                <select ng-model="ct.statusSelecionado" class="form-control" name="inputFiltroStatus" id="inputFiltroStatus" ng-options="s.Label for s in ct.eleicoesFiltro"></select>
+            </div>
+        </div>
+
+        <div class="col-sm-5">
+            <div class="form-group">
+                <label class="control-label" for="inputFiltroUnidade">Unidade</label>
+                <select ng-model="ct.unidadeSelecionada" name="inputFiltroUnidade" class="form-control" id="inputFiltroUnidade" ng-options="('#' + u.Unidade.Codigo + ' - ' + u.Unidade.RazaoSocial + ' (' + u.Unidade.Estabelecimento + ')') for u in ct.statusSelecionado.Unidades"></select>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label class="control-label" for="inputFiltroGestao">Gestão</label>
+                <select ng-options="('#' + g.Codigo + ' - ' + g.Gestao) for g in ct.unidadeSelecionada.Eleicoes" ng-model="ct.gestaoSelecionada" class="form-control" ng-change="ct.alteraGestao()" name="inputFiltroGestao" id="inputFiltroGestao"></select>
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="row" ng-show="ct.error">
+        <div class="col-md-12">
+            <div class="alert alert-danger">
+                <p class="alert-link" style="display: inline;">Erro!</p> {{ct.error}}
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="row" ng-show="!ct.error && ct.gestaoSelecionada">
+        <div class="col-lg-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content mailbox-content" ng-class="{'sk-loading': ct.loading}">
+                    <div class="sk-spinner sk-spinner-wave">
+                        <div class="sk-rect1"></div>
+                        <div class="sk-rect2"></div>
+                        <div class="sk-rect3"></div>
+                        <div class="sk-rect4"></div>
+                        <div class="sk-rect5"></div>
+                    </div>
+
+                    <div class="file-manager">
+                        <!-- <a class="btn btn-block btn-primary compose-mail" href="mail_compose.html">Compose Mail</a> -->
+                        <div class="space-25"></div>
+                        <h5>Templates</h5>
+                        <ul class="folder-list m-b-md" style="padding: 0 15px">
+                            <li ng-repeat="t in ct.templates" class="row">
+                                <a href style="display: inline;text-overflow: ellipsis;overflow: hidden;white-space: nowrap;" ng-click="ct.templateClick(t)" class="col-xs-11"> <strong><i class="fa fa-tag"></i></strong> {{t.Nome}}</a>
+                                <a class="col-xs-1" ng-click="ct.deleteTemplate(t.Id)"><i class="fa fa-trash" style="color: #ed5565"></i></a>
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-9 animated fadeInRight">
+            <div class="mail-box-header">
+                <h2>
+                    Enviar Email
+                </h2>
+            </div>
+            <div class="mail-box ibox-content" ng-class="{'sk-loading': ct.loading}">
+                <div class="sk-spinner sk-spinner-wave">
+                        <div class="sk-rect1"></div>
+                        <div class="sk-rect2"></div>
+                        <div class="sk-rect3"></div>
+                        <div class="sk-rect4"></div>
+                        <div class="sk-rect5"></div>
+                    </div>
+
+
+                <div class="mail-body">
+
+                    <form class="form-horizontal" name="formEmail">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Para:</label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-btn">
+                                        <button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button"><i class="fa fa-cog"></i> <span class="caret"></span></button>
+                                        <ul class="dropdown-menu">
+                                            <li><a href ng-click="ct.getAllAddresses('to')">Inserir Todos</a></li>
+                                            <li><a href ng-click="ct.getCandidatosAddresses('to')">Inserir Candidatos</a></li>
+                                            <li><a href ng-click="ct.getSindicatoAddress('to')">Inserir Sindicato</a></li>
+                                            <li class="divider"></li>
+                                            <li><a href ng-click="ct.removerTodos('to')">Remover todos</a></li>
+                                        </ul>
+                                    </div>
+                                    <input type="text" class="form-control" style="z-index: 0" ng-model="ct.email.To" id="to" name="to" required>
+                                </div>
+                            </div>
+                        </div>
+                       <div class="form-group">
+                            <label class="col-sm-2 control-label">Cópia:</label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-btn">
+                                        <button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button"><i class="fa fa-cog"></i> <span class="caret"></span></button>
+                                        <ul class="dropdown-menu">
+                                            <li><a href ng-click="ct.getAllAddresses('copy')">Inserir Todos</a></li>
+                                            <li><a href ng-click="ct.getCandidatosAddresses('copy')">Inserir Candidatos</a></li>
+                                            <li><a href ng-click="ct.getSindicatoAddress('copy')">Inserir Sindicato</a></li>
+                                            <li class="divider"></li>
+                                            <li><a href ng-click="ct.removerTodos('copy')">Remover todos</a></li>
+                                        </ul>
+                                    </div>
+                                    <input type="text" class="form-control" style="z-index: 0" ng-model="ct.email.Copy" id="copy" name="copy">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Cópia Oculta:</label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-btn">
+                                        <button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button"><i class="fa fa-cog"></i> <span class="caret"></span></button>
+                                        <ul class="dropdown-menu">
+                                            <li><a href ng-click="ct.getAllAddresses('cc')">Inserir Todos</a></li>
+                                            <li><a href ng-click="ct.getCandidatosAddresses('cc')">Inserir Candidatos</a></li>
+                                            <li><a href ng-click="ct.getSindicatoAddress('cc')">Inserir Sindicato</a></li>
+                                            <li class="divider"></li>
+                                            <li><a href ng-click="ct.removerTodos('cc')">Remover todos</a></li>
+                                        </ul>
+                                    </div>
+                                    <input type="text" class="form-control" style="z-index: 0" ng-model="ct.email.Bcc" id="bcc" name="bcc">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Assunto:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" ng-model="ct.email.Subject" id="subject" name="subject" required>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+
+                <div class="mail-text h-200">
+
+                    <div class="summernote">
+
+                    </div>
+
+                    <div class="clearfix"></div>
+                </div>
+                <div class="mail-body text-right tooltip-demo">
+                    <button class="btn btn-sm btn-primary" ng-click="ct.enviar(ct.email)" ng-disabled="formEmail.$invalid"><i class="fa fa-reply"></i> Enviar</button>
+                    <button class="btn btn-sm btn-success" ng-click="ct.salvarTemplate()" ng-disabled="formEmail.subject.$invalid"><i class="fa fa-floppy-o"></i> Salvar Template</button>
+                    <!--  <a href="mailbox.html" class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top" title="Discard email"><i class="fa fa-times"></i> Descartar</a> -->
+                </div>
+                <div class="clearfix"></div>
+
+
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- <div ng-include="'components/email/modalEmails.html'"></div> -->
+
+<script>
+    $(document).ready(function(){
+        $('.summernote').summernote({height: 300});
+        // $('input[data-role=tagsinput]').tagsinput();
+    });
+
+</script>

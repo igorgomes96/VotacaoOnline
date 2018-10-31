@@ -1,0 +1,39 @@
+<div class="middle-box text-center loginscreen animated fadeInDown">
+    <div>
+        <div>
+
+            <h1 class="logo-name">V.O.</h1>
+
+        </div>
+        <h3>Sistema de Votação Online</h3>
+        <p>
+            
+        </p>
+        <!-- <p>Informe seu CPF e sua matrícula e enviaremos sua senha para o e-mail cadastrado em nossa base de dados</p> -->
+        <p>Informe seu CPF e enviaremos sua senha para o e-mail cadastrado em nossa base de dados</p>
+
+        <form class="m-t" role="form" name="form">
+
+            <div class="form-group" ng-class="{'has-error': form.cpf.$invalid && form.cpf.$dirty}">
+                <input type="text" class="form-control" placeholder="CPF" name="cpf" id="cpf" autofocus ng-model="ct.recuperacao.CPF" ng-required="true" ui-cpf-mask>
+            </div>
+            <!-- <div class="form-group" ng-class="{'has-error': form.matricula.$invalid && form.matricula.$dirty}">
+                <input class="form-control" placeholder="Matrícula" name="matricula" id="matricula" autofocus ng-model="ct.recuperacao.MatriculaFuncionario" required>
+            </div> -->
+
+            <div class="alert alert-danger" ng-show="ct.erro">
+                <p class="alert-link" style="display: inline;">Erro!</p> {{ct.erro}}
+            </div>
+
+            <button type="submit" class="btn btn-primary block full-width m-b" ng-disabled="form.$invalid" ng-click="ct.recuperarSenha(ct.recuperacao)">Recuperar <span class="loader-spinner pull-right" ng-show="ct.mostraLoader"></span></button>
+
+            <a class="btn btn-sm btn-white btn-block" ui-sref="login">Voltar</a>
+            <!-- <hr> -->
+            <!-- <a ui-sref="loginAdmin">Logar como Admin</a> -->
+
+        </form>
+        <!-- <p class="m-t"> <small>Inspinia we app framework base on Bootstrap 3 &copy; 2014</small> </p> -->
+    </div>
+</div>
+
+

@@ -1,0 +1,90 @@
+<div class="modal fade" id="modalUnidade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" style="max-height: 550px;overflow-y: auto;">
+            <div class="modal-header">
+                <h4 class="modal-title">Nova Unidade</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+
+                    	<form role="form" novalidate name="formUnidade">
+
+                    		<div class="row">
+	                    		<div class="form-group col-md-6" ng-class="{'has-error': formUnidade.razaoSocialUnidade.$invalid}">
+								    <label class="control-label" for="razaoSocialUnidade">Razão Social</label>
+								    <input type="text" class="form-control" id="razaoSocialUnidade" name="razaoSocialUnidade" ng-model="ct.novaUnidade.RazaoSocial" required>
+								</div>
+
+								<div class="form-group col-md-6" ng-class="{'has-error': formUnidade.cidadeUnidade.$invalid}">
+								    <label class="control-label" for="cidadeUnidade">Cidade/Estado</label>
+								    <input type="text" class="form-control" id="cidadeUnidade" name="cidadeUnidade" ng-model="ct.novaUnidade.Cidade" required>
+								</div>
+
+							</div>
+
+							<div class="row">
+
+								<div class="form-group col-md-9" ng-class="{'has-error': formUnidade.estabelecimentoUnidade.$invalid}">
+								    <label class="control-label" for="estabelecimentoUnidade">Endereço</label>
+								    <input type="text" class="form-control" id="estabelecimentoUnidade" name="estabelecimentoUnidade" required ng-model="ct.novaUnidade.Estabelecimento">
+								</div>
+
+								<div class="form-group col-md-3" ng-class="{'has-error': formUnidade.codigoGrupo.$invalid}">
+								    <label class="control-label" for="codigoGrupo">Grupo</label>
+								    <select class="form-control" id="codigoGrupo" name="codigoGrupo" ng-model="ct.novaUnidade.CodigoGrupo" ng-options="g.Codigo as g.Codigo for g in ct.grupos" required></select>
+								</div>
+
+							</div>							
+
+							<button class="btn btn-success" ng-disabled="formUnidade.$invalid" ng-click="ct.salvarUnidade(ct.novaUnidade)">Salvar</button>
+							<button class="btn btn-default" ng-if="ct.editandoUnidade" ng-click="ct.novaUnidade = null;ct.editandoUnidade = false;">Cancelar</button>
+
+                    	</form>
+
+                    	<div ng-if="!ct.editandoUnidade">
+	                    	<hr>
+
+	                    	<div class="containerTableModal">
+		                    	<table class="table table-condensed table-hover" id="tableModalUnidades">
+		                    		<thead>
+		                    			<tr>
+		                    				<th width="10%">Código</th>
+			                    			<th width="23%">Razão Social</th>
+			                    			<th width="26%">Cidade/Estado</th>
+			                    			<th width="23%">Endereço</th>
+			                    			<th width="10%">Grupo</th>
+			                    			<th width="8%"></th>
+		                    			</tr>
+		                    		</thead>
+		                    		<tbody>
+		                    			<tr ng-repeat="u in ct.unidades track by u.Codigo" ng-click="ct.selecionarUnidadeTabela(u)" ng-class="{'active': u.Codigo == ct.unidadeSelecionada.Codigo}">
+		                    				<td>{{u.Codigo}}</td>
+		                    				<td>{{u.RazaoSocial}}</td>
+		                    				<td>{{u.Cidade}}</td>
+		                    				<td>{{u.Estabelecimento}}</td>
+		                    				<td>{{u.CodigoGrupo}}</td>
+		                    				<td>
+		                    					<button class="btn btn-xs btn-danger" ng-click="ct.deleteUnidade(u.Codigo)"><i class="fa fa-trash"></i></button>
+		                    					<button class="btn btn-xs btn-primary" ng-click="ct.editarUnidade(u)"><i class="fa fa-pencil"></i></button>
+		                    				</td>
+		                    			</tr>
+		                    		</tbody>
+		                    	</table>
+	                    	</div>
+                    	</div>
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer" ng-if="!ct.editandoUnidade">
+            	<button class="btn btn-success" ng-disabled="!ct.unidadeSelecionada" ng-click="ct.selecionarUnidade(ct.unidadeSelecionada);ct.editandoUnidade = false;" data-dismiss="modal">Selecionar</button>
+            	<button class="btn btn-default" data-dismiss="modal" ng-click="ct.novaUnidade = null;ct.editandoUnidade = false;">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

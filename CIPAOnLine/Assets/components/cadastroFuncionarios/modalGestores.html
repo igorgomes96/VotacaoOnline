@@ -1,0 +1,77 @@
+<div class="modal fade" id="modalGestores" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" style="max-height: 550px;overflow-y: auto;">
+            <div class="modal-header">
+                <h4 class="modal-title">Gestores</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+
+                    	<form role="form" novalidate name="formGestores">
+
+                    		<div class="row">
+	                    		<div class="form-group col-md-8" ng-class="{'has-error': formGestores.nomeGestor.$invalid && ct.editandoGestor}">
+								    <label class="control-label" for="nomeGestor">Nome do Gestor</label>
+								    <input type="text" class="form-control input-sm" id="nomeGestor" name="nomeGestor" ng-model="ct.novoGestor.Nome" required>
+								</div>
+
+								<div class="form-group col-md-4" ng-class="{'has-error': formGestores.emailGestor.$invalid && ct.editandoGestor}">
+								    <label class="control-label" for="emailGestor">E-mail</label>
+								     <input type="email" class="form-control input-sm" id="emailGestor" name="emailGestor" ng-model="ct.novoGestor.Email" required>
+								</div>
+
+							</div>
+
+							<button class="btn btn-success" ng-disabled="formGestores.$invalid" ng-click="ct.salvarGestor(ct.novoGestor);ct.editandoGestor = false;">Salvar</button>	
+							<button class="btn btn-default" ng-if="ct.editandoGestor" ng-click="ct.novoGestor = null;ct.editandoGestor = false;">Cancelar</button>
+
+                    	</form>
+
+                    	<div ng-if="!ct.editandoGestor">
+	                    	<hr>
+
+	                    	<div class="form-group">
+	                    		<label for="filtroGestor">Filtro</label>
+	                    		<input type="text" class="form-control" name="filtroGestor" id="filtroGestor" placeholder="Digite uma expressão para filtrar a tabela de gestores" ng-model="ct.filtroGestor" ng-model-options="{debounce: 300}">
+	                    	</div>
+
+	                    	<div class="containerTableModal">
+		                    	<table class="table table-condensed table-hover" id="tableModalGestores">
+		                    		<thead>
+		                    			<tr>
+			                    			<th width="10%">Código</th>
+			                    			<th width="45%">Nome do Gestor</th>
+			                    			<th width="37%">E-mail</th>
+			                    			<th width="8%"></th>
+		                    			</tr>
+		                    		</thead>
+		                    		<tbody>
+		                    			<tr ng-repeat="g in ct.gestores | filter:ct.filtroGestor | orderBy:'Nome' track by g.Codigo" ng-click="ct.gestorSelecionado = g;" ng-class="{'active': g.Codigo == ct.gestorSelecionado.Codigo}">
+		                    				<td>{{g.Codigo}}</td>
+		                    				<td>{{g.Nome}}</td>
+		                    				<td>{{g.Email}}</td>
+		                    				<td>
+		                    					<button class="btn btn-xs btn-danger" ng-click="ct.deleteGestor(g.Codigo)"><i class="fa fa-trash"></i></button>
+		                    					<button class="btn btn-xs btn-primary" ng-click="ct.editarGestor(g)"><i class="fa fa-pencil"></i></button>
+		                    				</td>
+		                    			</tr>
+		                    		</tbody>
+		                    	</table>
+	                    	</div>
+                    	</div>
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer" ng-if="!ct.editandoGestor">
+            	<button class="btn btn-success" ng-disabled="!ct.gestorSelecionado" ng-click="ct.selecionarGestor(ct.gestorSelecionado.Codigo);ct.editandoGestor = false;" data-dismiss="modal">Selecionar</button>
+            	<button class="btn btn-default" data-dismiss="modal" ng-click="ct.gestorSelecionado = null;ct.editandoGestor = false;">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

@@ -1,0 +1,77 @@
+<nav class="navbar-default navbar-static-side" role="navigation">
+    <div class="sidebar-collapse">
+        <ul class="nav metismenu" id="side-menu">
+            <li class="nav-header">
+                <div class="dropdown profile-element">
+                    <a data-toggle="dropdown" class="dropdown-toggle" href>
+                        <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">{{ctNav.user.Usuario.split(' ')[0]}}</strong>
+                        </span> <span class="text-muted text-xs block">{{ctNav.perfil}} <b class="caret"></b></span> </span>
+                    </a>
+                    <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                        <li><a href ng-click="ctNav.modoAdministrador()" ng-show="ctNav.user.Perfil == 'Administrador'">Modo Administrador</a></li>
+                        <li><a href ng-click="ctNav.modoEleitor()" ng-show="ctNav.user.Perfil == 'Administrador'">Modo Eleitor</a></li>
+                        <li><a href ng-click="ctNav.logout()">Logout</a></li>
+                        <!--<li><a href ng-click="ctNav.exibeModalSenha()">Alterar Senha</a></li>-->
+                    </ul>
+                </div>
+                <div class="logo-element">
+                    SVO
+                </div>
+            </li>
+            <li ng-repeat="e in ctNav.states" ng-class="{'active': e.active}">
+                <a ng-click="ctNav.redirect(e.state)"><i class="{{e.icon}}"></i> <span class="nav-label">{{e.label}}</span> <span ng-show="e.children" class="fa arrow"></span></a>
+                <ul class="nav nav-second-level collapse" ng-show="e.children">
+                    <li ng-repeat="c in e.children" ng-class="{'active': c.active}"><a ng-click="ctNav.redirect(c.state)">{{c.label}}</a></li>
+                </ul>
+            </li>
+        </ul>
+
+    </div>
+</nav>
+
+<div id="page-wrapper" class="gray-bg">
+    <div class="row border-bottom">
+        <nav class="navbar navbar-static-top white-bg" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href><i class="fa fa-bars"></i> </a>
+                <form role="search" class="navbar-form-custom">
+                    <div class="form-group">
+                        <input type="text" placeholder="" class="form-control" name="top-search" id="top-search">
+                    </div>
+                </form>
+            </div>
+            <ul class="nav navbar-top-links navbar-right">
+                <li>
+                    <a href ng-click="ctNav.logout()">
+                        <i class="fa fa-sign-out"></i> Log out
+                    </a>
+                </li>
+            </ul>
+
+        </nav>
+    </div>
+    
+    <div ui-view></div>
+
+    
+    <div class="footer">
+        <div class="pull-right">
+            <!--Desenvolvido por <strong>Igor Ap. Gomes</strong>.-->
+            <strong>Algar Tech</strong>
+        </div>
+        <div>
+            <strong>Copyright</strong> Votação Online &copy;
+        </div>
+    </div>
+
+</div>
+
+<div ng-include="'Assets/components/navContainer/modalAlterarSenha.html'"></div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        // MetisMenu
+        $('#side-menu').metisMenu();
+
+    });
+</script>

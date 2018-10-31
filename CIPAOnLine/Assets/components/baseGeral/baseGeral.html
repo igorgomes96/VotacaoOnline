@@ -1,0 +1,157 @@
+<!-- Fixo -->
+<div class="row wrapper border-bottom white-bg page-heading">
+	<div class="col-lg-10">
+		<h2>Consulta à Base Geral</h2>
+		<ol class="breadcrumb">
+			<li>
+				<a ui-sref="navContainer.home">Home</a>
+			</li>
+			<li class="active">
+				<strong>Base Geral</strong>
+			</li>
+		</ol>
+	</div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+	<!-- /Fixo -->
+	<div class="row">
+		<div class="col-md-6 col-sm-8 col-xs-12">
+			<label for="inputFiltro">Pesquisa</label>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6 col-sm-8 col-xs-12">
+			<div class="input-group">
+				<input type="text" class="form-control" id="inputFiltro" name="inputFiltro" ng-model="pesquisa" placeholder="Digite a matrícula ou login do funcionário" ng-keypress="ct.keypressed($event, pesquisa)">
+				<span class="input-group-btn">
+					<button class="btn btn-primary" type="button" ng-click="ct.pesquisa(pesquisa)"><i class="fa fa-search"></i></button>
+				</span>
+			</div>
+		</div>
+	</div>
+
+	<hr>
+
+	<div class="row">
+
+		<div class="col-sm-12">
+
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5>Cadastro de Funcionários</h5>
+				</div>
+
+				<!-- <div class="panel-card-body"> -->
+				<!-- <div class="row">
+					<h2 class="col-lg-4 col-sm-6 col-xs-12">Cadastro de Funcionários</h2>
+				</div>
+				<hr> -->
+
+				<div class="ibox-content">
+					<div class="sk-spinner sk-spinner-wave">
+						<div class="sk-rect1"></div>
+						<div class="sk-rect2"></div>
+						<div class="sk-rect3"></div>
+						<div class="sk-rect4"></div>
+						<div class="sk-rect5"></div>
+					</div>
+
+
+					<form name="formFuncionarios" novalidate>
+
+
+						<div class="row">
+							<div class="form-group col-md-4 col-sm-10 col-xs-12" ng-class="{'has-error': ct.editando && formFuncionarios.matricula.$invalid}">
+								<label for="matricula">Matricula</label>
+								<input type="text" class="form-control" id="matricula" name="matricula" placeholder="Matrícula do Funcionário" ng-model="ct.atual.MatriculaFuncionario" ng-disabled="!ct.novo" required>
+							</div>
+
+							<div class="form-group col-md-8 col-sm-10 col-xs-12" ng-class="{'has-error': ct.editando && formFuncionarios.cpf.$invalid}">
+								<label for="cpf">Login</label>
+								<input type="text" class="form-control" id="cpf" name="cpf" ng-model="ct.atual.Login" placeholder="Login do Funcionário" ng-disabled="!ct.editando" required>
+							</div>
+						</div>
+
+
+						<div class="row">
+							<div class="form-group col-md-7 col-xs-12" ng-class="{'has-error': ct.editando && formFuncionarios.nome.$invalid}">
+								<label for="nome">Nome</label>
+								<input type="text" class="form-control" id="nome" name="nome" ng-model="ct.atual.Nome" placeholder="Nome do Funcionário" ng-disabled="!ct.editando" required>
+							</div>
+
+							<div class="form-group col-md-5 col-xs-12" ng-class="{'has-error': ct.editando && formFuncionarios.email.$invalid}">
+								<label for="email">Email</label>
+								<input type="email" class="form-control" id="email" name="email" ng-model="ct.atual.Email" placeholder="Email do funcionário" ng-disabled="!ct.editando" required>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="form-group col-md-7 col-sm-12" ng-class="{'has-error': ct.editando && formFuncionarios.cargo.$invalid}">
+								<label for="cargo">Cargo</label>
+								<input type="text" class="form-control" id="cargo" name="cargo" ng-model="ct.atual.Cargo" placeholder="Cargo do Funcionário" ng-disabled="!ct.editando" required>
+							</div>
+
+							<div class="col-md-5 col-sm-12">
+							
+								<div class="row">
+									<div class="col-sm-8 col-xs-12">
+										<label for="gestor">Gestor</label>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-xs-12">
+										<div class="input-group" ng-class="{'has-error': ct.editando && formFuncionarios.gestor.$invalid}" style="margin-bottom: 15px;">
+											<select class="form-control" id="gestor" name="gestor" ng-model="ct.atual.CodigoGestor" ng-options="g.Codigo as g.Nome for g in ct.gestores" ng-disabled="!ct.editando" style="z-index: 0">
+												<option value="">(Selecione o gestor)</option>
+											</select>
+											<span class="input-group-btn">
+												<button class="btn btn-default" ng-disabled="!ct.editando" data-toggle="modal" data-target="#modalGestores"><i class="fa fa-list"></i></button>
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+
+						</div>
+
+						<div class="row">
+							<div class="form-group col-md-6 col-sm-12" ng-class="{'has-error': ct.editando && formFuncionarios.area.$invalid}">
+								<label for="area">Área / Departamento</label>
+								<input type="text" class="form-control" id="area" name="area" ng-model="ct.atual.Area" placeholder="Área onde o Funcionário trabalha" ng-disabled="!ct.editando" required>
+							</div>
+
+							<div class="form-group col-md-3 col-sm-6 col-xs-12" ng-class="{'has-error': ct.editando && formFuncionarios.nascimento.$invalid}">
+								<label for="nascimento">Data de Nascimento</label>
+								<input type="date" class="form-control" id="nascimento" name="nascimento" ng-model="ct.atual.DataNascimento" ng-disabled="!ct.editando" required>
+							</div>
+
+							<div class="form-group col-md-3 col-sm-6 col-xs-12" ng-class="{'has-error': ct.editando && formFuncionarios.admissao.$invalid}">
+								<label for="admissao">Data de Admissão</label>
+								<input type="date" class="form-control" id="admissao" name="admissao" ng-model="ct.atual.DataAdmissao" ng-disabled="!ct.editando" required>
+							</div>
+						</div>
+
+					</form>
+
+					<hr>
+					<div class="row" ng-show="ct.editando">
+						<div class="col-sm-12">
+							<button class="btn btn-default" ng-click="ct.cancelar()">Cancelar</button>
+							<button class="btn btn-primary" ng-click="ct.salvarFuncionario(ct.atual);ct.editando = false;" ng-disabled="formFuncionarios.$invalid">Salvar <i class="fa fa-save"></i></button>
+			            </div>
+					</div>
+
+					<div class="row" ng-hide="ct.editando || !ct.atual">
+						<div class="col-sm-12">
+							<button class="btn btn-primary" ng-click="ct.editar()">Editar <i class="fa fa-pencil"></i></button>
+							<button class="btn btn-danger" ng-click="ct.excluirFuncionario(ct.atual.MatriculaFuncionario)">Excluir <i class="fa fa-trash"></i></button>
+			            </div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>

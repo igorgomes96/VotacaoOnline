@@ -1,0 +1,42 @@
+<div class="modal fade" id="modalReprovacao" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Reprovar Candidatura</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <dl>
+                            <dt>Nome</dt>
+                            <dd>{{ct.candidato.Nome | capitalize}}</dd>
+                            <dt>Cargo</dt>
+                            <dd>{{ct.candidato.Cargo | capitalize}}</dd>
+                            <dt>Área</dt>
+                            <dd>{{ct.candidato.Area | capitalize}}</dd>
+                        </dl>
+
+                    	<form role="form" novalidate name="formReprovacao">
+
+                            <div class="form-group">
+                                <label for="inputMotivoReprovacao">Motivo da Reprovação</label>
+                                <textarea class="form-control" ng-model="ct.candidato.MotivoReprovacao"></textarea>
+                            </div>
+
+                    	</form>
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+            	<button class="btn btn-success" ng-disabled="formUnidade.$invalid" data-dismiss="modal" ng-click="ct.reprovarCandidatura(ct.candidato.MatriculaFuncionario, ct.candidato.CodigoEleicao, ct.candidato.MotivoReprovacao)">Salvar</button>
+            	<button class="btn btn-default" data-dismiss="modal" ng-click="ct.candidato.MotivoReprovacao = '';">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

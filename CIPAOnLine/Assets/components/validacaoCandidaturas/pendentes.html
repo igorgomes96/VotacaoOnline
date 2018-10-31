@@ -1,0 +1,125 @@
+<!-- Fixo -->
+<div class="row wrapper border-bottom white-bg page-heading">
+	<div class="col-lg-10">
+		<h2>Aprovações Pendentes</h2>
+		<ol class="breadcrumb">
+			<li>
+				<a ui-sref="navContainer.home">Home</a>
+			</li>
+			<li ng-class="{'active': !ct.codEleicao}">
+				<a>Validação de Candidaturas</a>
+			</li>
+			<li ng-class="{'active': !ct.codEleicao}">
+				<strong ng-hide="ct.codEleicao">Pendentes</strong>
+				<a ng-show="ct.codEleicao" ui-sref="navContainer.pendente">Pendentes</a>
+			</li>
+			<li class="active" ng-show="ct.codEleicao">
+				<strong>{{ct.codEleicao}}</strong>
+			</li>
+		</ol>
+	</div>
+	<div class="col-lg-2">
+
+	</div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+	<!-- /Fixo -->
+
+	<!-- Filtro -->
+	<div class="row">
+
+		<div class="col-sm-3">
+			<div class="form-group">
+				<label class="control-label" for="inputFiltroStatus">Status</label>
+				<select ng-model="ct.statusSelecionado" class="form-control" name="inputFiltroStatus" id="inputFiltroStatus" ng-options="s.Label for s in ct.eleicoesFiltro"></select>
+			</div>
+		</div>
+
+		<div class="col-sm-5">
+			<div class="form-group">
+				<label class="control-label" for="inputFiltroUnidade">Unidade</label>
+				<select ng-model="ct.unidadeSelecionada" name="inputFiltroUnidade" class="form-control" id="inputFiltroUnidade" ng-options="('#' + u.Unidade.Codigo + ' - ' + u.Unidade.RazaoSocial + ' (' + u.Unidade.Estabelecimento + ')') for u in ct.statusSelecionado.Unidades"></select>
+			</div>
+		</div>
+
+		<div class="col-sm-4">
+			<div class="form-group">
+				<label class="control-label" for="inputFiltroGestao">Gestão</label>
+				<select ng-options="('#' + g.Codigo + ' - ' + g.Gestao) for g in ct.unidadeSelecionada.Eleicoes" ng-model="ct.gestaoSelecionada" class="form-control" ng-change="ct.alteraGestao()" name="inputFiltroGestao" id="inputFiltroGestao"></select>
+			</div>
+		</div>
+
+
+	</div>
+
+	<div class="row" ng-show="ct.error">
+		<div class="col-md-12">
+			<div class="alert alert-danger">
+		        <p class="alert-link" style="display: inline;">Inválido!</p> {{ct.error}}
+		    </div>
+		</div>
+	</div>
+
+	<div class="row" ng-show="!ct.error && ct.candidatos && ct.candidatos.length > 0">
+
+		<div class="col-sm-12">
+			
+			<button class="btn btn-primary" ng-click="ct.aprovarTodos()"><i class="fa fa-check"></i> Aprovar todos</button>
+
+			<br>
+			<br>
+			<br>
+
+			<!-- <div class="ibox-content"> -->
+
+				<div class="row">
+					<div class="col-lg-4" ng-repeat="c in ct.candidatos">
+						<div class="contact-box">
+							<div class="contact-box-content">
+								<div class="col-sm-4">
+									<div class="text-center">
+										<img alt="image" class="img-circle m-t-xs img-responsive" data-ng-src="data:image/png;base64,{{c.Foto}}">
+										<small class="m-t-xs" style="font-weight: 800;">{{c.Nome.split(' ')[0]}}</small>
+									</div>
+								</div>
+								<div class="col-sm-8">
+									<h4><strong>{{c.Nome | capitalize | ellipsis:15:0:!c.flagSobreMim}}</strong></h4>
+									<small>
+										<i class="fa fa-users"></i> {{c.Area | ellipsis:15:0:!c.flagSobreMim}}
+										<br><i class="fa fa-briefcase"></i> {{c.Cargo | capitalize | ellipsis:15:0:!c.flagSobreMim}}
+										<br><i class="fa fa-calendar"></i> Admissão: {{c.DataAdmissao | date:'dd/MM/yyyy'}}
+									</small>
+								</div>
+
+								<div class="clearfix"></div>
+
+								<div class="text-center" style="margin-top: 10px;">
+									<a href class="sobre-mim" ng-click="c.flagSobreMim = !c.flagSobreMim">Sobre mim <i class="fa fa-angle-down"></i></a>
+									<small class="sobre-mim">
+										{{c.Sobre}}
+									</small>
+								</div>
+
+							</div>
+
+							<hr style="margin-top: 10px;">
+
+							<div class="thumbnail-btn">
+								<button class="btn btn-xs btn-primary" ng-click="ct.aprovarCandidatura(c.MatriculaFuncionario, c.CodigoEleicao)"><i class="fa fa-check"></i></button>
+								<button class="btn btn-xs btn-danger" data-toggle="modal" data-target="#modalReprovacao" ng-click="ct.candidato = c;"><i class="fa fa-times"></i></button>
+							</div>
+
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+
+	</div>
+
+</div>
+
+<div ng-include="'Assets/components/validacaoCandidaturas/modalReprovacao.html'"></div>

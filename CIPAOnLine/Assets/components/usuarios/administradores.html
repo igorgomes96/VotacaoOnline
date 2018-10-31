@@ -1,0 +1,95 @@
+<!-- Fixo -->
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>Usuários Administradores</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a ui-sref="navContainer.home">Home</a>
+            </li>
+            <li class="active">
+                <strong>Usuários Administradores</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+
+
+    <div class="row">
+
+        <div class="col-xs-12">
+
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Administradores Cadastrados</h5>
+                </div>
+
+                <div class="ibox-content" ng-class="{'sk-loading': ct.loading}">
+
+
+                    <div class="row">
+                        <div class="col-md-6 col-sm-8 col-xs-12">
+                            <label for="inputFiltro">Filtrar Tabela</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-sm-8 col-xs-12">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                <input type="text" class="form-control" id="inputFiltro" name="inputFiltro" ng-model="filtro" placeholder="Digite uma expressão para filtrar" ng-model-options="{debounce:500}">
+                                
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-md-6 col-sm-8 col-xs-12">
+                            <label for="inputAdd">Adicionar Administrador</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-sm-8 col-xs-12">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="inputAdd" name="inputAdd" ng-model="ct.novoUser.Login" placeholder="Digite o usuário de rede" ng-keypress="ct.keypressedSenha($event, ct.novoUser)">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-primary" type="button" ng-click="ct.salvar(ct.novoUser);ct.novoUser=null;"><i class="fa fa-plus"></i></button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <table class="table table-condensed table-striped">
+                        <thead>
+                            <tr>
+                                <th width="15%">Login</th>
+                                <th width="15%">Matrícula</th>
+                                <th width="35%">Nome</th>
+                                <th width="30%">Cargo / Função</th>
+                                <th width="5%"></th>
+                                <!-- <th width="15%">Registro</th> -->
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr ng-repeat="a in ct.administradores | filter:filtro">
+                                <td>{{a.Login}}</td>
+                                <td>{{a.MatriculaFuncionario}}</td>
+                                <td>{{a.Nome}}</td>
+                                <td>{{a.Cargo}}</td>
+                                <td class="text-right">
+                                    <button class="btn btn-danger btn-xs" ng-click="ct.excluir(a.Login)"><i class="fa fa-trash"></i></button>
+                                </td>
+                                <!-- <td>{{a.DRT}}</td> -->
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

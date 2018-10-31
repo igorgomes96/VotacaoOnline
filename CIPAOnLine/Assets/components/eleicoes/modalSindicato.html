@@ -1,0 +1,92 @@
+<div class="modal fade" id="modalSindicato" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" style="max-height: 550px;overflow-y: auto;">
+            <div class="modal-header">
+                <h4 class="modal-title">Novo Sindicato</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+
+                    	<form role="form" novalidate name="formSindicato">
+
+                    		<div class="row">
+	                    		<div class="form-group col-md-8" ng-class="{'has-error': formSindicato.nomeSindicato.$invalid}">
+								    <label class="control-label" for="nomeSindicato">Sindicato</label>
+								    <input type="text" class="form-control" id="nomeSindicato" name="nomeSindicato" ng-model="ct.novoSindicato.Nome" required>
+								</div>
+
+								<div class="form-group col-md-4" ng-class="{'has-error': formSindicato.emailSindicato.$invalid}">
+								    <label class="control-label" for="emailSindicato">E-mail</label>
+								     <input type="email" class="form-control" id="emailSindicato" name="emailSindicato" ng-model="ct.novoSindicato.Email" required>
+								</div>
+
+							</div>
+
+							<div class="row">
+								<div class="form-group col-md-5" ng-class="{'has-error': formSindicato.enderecoSindicato.$invalid}">
+								    <label class="control-label" for="enderecoSindicato">Endereço</label>
+								     <input type="text" class="form-control" id="enderecoSindicato" name="enderecoSindicato" ng-model="ct.novoSindicato.Endereco" required>
+								</div>
+
+								<div class="form-group col-md-3" ng-class="{'has-error': formSindicato.cidadeSindicato.$invalid}">
+								    <label class="control-label" for="cidadeSindicato">Cidade</label>
+								     <input type="text" class="form-control" id="cidadeSindicato" name="cidadeSindicato" ng-model="ct.novoSindicato.Cidade" required>
+								</div>
+
+								<div class="form-group col-md-4" ng-class="{'has-error': formSindicato.responsavelSindicato.$invalid}">
+								    <label class="control-label" for="responsavelSindicato">Responsável</label>
+								     <input type="text" class="form-control" id="responsavelSindicato" name="responsavelSindicato" ng-model="ct.novoSindicato.Responsavel" required>
+								</div>
+
+							</div>
+
+							<button class="btn btn-success" ng-disabled="formSindicato.$invalid" ng-click="ct.salvarSindicato(ct.novoSindicato);ct.editandoSindicato = false;">Salvar</button>	
+							<button class="btn btn-default" ng-if="ct.editandoSindicato" ng-click="ct.novoSindicato = null;ct.editandoSindicato = false;">Cancelar</button>
+
+                    	</form>
+
+                    	<div ng-if="!ct.editandoSindicato">
+	                    	<hr>
+
+	                    	<div class="containerTableModal">
+		                    	<table class="table table-condensed table-hover" id="tableModalSindicatos">
+		                    		<thead>
+		                    			<tr>
+			                    			<th width="8%">Código</th>
+			                    			<th width="35%">Sindicato</th>
+			                    			<th width="19%">Cidade/Estado</th>
+			                    			<th width="25%">E-mail</th>
+			                    			<th width="8%"></th>
+		                    			</tr>
+		                    		</thead>
+		                    		<tbody>
+		                    			<tr ng-repeat="s in ct.sindicatos track by s.Codigo" ng-click="ct.selecionarSindicatoTabela(s)" ng-class="{'active': s.Codigo == ct.sindicatoSelecionado.Codigo}">
+		                    				<td>{{s.Codigo}}</td>
+		                    				<td>{{s.Nome}}</td>
+		                    				<td>{{s.Cidade}}</td>
+		                    				<td>{{s.Email}}</td>
+		                    				<td>
+		                    					<button class="btn btn-xs btn-danger" ng-click="ct.deleteSindicato(s.Codigo)"><i class="fa fa-trash"></i></button>
+		                    					<button class="btn btn-xs btn-primary" ng-click="ct.editarSindicato(s)"><i class="fa fa-pencil"></i></button>
+		                    				</td>
+		                    			</tr>
+		                    		</tbody>
+		                    	</table>
+	                    	</div>
+                    	</div>
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer" ng-if="!ct.editandoSindicato">
+            	<button class="btn btn-success" ng-disabled="!ct.sindicatoSelecionado" ng-click="ct.selecionarSindicato(ct.sindicatoSelecionado);ct.editandoSindicato = false;" data-dismiss="modal">Selecionar</button>
+            	<button class="btn btn-default" data-dismiss="modal" ng-click="ct.novoSindicato = null;ct.editandoSindicato = false;">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

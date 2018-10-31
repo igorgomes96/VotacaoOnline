@@ -1,0 +1,37 @@
+<div class="modal fade" id="modalEmails" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="max-height: 550px;overflow-y: auto;">
+            <div class="modal-header">
+                <h4 class="modal-title">Salvar Template</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+
+                    	<form role="form" novalidate name="formEmails">
+
+							<div class="row">
+
+								<div class="form-group col-md-12" ng-class="{'has-error': formSindicato.nomeTempate.$invalid}">
+								    <label class="control-label" for="nomeTempate">Nome do Template</label>
+								    <input type="text" class="form-control" id="nomeTempate" name="nomeTempate" ng-model="ct.Template.Nome" required>
+								</div>
+
+							</div>
+
+                    	</form>
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+            	<button class="btn btn-success" ng-disabled="formEmails.$invalid" ng-click="ct.salvarNovoTemplate(ct.Template)" data-dismiss="modal">Salvar</button>
+            	<button class="btn btn-default" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

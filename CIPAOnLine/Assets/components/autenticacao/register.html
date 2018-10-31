@@ -1,0 +1,55 @@
+<div class="middle-box text-center loginscreen animated fadeInDown">
+    <div>
+        <div>
+
+            <h1 class="logo-name">V.O.</h1>
+
+        </div>
+        <h3>Sistema de Votação Online</h3>
+        <p>
+            
+        </p>
+        <p>Cadastre-se no sistema de Votação Online.</p>
+        <form class="m-t" role="form" name="form">
+
+            <div class="form-group" ng-class="{'has-error': form.cpf.$invalid && form.cpf.$dirty}">
+                <input type="text" ng-change="ct.buscaUsuario(ct.user.CPF)" class="form-control" placeholder="CPF" name="cpf" id="cpf" autofocus ng-model="ct.user.CPF" ng-required="true" ui-cpf-mask>
+            </div>
+
+            <div class="form-group" ng-class="{'has-error': form.matricula.$invalid && form.matricula.$dirty}">
+                <input class="form-control" placeholder="Matrícula" name="matricula" id="matricula" autofocus ng-model="ct.user.MatriculaFuncionario" required ng-blur="ct.validaMatricula(ct.user.MatriculaFuncionario)">
+                <span class="help-block" ng-show="form.matricula.$valid && ct.matriculaIncorreta" style="color: #dc2727;">Matrícula Incorreta!</span>
+            </div>
+
+            <div class="form-group" ng-class="{'has-error': form.email.$invalid && form.email.$dirty}">
+                <input class="form-control" placeholder="Email" name="email" id="email" type="email" ng-model="ct.user.Email">
+            </div>
+
+            <div class="form-group" ng-class="{'has-error': form.password.$invalid && form.password.$dirty}">
+                <input type="password" class="form-control" placeholder="Senha" name="password" id="password" type="password" ng-model="ct.user.Senha" ng-keypress="ct.keypressedSenha($event, ct.user)" required>
+            </div>
+
+            <div class="form-group" ng-class="{'has-error': form.passwordPrimeiroAcesso.$invalid && form.passwordPrimeiroAcesso.$dirty}" ng-if="ct.primeiroAcesso">
+                <input class="form-control" placeholder="Senha" name="passwordPrimeiroAcesso" id="passwordPrimeiroAcesso" type="password" ng-model="ct.user.Senha" required ng-minlength="8">
+                <span class="help-block" ng-show="form.passwordPrimeiroAcesso.$error.minlength && form.passwordPrimeiroAcesso.$dirty" style="color: #dc2727;">Qtda. Mínima de caracteres: 8</span>
+            </div>
+
+            <div class="form-group" ng-class="{'has-error': (form.confirmaSenha.$invalid || ct.user.Senha != ct.user.ConfirmaSenha) && form.confirmaSenha.$dirty}">
+                <input class="form-control" placeholder="Confirmação da Senha" name="confirmaSenha" id="confirmaSenha" type="password"  ng-model="ct.user.ConfirmaSenha" ng-keypress="ct.keypressedSenha($event, ct.user)" required>
+            </div>
+
+
+            <!-- <button type="submit" class="btn btn-primary block full-width m-b" ng-disabled="!ct.user.CPF || !ct.user.Senha" ng-click="ct.autentica(ct.user)">Login</button> -->
+
+            <button class="btn btn-primary block full-width m-b" ng-disabled="form.$invalid || ct.user.Senha != ct.user.ConfirmaSenha" ng-click="ct.cadastrar(ct.user)" style="margin-bottom: 15px;">Cadastrar <span class="loader-spinner pull-right" ng-show="ct.mostraLoader"></span></button>
+
+            <a class="btn btn-sm btn-white btn-block" ui-sref="login">Voltar</a>
+            <hr>
+            <div class="alert alert-danger" ng-show="ct.erro">
+                <p class="alert-link" style="display: inline;">Erro!</p> {{ct.erro}}
+            </div>
+
+        </form>
+        <!-- <p class="m-t"> <small>Inspinia we app framework base on Bootstrap 3 &copy; 2014</small> </p> -->
+    </div>
+</div>

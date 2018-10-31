@@ -1,0 +1,368 @@
+<!-- Fixo -->
+<div class="row wrapper border-bottom white-bg page-heading">
+	<div class="col-lg-10">
+		<h2>Eleições</h2>
+		<ol class="breadcrumb">
+			<li>
+				<a ui-sref="home">Home</a>
+			</li>
+			<li>
+				<a ui-sref="navContainer.eleicoes">Eleições</a>
+			</li>
+			<li class="active">
+				<strong>Nova</strong>
+			</li>
+		</ol>
+	</div>
+	<div class="col-lg-2">
+
+	</div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+	<!-- /Fixo -->
+
+	<div class="row">
+
+		<div class="col-sm-12 col-md-6">
+
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5>Nova Eleição</h5>
+				</div>
+
+				<div class="ibox-content">
+
+					<form class="form-horizontal" style="margin-top: 30px;" name="formEleicao" novalidate>
+
+						<div class="form-group">
+						    <label class="control-label col-sm-3" for="inputGestao">Gestão</label>
+						    <div class="col-sm-5 col-md-4"> 
+						     	<input type="text" class="form-control" name="inputGestao" id="inputGestao" ng-model="ct.eleicaoAtual.Gestao" disabled>
+						    </div>
+						</div>
+
+						<div class="row" style="margin-bottom: 15px;">
+							<label class="control-label col-sm-3 col-xs-12" for="inputCodUnidade">Cód. Unidade</label>
+						  	<div class="col-sm-5 col-md-4">
+						    	<div class="input-group" ng-class="{'has-error': formEleicao.inputCodUnidade.$invalid && ct.editando}">
+						      		<input class="form-control" ng-model="ct.eleicaoAtual.CodigoUnidade" name="inputCodUnidade" id="inputCodUnidade" required ng-keydown="ct.buscaUnidadeEnter($event, ct.eleicaoAtual.CodigoUnidade)">
+						      		<span class="input-group-btn">
+						      			<button class="btn btn-default" ng-disabled="formEleicao.inputCodUnidade.$invalid" ng-click="ct.buscaUnidade(ct.eleicaoAtual.CodigoUnidade)"><i class="fa fa-search"></i></button>
+						      			<button class="btn btn-default" data-toggle="modal" data-target="#modalUnidade"><i class="fa fa-list"></i></button>
+						      		</span>
+						    	</div>
+						  	</div>
+						</div>
+
+						<div class="form-group">
+						    <label class="control-label col-sm-3" for="inputRazaoSocial">Razão Social</label>
+						    <div class="col-sm-8"> 
+						     	<input type="text" class="form-control" name="inputRazaoSocial" id="inputRazaoSocial" ng-model="ct.eleicaoAtual.UnidadeObj.RazaoSocial" disabled>
+						    </div>
+						</div>
+
+						<div class="form-group">
+						    <label class="control-label col-sm-3" for="inputCidade">Cidade/Estado</label>
+						    <div class="col-sm-8"> 
+						     	<input type="text" class="form-control" name="inputCidade" id="inputCidade" ng-model="ct.eleicaoAtual.UnidadeObj.Cidade" disabled>
+						    </div>
+						</div>
+
+						<div class="form-group">
+						    <label class="control-label col-sm-3" for="inputEndereco">Endereço</label>
+						    <div class="col-sm-8"> 
+						     	<input type="text" class="form-control" name="inputEndereco" id="inputEndereco" ng-model="ct.eleicaoAtual.UnidadeObj.Estabelecimento" disabled required>
+						    </div>
+						</div>
+
+						<div ng-if="ct.codigoModulo == 1">
+						
+							<div class="row" style="margin-bottom: 15px;">
+								<label class="control-label col-sm-3 col-xs-12" for="inputCodSindicato">Cód. Sindicato</label>
+							  	<div class="col-sm-5 col-md-4">
+							    	<div class="input-group" ng-class="{'has-error': formEleicao.inputCodSindicato.$invalid && ct.editando}">
+							      		<input class="form-control" ng-model="ct.eleicaoAtual.CodigoSindicato" name="inputCodSindicato" id="inputCodSindicato" ng-keydown="ct.buscaSindicatoEnter($event, ct.eleicaoAtual.CodigoSindicato)">
+							      		<span class="input-group-btn">
+							      			<button class="btn btn-default" ng-disabled="!ct.eleicaoAtual.CodigoSindicato" ng-click="ct.buscaSindicato(ct.eleicaoAtual.CodigoSindicato)"><i class="fa fa-search"></i></button>
+							      			<button class="btn btn-default" data-toggle="modal" data-target="#modalSindicato"><i class="fa fa-list"></i></button>
+							      		</span>
+							    	</div>
+							  	</div>
+							</div>
+
+							<div class="form-group">
+							    <label class="control-label col-sm-3" for="inputSindicato">Sindicato</label>
+							    <div class="col-sm-8"> 
+							     	<input type="text" class="form-control" name="inputSindicato" id="inputSindicato" ng-model="ct.eleicaoAtual.SindicatoObj.Nome" disabled>
+							    </div>
+							</div>
+
+							<div class="form-group">
+							    <label class="control-label col-sm-3" for="inputEmailSindicato">E-mail</label>
+							    <div class="col-sm-8"> 
+							     	<input type="text" class="form-control" name="inputEmailSindicato" id="inputEmailSindicato" ng-model="ct.eleicaoAtual.SindicatoObj.Email" disabled>
+							    </div>
+							</div>
+
+							<div class="form-group">
+							    <label class="control-label col-sm-3" for="inputEnderecoSindicato">Endereço</label>
+							    <div class="col-sm-8"> 
+							     	<input type="text" class="form-control" name="inputEnderecoSindicato" id="inputEnderecoSindicato" ng-model="ct.eleicaoAtual.SindicatoObj.Endereco" disabled>
+							    </div>
+							</div>
+
+							<div class="form-group">
+							    <label class="control-label col-sm-3" for="inputCidadeSindicato">Cidade</label>
+							    <div class="col-sm-8"> 
+							     	<input type="text" class="form-control" name="inputCidadeSindicato" id="inputCidadeSindicato" ng-model="ct.eleicaoAtual.SindicatoObj.Cidade" disabled>
+							    </div>
+							</div>
+
+							<div class="form-group">
+							    <label class="control-label col-sm-3" for="inputResponsavel">Responsável</label>
+							    <div class="col-sm-8"> 
+							     	<input type="text" class="form-control" name="inputResponsavel" id="inputResponsavel" ng-model="ct.eleicaoAtual.SindicatoObj.Responsavel" disabled>
+							    </div>
+							</div>
+						</div>
+
+						<hr>
+
+						<div class="row">
+							<div class="col-sm-11"> 
+								<button class="btn btn-success pull-right" ng-if="ct.editando" ng-disabled="formTimeline.$invalid || formEleicao.inputCodUnidade.$invalid || (formEleicao.$invalid && ct.codigoModulo == 1)" ng-click="ct.salvarEleicao(ct.eleicaoAtual)">Abrir Eleição</button>
+								<button class="btn btn-default pull-right" ng-if="ct.editando" ng-click="ct.cancelar()" style="margin-right: 10px;">Cancelar</button>
+							</div>
+						</div>
+
+
+					</form>
+
+
+				</div>
+
+			</div>
+
+		</div>
+
+		<!-- Etapas da Eleição atual -->
+		<div class="col-md-6 col-sm-12" style="margin-bottom: 40px" ng-if="ct.eleicaoAtual">
+
+
+			<form name="formTimeline" role="form" novalidate style="margin-top: 7px;">
+
+				<div id="vertical-timeline" class="vertical-container light-timeline no-margins">
+
+					<div class="vertical-timeline-block">
+
+						<div class="vertical-timeline-icon navy-bg">
+							<i class="fa fa-calendar-check-o"></i>
+						</div>
+
+						<div class="vertical-timeline-content">
+							<h4>Abertura</h4>
+                            <span class="vertical-date">
+                                <input type="date" ng-model="ct.eleicaoAtual.DataInicio" class="text-success" style="display: inline;">
+                            </span>
+						</div>
+					</div>
+
+					<div class="vertical-timeline-block" ng-repeat="e in ct.eleicaoAtual.PrazosEtapasObj | orderBy:'Ordem'">
+						<div class="vertical-timeline-icon" ng-class="{'blue-bg': e.CodigoEtapa == ct.eleicaoAtual.CodigoEtapa, 'gray-bg': e.CodigoEtapa > ct.eleicaoAtual.CodigoEtapa, 'navy-bg': e.CodigoEtapa < ct.eleicaoAtual.CodigoEtapa}">
+
+							<i class="fa" ng-class="e.CodigoEtapa >= ct.eleicaoAtual.CodigoEtapa ? 'fa-calendar' : 'fa-calendar-check-o'"></i>
+						</div>
+
+						<div class="vertical-timeline-content">
+							<h4>{{e.NomeEtapa}}</h4>
+
+							<!-- <a href class="btn btn-sm btn-success" ng-click="ct.setProximaEtapa(ct.eleicaoAtual.Codigo)" ng-show="ct.eleicaoAtual.CodigoEtapa == e.CodigoEtapa"> Próx. Etapa</a> -->
+
+							<span>
+
+								<!-- <div ng-if="e.DataRealizada && (e.DataProposta | date:'dd/MM/yyyy') != (e.DataRealizada | date:'dd/MM/yyyy')">
+									<del style="background-color: transparent;">{{e.DataProposta | date:'dd/MM/yyyy'}}</del> - {{e.DataRealizada | date:'dd/MM/yyyy'}} 
+								</div>
+ -->
+								<input type="date" ng-model="e.DataProposta" class="text-success" style="display: inline;">
+
+							</span>
+						</div>
+					</div>
+				</div>
+
+			</form>
+
+		</div>
+
+	</div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+<!--
+<div class="row">
+
+	<div class="col-sm-12 col-md-6">
+		<div class="panel-card">
+
+			<div class="panel-card-title">
+				Cadastro de Eleição
+			</div>
+
+			<div class="panel-card-body">
+
+				<form class="form-horizontal" style="margin-top: 30px;" name="formEleicao" novalidate>
+
+					<div class="form-group">
+					    <label class="control-label col-sm-3" for="inputGestao">Gestão</label>
+					    <div class="col-sm-5 col-md-4"> 
+					     	<input type="text" class="form-control" name="inputGestao" id="inputGestao" ng-model="ct.eleicaoAtual.Gestao" disabled>
+					    </div>
+					</div>
+
+					<div class="row" style="margin-bottom: 15px;">
+						<label class="control-label col-sm-3 col-xs-12" for="inputCodUnidade">Cód. Unidade</label>
+					  	<div class="col-sm-5 col-md-4">
+					    	<div class="input-group" ng-class="{'has-error': formEleicao.inputCodUnidade.$invalid && ct.editando}">
+					      		<input class="form-control" ng-model="ct.eleicaoAtual.CodigoUnidade" name="inputCodUnidade" id="inputCodUnidade" required ng-keydown="ct.buscaUnidadeEnter($event, ct.eleicaoAtual.CodigoUnidade)">
+					      		<span class="input-group-btn">
+					      			<button class="btn btn-default" ng-disabled="formEleicao.inputCodUnidade.$invalid" ng-click="ct.buscaUnidade(ct.eleicaoAtual.CodigoUnidade)"><i class="fa fa-search"></i></button>
+					      			<button class="btn btn-default" data-toggle="modal" data-target="#modalUnidade"><i class="fa fa-list"></i></button>
+					      		</span>
+					    	</div>
+					  	</div>
+					</div>
+
+					<div class="form-group">
+					    <label class="control-label col-sm-3" for="inputRazaoSocial">Razão Social</label>
+					    <div class="col-sm-8"> 
+					     	<input type="text" class="form-control" name="inputRazaoSocial" id="inputRazaoSocial" ng-model="ct.eleicaoAtual.UnidadeObj.RazaoSocial" disabled>
+					    </div>
+					</div>
+
+					<div class="form-group">
+					    <label class="control-label col-sm-3" for="inputCidade">Cidade/Estado</label>
+					    <div class="col-sm-8"> 
+					     	<input type="text" class="form-control" name="inputCidade" id="inputCidade" ng-model="ct.eleicaoAtual.UnidadeObj.Cidade" disabled>
+					    </div>
+					</div>
+
+					<div class="form-group">
+					    <label class="control-label col-sm-3" for="inputEndereco">Endereço</label>
+					    <div class="col-sm-8"> 
+					     	<input type="text" class="form-control" name="inputEndereco" id="inputEndereco" ng-model="ct.eleicaoAtual.UnidadeObj.Estabelecimento" disabled required>
+					    </div>
+					</div>
+
+					<div ng-if="ct.codigoModulo == 1">
+					
+						<div class="row" style="margin-bottom: 15px;">
+							<label class="control-label col-sm-3 col-xs-12" for="inputCodSindicato">Cód. Sindicato</label>
+						  	<div class="col-sm-5 col-md-4">
+						    	<div class="input-group" ng-class="{'has-error': formEleicao.inputCodSindicato.$invalid && ct.editando}">
+						      		<input class="form-control" ng-model="ct.eleicaoAtual.CodigoSindicato" name="inputCodSindicato" id="inputCodSindicato" required  ng-keydown="ct.buscaSindicatoEnter($event, ct.eleicaoAtual.CodigoSindicato)">
+						      		<span class="input-group-btn">
+						      			<button class="btn btn-default" ng-disabled="formEleicao.inputCodSindicato.$invalid" ng-click="ct.buscaSindicato(ct.eleicaoAtual.CodigoSindicato)"><i class="fa fa-search"></i></button>
+						      			<button class="btn btn-default" data-toggle="modal" data-target="#modalSindicato"><i class="fa fa-list"></i></button>
+						      		</span>
+						    	</div>
+						  	</div>
+						</div>
+
+						<div class="form-group">
+						    <label class="control-label col-sm-3" for="inputSindicato">Sindicato</label>
+						    <div class="col-sm-8"> 
+						     	<input type="text" class="form-control" name="inputSindicato" id="inputSindicato" ng-model="ct.eleicaoAtual.SindicatoObj.Nome" disabled>
+						    </div>
+						</div>
+
+						<div class="form-group">
+						    <label class="control-label col-sm-3" for="inputEmailSindicato">E-mail</label>
+						    <div class="col-sm-8"> 
+						     	<input type="text" class="form-control" name="inputEmailSindicato" id="inputEmailSindicato" ng-model="ct.eleicaoAtual.SindicatoObj.Email" disabled>
+						    </div>
+						</div>
+
+						<div class="form-group">
+						    <label class="control-label col-sm-3" for="inputEnderecoSindicato">Endereço</label>
+						    <div class="col-sm-8"> 
+						     	<input type="text" class="form-control" name="inputEnderecoSindicato" id="inputEnderecoSindicato" ng-model="ct.eleicaoAtual.SindicatoObj.Endereco" disabled>
+						    </div>
+						</div>
+
+						<div class="form-group">
+						    <label class="control-label col-sm-3" for="inputCidadeSindicato">Cidade</label>
+						    <div class="col-sm-8"> 
+						     	<input type="text" class="form-control" name="inputCidadeSindicato" id="inputCidadeSindicato" ng-model="ct.eleicaoAtual.SindicatoObj.Cidade" disabled>
+						    </div>
+						</div>
+
+						<div class="form-group">
+						    <label class="control-label col-sm-3" for="inputResponsavel">Responsável</label>
+						    <div class="col-sm-8"> 
+						     	<input type="text" class="form-control" name="inputResponsavel" id="inputResponsavel" ng-model="ct.eleicaoAtual.SindicatoObj.Responsavel" disabled>
+						    </div>
+						</div>
+					</div>
+
+					<hr>
+
+					<div class="row">
+						<div class="col-sm-11"> 
+							<button class="btn btn-success pull-right" ng-if="ct.editando" ng-disabled="formTimeline.$invalid || formEleicao.inputCodUnidade.$invalid || (formEleicao.$invalid && ct.codigoModulo == 1)" ng-click="ct.salvarEleicao(ct.eleicaoAtual)">Abrir Eleição</button>
+							<button class="btn btn-default pull-right" ng-if="ct.editando" ng-click="ct.cancelar()" style="margin-right: 10px;">Cancelar</button>
+						</div>
+					</div>
+
+								  
+				</form>
+
+
+			</div>
+		</div>
+
+	</div>
+
+	<form name="formTimeline" role="form" novalidate style="margin-top: 7px;">
+
+		<div class="col-md-6 col-sm-12" style="margin-bottom: 40px">
+			<div class="vertical-timeline" style="margin-top: 20px;">
+
+				<div class="container-right timeline-checked">
+					<div class="timeline-circle"></div>
+					<div class="timeline-content">
+						<h3>Abertura</h3>
+						<p>
+							Data: {{ct.eleicaoAtual.DataInicio | date:'dd/MM/yyyy'}}
+						</p>
+					</div>
+				</div>
+
+				<div class="container-right" ng-repeat="e in ct.eleicaoAtual.PrazosEtapasObj | orderBy:'Ordem'">
+					<div class="timeline-circle"></div>
+					<div class="timeline-content">
+						<h3>{{e.NomeEtapa}}</h3>
+						Data: <input type="date" name="inputData" class="input-small" ng-model="e.DataProposta" required>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+
+	</form>
+
+</div>
+
+-->
+<div ng-include="'Assets/components/eleicoes/modalUnidade.html'"></div>
+<div ng-include="'Assets/components/eleicoes/modalSindicato.html'"></div>
