@@ -10,10 +10,10 @@
             
         </p>
         <p>Cadastre-se no sistema de Votação Online.</p>
-        <form class="m-t" role="form" name="form">
+        <form class="m-t" role="form" name="form" novalidate>
 
-            <div class="form-group" ng-class="{'has-error': form.cpf.$invalid && form.cpf.$dirty}">
-                <input type="text" ng-change="ct.buscaUsuario(ct.user.CPF)" class="form-control" placeholder="CPF" name="cpf" id="cpf" autofocus ng-model="ct.user.CPF" ng-required="true" ui-cpf-mask>
+            <div class="form-group" ng-class="{'has-error': form.login.$invalid && form.login.$dirty}">
+                <input type="text" ng-change="ct.buscaUsuario(ct.user.Login)" class="form-control" placeholder="Login" name="login" id="login" autofocus ng-model="ct.user.Login" ng-required="true">
             </div>
 
             <div class="form-group" ng-class="{'has-error': form.matricula.$invalid && form.matricula.$dirty}">
@@ -26,22 +26,16 @@
             </div>
 
             <div class="form-group" ng-class="{'has-error': form.password.$invalid && form.password.$dirty}">
-                <input type="password" class="form-control" placeholder="Senha" name="password" id="password" type="password" ng-model="ct.user.Senha" ng-keypress="ct.keypressedSenha($event, ct.user)" required>
+                <input type="password" class="form-control" placeholder="Senha" name="password" id="password" type="password" ng-model="ct.user.Senha" ng-keypress="ct.keypressedSenha($event, ct.user)" required ng-minlength="8">
+                <span class="help-block" ng-show="form.password.$error.minlength && form.password.$dirty" style="color: #dc2727;">Qtda. Mínima de caracteres: 8</span>
             </div>
 
-            <div class="form-group" ng-class="{'has-error': form.passwordPrimeiroAcesso.$invalid && form.passwordPrimeiroAcesso.$dirty}" ng-if="ct.primeiroAcesso">
-                <input class="form-control" placeholder="Senha" name="passwordPrimeiroAcesso" id="passwordPrimeiroAcesso" type="password" ng-model="ct.user.Senha" required ng-minlength="8">
-                <span class="help-block" ng-show="form.passwordPrimeiroAcesso.$error.minlength && form.passwordPrimeiroAcesso.$dirty" style="color: #dc2727;">Qtda. Mínima de caracteres: 8</span>
-            </div>
 
             <div class="form-group" ng-class="{'has-error': (form.confirmaSenha.$invalid || ct.user.Senha != ct.user.ConfirmaSenha) && form.confirmaSenha.$dirty}">
                 <input class="form-control" placeholder="Confirmação da Senha" name="confirmaSenha" id="confirmaSenha" type="password"  ng-model="ct.user.ConfirmaSenha" ng-keypress="ct.keypressedSenha($event, ct.user)" required>
             </div>
 
-
-            <!-- <button type="submit" class="btn btn-primary block full-width m-b" ng-disabled="!ct.user.CPF || !ct.user.Senha" ng-click="ct.autentica(ct.user)">Login</button> -->
-
-            <button class="btn btn-primary block full-width m-b" ng-disabled="form.$invalid || ct.user.Senha != ct.user.ConfirmaSenha" ng-click="ct.cadastrar(ct.user)" style="margin-bottom: 15px;">Cadastrar <span class="loader-spinner pull-right" ng-show="ct.mostraLoader"></span></button>
+            <button class="btn btn-primary block full-width m-b"  ng-click="ct.cadastrar(ct.user)" ng-disabled="form.$invalid || ct.user.Senha != ct.user.ConfirmaSenha" style="margin-bottom: 15px;">Cadastrar <span class="loader-spinner pull-right" ng-show="ct.mostraLoader"></span></button>
 
             <a class="btn btn-sm btn-white btn-block" ui-sref="login">Voltar</a>
             <hr>

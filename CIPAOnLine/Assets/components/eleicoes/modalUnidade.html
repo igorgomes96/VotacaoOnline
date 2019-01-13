@@ -11,9 +11,12 @@
                     	<form role="form" novalidate name="formUnidade">
 
                     		<div class="row">
-	                    		<div class="form-group col-md-6" ng-class="{'has-error': formUnidade.razaoSocialUnidade.$invalid}">
-								    <label class="control-label" for="razaoSocialUnidade">Razão Social</label>
-								    <input type="text" class="form-control" id="razaoSocialUnidade" name="razaoSocialUnidade" ng-model="ct.novaUnidade.RazaoSocial" required>
+
+								<div class="form-group col-md-6"  ng-class="{'has-error': formUnidade.codigoEmpresa.$invalid}">
+									<label class="control-label" for="codigoEmpresa">Empresa</label>
+									<select class="form-control" id="codigoEmpresa" name="codigoEmpresa" ng-model="ct.novaUnidade.CodigoEmpresa" ng-options="e.Codigo as (e.Codigo + ' - ' + e.RazaoSocial) for e in ct.empresas" required>
+										<option value="">(Selecione)</option>
+									</select>
 								</div>
 
 								<div class="form-group col-md-6" ng-class="{'has-error': formUnidade.cidadeUnidade.$invalid}">
@@ -49,12 +52,12 @@
 		                    	<table class="table table-condensed table-hover" id="tableModalUnidades">
 		                    		<thead>
 		                    			<tr>
-		                    				<th width="10%">Código</th>
-			                    			<th width="23%">Razão Social</th>
-			                    			<th width="26%">Cidade/Estado</th>
-			                    			<th width="23%">Endereço</th>
-			                    			<th width="10%">Grupo</th>
-			                    			<th width="8%"></th>
+		                    				<th>Código</th>
+			                    			<th>Razão Social</th>
+			                    			<th>Cidade/Estado</th>
+			                    			<th>Endereço</th>
+			                    			<th>Grupo</th>
+			                    			<th></th>
 		                    			</tr>
 		                    		</thead>
 		                    		<tbody>

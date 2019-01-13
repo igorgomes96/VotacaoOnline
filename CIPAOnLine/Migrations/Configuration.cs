@@ -1,10 +1,13 @@
 namespace CIPAOnLine.Migrations
 {
     using System;
+    using System.Collections.Generic;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
+    using CIPAOnLine.DTO;
     using CIPAOnLine.Models;
+    using CIPAOnLine.Services;
 
     internal sealed class Configuration : DbMigrationsConfiguration<Modelo>
     {
@@ -15,10 +18,46 @@ namespace CIPAOnLine.Migrations
 
         protected override void Seed(Modelo context)
         {
+            context.Empresas.AddOrUpdate(e => e.Codigo,
+                new Empresa { Codigo = 9, RazaoSocial = "ALGAR SEGURANCA ELETRONICA E SERVICOS LTDA" },
+                new Empresa { Codigo = 10, RazaoSocial = "ALGAR SEGURANCA E VIGILANCIA LTDA" },
+                new Empresa { Codigo = 15, RazaoSocial = "ALGAR S/A EMPREENDIMENTOS E PARTICIPACOES" },
+                new Empresa { Codigo = 18, RazaoSocial = "ABC AGRICULTURA E PECUARIA SA- ABC A&P" },
+                new Empresa { Codigo = 20, RazaoSocial = "ABC AGROPEC BRASIL NORTE S/A PROD EXPORT" },
+                new Empresa { Codigo = 25, RazaoSocial = "ALGAR TELECOM S/A" },
+                new Empresa { Codigo = 27, RazaoSocial = "ALGAR MULTIMIDIA S/A" },
+                new Empresa { Codigo = 28, RazaoSocial = "ENGESET ENG SERV TELECOMUNICACOES SA" },
+                new Empresa { Codigo = 29, RazaoSocial = "ALGAR TECNOLOGIA E CONSULTORIA S/A" },
+                new Empresa { Codigo = 33, RazaoSocial = "ALGAR TI CONSULTORIA S/A" },
+                new Empresa { Codigo = 38, RazaoSocial = "ALGAR SOLUCOES EM TIC S/A" },
+                new Empresa { Codigo = 39, RazaoSocial = "ALSOL ENERGIAS RENOVAVEIS S/A" });
+
+            context.Usuarios.AddOrUpdate(u => u.Login,
+                new Usuario {
+                    Login = "admin", Nome = "Administrador Master", Perfil = Perfil.ADMINISTRADOR, Senha = CryptoGraph.Encrypt("Admin01!")
+                }
+            );
+
             context.Modulos.AddOrUpdate(x => x.Codigo,
-                new Modulo() { Codigo = 1, NomeModulo = "CIPA" },
+                new Modulo { Codigo = 1, NomeModulo = "CIPA" },
                 new Modulo { Codigo = 2, NomeModulo = "Comissão Interna de Trabalhadores" }
             );
+
+            List<TemplateEmail> templates = new List<TemplateEmail>()
+            {
+                new TemplateEmail() { Template = Resources.Emails.EmailEdital, Nome = "[CIPA] Edital do Processo" },
+                new TemplateEmail() { Template = Resources.Emails.EmailSindicato, Nome = "[CIPA] Comunicação ao Sindicato" },
+                new TemplateEmail() { Template = Resources.Emails.EmailInscricoes, Nome = "[CIPA] Inscrições para CIPA" },
+                new TemplateEmail() { Template = Resources.Emails.EmailCandidatos, Nome = "[CIPA] Relação de Candidatos" },
+                new TemplateEmail() { Template = Resources.Emails.EmailVotacao, Nome = "[CIPA] Convite para Votação" },
+                new TemplateEmail() { Template = Resources.Emails.EmailApuracaoVotos, Nome = "[CIPA] Apuração dos Votos" }
+            };
+
+            templates.ForEach(t =>
+            {
+                if (!context.Templates.Any(x => x.Nome == t.Nome))
+                    context.Templates.Add(t);
+            });
 
             context.Grupos.AddOrUpdate(
                 new Grupo() { Codigo = "C-1" },

@@ -17,6 +17,7 @@ angular.module('cipaApp').controller('autenticacaoCtrl', ['$stateParams', 'auten
 	self.modulos = [{Codigo: 1, Label: 'CIPA'}, {Codigo: 2, Label: 'Comissão Interna de Trabalhadores'}];
 	self.modulo = self.modulos[0].Codigo;
 
+	self.mostraCodigo = false;
     self.mostraLoader = false;
 	self.primeiroAcesso = false;
 	self.uri = '';
@@ -25,45 +26,31 @@ angular.module('cipaApp').controller('autenticacaoCtrl', ['$stateParams', 'auten
 	self.cpfNaoEncontrado = false;
 	self.matriculaIncorreta = false;
 
-    self.autenticaAdmin = function () {
-        self.mostraLoader = true;
-		autenticacaoAPI.postLoginAdmin(self.admin)
-		.then(function(dado) {
-			
-			//Se houver o código do módulo como parâmetro, guarda na seção
-			sessionStorageService.saveCodigoModulo(self.modulo);
-			sessionStorageService.saveUser(dado.data);
-			sharedDataService.setUsuario(dado.data);
-
-            self.mostraLoader = false;
-			$rootScope.$broadcast('reloadStatesEvent');
-			$state.go('navContainer.home', null, {reload: true});
-
-		}, function(error) {
-
-            self.mostraLoader = false;
-			setErro((error.data && error.data.Message) || error.data ||  error);
-			console.log(error);
-			
-		});
-	}
-
     self.recuperarSenha = function (usuario) {
+	    self.mostraLoader = true;
+    	if (self.mostraCodigo) {
+			autenticacaoAPI.postRecuperarSenha(usuario)
+			.then(function(dado) {
+	            self.mostraLoader = false;
+				swal('Sucesso!', dado.data, 'success');
+				$state.go('login');
+			}, function(error) {
+	            self.mostraLoader = false;
+				setErro((error.data && error.data.Message) || error.data ||  error);
+				console.log(error);
+			});
+		} else {
 
-    	//Alterado para a Virtual Connection
-
-        self.mostraLoader = true;
-		autenticacaoAPI.postRecuperarSenha(usuario)
-		.then(function(dado) {
-            self.mostraLoader = false;
-			swal('Sucesso!', dado.data, 'success');
-			$state.go('login');
-		}, function(error) {
-            self.mostraLoader = false;
-			setErro((error.data && error.data.Message) || error.data ||  error);
-			console.log(error);
-			
-		});
+			autenticacaoAPI.postEnviarCodigo(usuario)
+			.then(function(dado) {
+				self.mostraCodigo = true;
+			}, function(error) {
+				setErro((error.data && error.data.Message) || error.data ||  error);
+				console.log(error);
+			}).finally(function() {
+	            self.mostraLoader = false;
+			});
+		}
 	}
 
 	self.keypressedSenha = function ($event, user) {
@@ -83,19 +70,19 @@ angular.module('cipaApp').controller('autenticacaoCtrl', ['$stateParams', 'auten
     	}
     }
 
-    self.buscaUsuario = function(cpf) {
+    self.buscaUsuario = function(login) {
     	//self.matriculaIncorreta = false;
-    	if (!cpf) return;
-		autenticacaoAPI.getFuncionario(cpf)
+    	if (!login) return;
+		autenticacaoAPI.getFuncionario(login)
 		.then(function(dado) {
 			self.tempUser = dado.data;
-			self.cpfNaoEncontrado = false;
+			self.loginNaoEncontrado = false;
 		}, function(error) {
 			self.tempUser = null;
 			self.user.MatriculaFuncionario = null;
 			self.user.Email = null;
 			if (error.status == 404)
-				self.cpfNaoEncontrado = true;
+				self.loginNaoEncontrado = true;
 		});
     }
 
@@ -128,8 +115,9 @@ angular.module('cipaApp').controller('autenticacaoCtrl', ['$stateParams', 'auten
 	}
 
 	self.cadastrar = function(user) {
-		self.mostraLoader = true;
 
+		self.mostraLoader = true;
+		user.CodigoEmpresa = self.tempUser.CodigoEmpresa;
 		autenticacaoAPI.postPrimeiroAcesso(user)
 		.then(function(dado) {
 			return autenticacaoAPI.postLogin(user);
@@ -155,6 +143,5 @@ angular.module('cipaApp').controller('autenticacaoCtrl', ['$stateParams', 'auten
 
 		});
 	}
-
 
 }]);

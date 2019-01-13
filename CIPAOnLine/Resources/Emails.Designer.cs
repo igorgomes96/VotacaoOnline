@@ -61,33 +61,18 @@ namespace CIPAOnLine.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;!DOCTYPE html&gt;
-        ///&lt;html&gt;
+        ///   Looks up a localized string similar to &lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot; &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;
+        ///&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;
         ///&lt;head&gt;
-        ///	&lt;title&gt;CIPA&lt;/title&gt;
-        ///	&lt;style type=&quot;text/css&quot;&gt;
-        ///		* {{
-        ///			font-size: 14px;
-        ///			line-height: 1.428;
-        ///			font-family: &quot;Segoe UI&quot;,Arial,sans-serif;
-        ///		}}
-        ///	&lt;/style&gt;
-        ///&lt;/head&gt;
-        ///&lt;body&gt;
+        ///    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width&quot; /&gt;
+        ///    &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot; /&gt;
+        ///    &lt;title&gt;Aprovação de Candidatura&lt;/title&gt;
+        ///    &lt;style&gt;
         ///
-        ///	&lt;h3&gt;Sua candidatura à eleição para {0} foi aprovada!&lt;/h3&gt;
-        ///	&lt;p&gt;
-        ///		&lt;strong&gt;CPF: &lt;/strong&gt;{1}&lt;br&gt;
-        ///		&lt;strong&gt;Nome: &lt;/strong&gt;{2}&lt;br&gt;
-        ///		&lt;strong&gt;Cargo: &lt;/strong&gt;{3}&lt;br&gt;
-        ///		&lt;strong&gt;Área: &lt;/strong&gt;{4}
-        ///	&lt;/p&gt;
-        ///&lt;p style=&quot;color: #888&quot;&gt;
-        ///Atenciosamente,&lt;br&gt;
-        ///Sistema de Votação Online.
-        ///&lt;/p&gt;
-        ///&lt;/body&gt;
-        ///&lt;/ [rest of string was truncated]&quot;;.
+        ///        .body {
+        ///            -webkit-font-smoothing: antialiased;
+        ///            -webkit-text-size-adjust: none;
+        ///            width: 100% !impor [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string EmailAprovacaoCandidatura {
             get {
@@ -96,44 +81,42 @@ namespace CIPAOnLine.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;!DOCTYPE html&gt;
-        ///&lt;html&gt;
+        ///   Looks up a localized string similar to &lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot; &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;
+        ///&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;
         ///&lt;head&gt;
-        ///	&lt;title&gt;CIPA&lt;/title&gt;
-        ///	&lt;style type=&quot;text/css&quot;&gt;
-        ///		* {{
-        ///			font-size: 14px;
-        ///			line-height: 1.428;
-        ///			font-family: &quot;Segoe UI&quot;,Arial,sans-serif;
-        ///		}}
-        ///	&lt;/style&gt;
-        ///&lt;/head&gt;
-        ///&lt;body&gt;
-        ///	&lt;h4&gt;ATA DE APURAÇÃO DOS VOTOS CIPA {0} GESTÃO {1}&lt;/h4&gt;
-        ///	&lt;p&gt;Aos {2}, no(a) {3}, situado(a) no(a) {4}, nesta cidade {0}, diante a apuração ficou constatada a participação superior a cinquenta por cento dos empregados na votação, eximindo-se a empresa de nova votação, de acordo com o item 5.41 da N [rest of string was truncated]&quot;;.
+        ///    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width&quot; /&gt;
+        ///    &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot; /&gt;
+        ///    &lt;title&gt;Apuração de Votos&lt;/title&gt;
+        ///    &lt;style&gt;
+        ///
+        ///        .body {
+        ///            -webkit-font-smoothing: antialiased;
+        ///            -webkit-text-size-adjust: none;
+        ///            width: 100% !important;
+        /// [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string EmailApuracao {
+        internal static string EmailApuracaoVotos {
             get {
-                return ResourceManager.GetString("EmailApuracao", resourceCulture);
+                return ResourceManager.GetString("EmailApuracaoVotos", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;!DOCTYPE html&gt;
-        ///&lt;html&gt;
+        ///   Looks up a localized string similar to &lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot; &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;
+        ///&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;
         ///&lt;head&gt;
-        ///	&lt;title&gt;CIPA&lt;/title&gt;
-        ///	&lt;style type=&quot;text/css&quot;&gt;
-        ///		* {{
-        ///			font-size: 14px;
-        ///			line-height: 1.428;
-        ///			font-family: &quot;Segoe UI&quot;,Arial,sans-serif;
-        ///		}}
-        ///	&lt;/style&gt;
-        ///&lt;/head&gt;
-        ///&lt;body&gt;
-        ///	&lt;h4&gt;RELAÇÃO DE CANDIDATOS INSCRITOS DA CIPA {0} – GESTÃO {1}&lt;/h4&gt;                                           
-        ///	&lt;p&gt;Ficam convocados os associados, estagiários e temporários do(a) {2}, {3}, na cidade {0}, para a eleição de seus representantes na Comissão Interna de Prevenção de Acidentes - CIPA, de [rest of string was truncated]&quot;;.
+        ///    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width&quot; /&gt;
+        ///    &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot; /&gt;
+        ///    &lt;title&gt;Candidatos - CIPA&lt;/title&gt;
+        ///    &lt;style&gt;
+        ///
+        ///        .content-wrap {
+        ///            padding: 20px;
+        ///        }
+        ///
+        ///        .body-wrap {
+        ///            background-color: #f6f6f6;
+        ///            width: 10 [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string EmailCandidatos {
             get {
@@ -142,64 +125,41 @@ namespace CIPAOnLine.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;!DOCTYPE html&gt;
-        ///&lt;html&gt;
+        ///   Looks up a localized string similar to &lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot; &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;
+        ///&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;
         ///&lt;head&gt;
-        ///	&lt;title&gt;CIPA&lt;/title&gt;
-        ///	&lt;style type=&quot;text/css&quot;&gt;
-        ///		* {{
-        ///			font-size: 14px;
-        ///			line-height: 1.428;
-        ///			font-family: &quot;Segoe UI&quot;,Arial,sans-serif;
-        ///		}}
-        ///	&lt;/style&gt;
-        ///&lt;/head&gt;
-        ///&lt;body&gt;
+        ///    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width&quot; /&gt;
+        ///    &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot; /&gt;
+        ///    &lt;title&gt;Confirmação de Candidatura&lt;/title&gt;
+        ///    &lt;style&gt;
         ///
-        ///	&lt;h3&gt;Sua candidatura à eleicão para {0} foi efetuada com sucesso!&lt;/h3&gt;
-        ///	&lt;p&gt;
-        ///		&lt;strong&gt;CPF: &lt;/strong&gt;{1}&lt;br&gt;
-        ///		&lt;strong&gt;Nome: &lt;/strong&gt;{2}&lt;br&gt;
-        ///		&lt;strong&gt;Cargo: &lt;/strong&gt;{3}&lt;br&gt;
-        ///		&lt;strong&gt;Área: &lt;/strong&gt;{4}
-        ///	&lt;/p&gt;
-        ///	&lt;p&gt;Agora, sua candidatura passará pela aprovação dos responsáveis pelo process [rest of string was truncated]&quot;;.
+        ///        .body {
+        ///            -webkit-font-smoothing: antialiased;
+        ///            -webkit-text-size-adjust: none;
+        ///            width: 100% !imp [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string EmailCandidatura {
+        internal static string EmailConfirmacaoCandidatura {
             get {
-                return ResourceManager.GetString("EmailCandidatura", resourceCulture);
+                return ResourceManager.GetString("EmailConfirmacaoCandidatura", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;!DOCTYPE html&gt;
-        ///&lt;html&gt;
+        ///   Looks up a localized string similar to &lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot; &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;
+        ///&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;
         ///&lt;head&gt;
-        ///	&lt;title&gt;CIPA&lt;/title&gt;
-        ///	&lt;style type=&quot;text/css&quot;&gt;
-        ///		* {{
-        ///			font-size: 14px;
-        ///			line-height: 1.428;
-        ///			font-family: &quot;Segoe UI&quot;,Arial,sans-serif;
-        ///		}}
+        ///    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width&quot; /&gt;
+        ///    &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot; /&gt;
+        ///    &lt;title&gt;Edital - CIPA&lt;/title&gt;
+        ///    &lt;style&gt;
         ///
-        ///		.email p {{
-        ///			text-indent: 20px;
-        ///		}}
+        ///        .content-wrap {
+        ///            padding: 20px;
+        ///        }
         ///
-        ///		div.footer {{
-        ///			margin-left: 30px;
-        ///		}}
-        ///
-        ///	&lt;/style&gt;
-        ///
-        ///	&lt;!-- Custom Fonts --&gt;
-        ///    &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css&quot;&gt;
-        ///&lt;/head&gt;
-        ///&lt;body&gt;
-        ///
-        ///	&lt;div class=&quot;email&quot;&gt;
-        ///		&lt;p&gt;{0}, &lt;strong&gt;{1}&lt;/s [rest of string was truncated]&quot;;.
+        ///        .body-wrap {
+        ///            background-color: #f6f6f6;
+        ///            width: 100%;        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string EmailEdital {
             get {
@@ -208,79 +168,41 @@ namespace CIPAOnLine.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to eleicoes.cipa@gmail.com.
-        /// </summary>
-        internal static string EmailEndereco {
-            get {
-                return ResourceManager.GetString("EmailEndereco", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;!DOCTYPE html&gt;
-        ///&lt;html&gt;
+        ///   Looks up a localized string similar to &lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot; &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;
+        ///&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;
         ///&lt;head&gt;
-        ///	&lt;title&gt;CIPA&lt;/title&gt;
-        ///	&lt;style type=&quot;text/css&quot;&gt;
-        ///		* {{
-        ///			font-size: 14px;
-        ///			line-height: 1.428;
-        ///			font-family: &quot;Segoe UI&quot;,Arial,sans-serif;
-        ///		}}
-        ///	&lt;/style&gt;
-        ///&lt;/head&gt;
-        ///&lt;body&gt;
-        ///	&lt;h4&gt;EDITAL DE INSCRIÇÃO PARA MEMBROS DA CIPA {0} – GESTÃO {1}&lt;/h4&gt;
-        ///	&lt;p&gt;Aos {2}, o(a) {3}, situado(a) no(a) {4}, nesta cidade de {0}, site ......, convida seus associados a realizarem suas inscrições para eleição dos membros representantes dos Empregados da Comissão Interna de Prevenção de Aciden [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string EmailInscricao {
-            get {
-                return ResourceManager.GetString("EmailInscricao", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to votacaoonline@algartech.com.
-        /// </summary>
-        internal static string EmailOrigem {
-            get {
-                return ResourceManager.GetString("EmailOrigem", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;strong&gt;Olá!&lt;/strong&gt;&lt;br&gt;&lt;br&gt;Recuperamos sua senha de acesso ao sistema de Votação Online: {0}..
-        /// </summary>
-        internal static string EmailRecuperacaoSenha {
-            get {
-                return ResourceManager.GetString("EmailRecuperacaoSenha", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;!DOCTYPE html&gt;
-        ///&lt;html&gt;
-        ///&lt;head&gt;
-        ///	&lt;title&gt;CIPA&lt;/title&gt;
-        ///	&lt;style type=&quot;text/css&quot;&gt;
-        ///		* {{
-        ///			font-size: 14px;
-        ///			line-height: 1.428;
-        ///			font-family: &quot;Segoe UI&quot;,Arial,sans-serif;
-        ///		}}
-        ///	&lt;/style&gt;
-        ///&lt;/head&gt;
-        ///&lt;body&gt;
+        ///    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width&quot; /&gt;
+        ///    &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot; /&gt;
+        ///    &lt;title&gt;Inscrições para CIPA&lt;/title&gt;
+        ///    &lt;style&gt;
         ///
-        ///	&lt;h3&gt;Sua candidatura à eleição para {0} foi reprovada.&lt;/h3&gt;
-        ///	&lt;p&gt;
-        ///		&lt;strong&gt;CPF: &lt;/strong&gt;{1}&lt;br&gt;
-        ///		&lt;strong&gt;Nome: &lt;/strong&gt;{2}&lt;br&gt;
-        ///		&lt;strong&gt;Cargo: &lt;/strong&gt;{3}&lt;br&gt;
-        ///		&lt;strong&gt;Área: &lt;/strong&gt;{4}
-        ///	&lt;/p&gt;
-        ///	&lt;p&gt;Segue abaixo o motivo informado pelo administrador do processo eleitoral:&lt;/p&gt;
-        ///	&lt;p sty [rest of string was truncated]&quot;;.
+        ///        .content-wrap {
+        ///            padding: 20px;
+        ///        }
+        ///
+        ///        .body-wrap {
+        ///            background-color: #f6f6f6;
+        ///            width: [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string EmailInscricoes {
+            get {
+                return ResourceManager.GetString("EmailInscricoes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot; &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;
+        ///&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;
+        ///&lt;head&gt;
+        ///    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width&quot; /&gt;
+        ///    &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot; /&gt;
+        ///    &lt;title&gt;Reprovação de Candidatura&lt;/title&gt;
+        ///    &lt;style&gt;
+        ///
+        ///        .body {
+        ///            -webkit-font-smoothing: antialiased;
+        ///            -webkit-text-size-adjust: none;
+        ///            width: 100% !impo [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string EmailReprovacaoCandidatura {
             get {
@@ -289,51 +211,21 @@ namespace CIPAOnLine.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to *eleicoes.cipa*.
-        /// </summary>
-        internal static string EmailSenha {
-            get {
-                return ResourceManager.GetString("EmailSenha", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;!DOCTYPE html&gt;
-        ///&lt;html&gt;
+        ///   Looks up a localized string similar to &lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot; &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;
+        ///&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;
         ///&lt;head&gt;
-        ///	&lt;title&gt;CIPA&lt;/title&gt;
-        ///	&lt;style type=&quot;text/css&quot;&gt;
-        ///		* {{
-        ///			font-size: 14px;
-        ///			line-height: 1.428;
-        ///			font-family: &quot;Segoe UI&quot;,Arial,sans-serif;
-        ///		}}
+        ///    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width&quot; /&gt;
+        ///    &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot; /&gt;
+        ///    &lt;title&gt;Comunicação: CIPA&lt;/title&gt;
+        ///    &lt;style&gt;
         ///
-        ///		.email p {{
-        ///			text-indent: 20px;
-        ///		}}
+        ///        .content-wrap {
+        ///            padding: 20px;
+        ///        }
         ///
-        ///		div.footer {{
-        ///			margin-left: 20px;
-        ///		}}
-        ///
-        ///		div.title {{
-        ///			margin-left: 20px;
-        ///		}}
-        ///
-        ///		#cronograma {{
-        ///			padding-left: 20px;
-        ///		}}
-        ///
-        ///	&lt;/style&gt;
-        ///&lt;/head&gt;
-        ///&lt;body&gt;
-        ///
-        ///	&lt;div class=&quot;email&quot;&gt;
-        ///		&lt;p&gt;{0}, {1}.&lt;/p&gt;
-        ///
-        ///		&lt;div class=&quot;title&quot;&gt;
-        ///			Finalidade: Comunicação de eleiçõ [rest of string was truncated]&quot;;.
+        ///        .body-wrap {
+        ///            background-color: #f6f6f6;
+        ///            width: 10 [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string EmailSindicato {
             get {
@@ -342,21 +234,21 @@ namespace CIPAOnLine.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;!DOCTYPE html&gt;
-        ///&lt;html&gt;
+        ///   Looks up a localized string similar to &lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot; &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;
+        ///&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;
         ///&lt;head&gt;
-        ///	&lt;title&gt;CIPA&lt;/title&gt;
-        ///	&lt;style type=&quot;text/css&quot;&gt;
-        ///		* {{
-        ///			font-size: 14px;
-        ///			line-height: 1.428;
-        ///			font-family: &quot;Segoe UI&quot;,Arial,sans-serif;
-        ///		}}
-        ///	&lt;/style&gt;
-        ///&lt;/head&gt;
-        ///&lt;body&gt;
-        ///	&lt;h4&gt;EDITAL DE VOTAÇÃO PARA MEMBROS DA CIPA {0} – GESTÃO {1}&lt;/h4&gt; 
-        ///	&lt;p&gt;Aos {2}, o(a) {3}, situado(a) no(a) {4}, nesta cidade de {0}, através de seu SESMT – Serviço Especializado em Engenharia de Segurança e Medicina do Trabalho - INFORMAMOS A TODOS OS ASSOCIADOS QUE O PROCESSO DE VOTAÇÃO DA CIPA  [rest of string was truncated]&quot;;.
+        ///    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width&quot; /&gt;
+        ///    &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot; /&gt;
+        ///    &lt;title&gt;Votação - CIPA&lt;/title&gt;
+        ///    &lt;style&gt;
+        ///
+        ///        .content-wrap {
+        ///            padding: 20px;
+        ///        }
+        ///
+        ///        .body-wrap {
+        ///            background-color: #f6f6f6;
+        ///            width: 100%; [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string EmailVotacao {
             get {
@@ -365,11 +257,21 @@ namespace CIPAOnLine.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to http://10.200.51.46:8090.
+        ///   Looks up a localized string similar to &lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot; &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;
+        ///&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;
+        ///&lt;head&gt;
+        ///    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width&quot; /&gt;
+        ///    &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot; /&gt;
+        ///    &lt;title&gt;Recuperação de Senha&lt;/title&gt;
+        ///    &lt;style&gt;
+        ///        * {
+        ///            margin: 0;
+        ///            padding: 0;
+        ///            font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif;        /// [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string LinkSistema {
+        internal static string RecoverySenha {
             get {
-                return ResourceManager.GetString("LinkSistema", resourceCulture);
+                return ResourceManager.GetString("RecoverySenha", resourceCulture);
             }
         }
     }

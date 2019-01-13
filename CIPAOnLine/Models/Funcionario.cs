@@ -17,9 +17,20 @@ namespace CIPAOnLine.Models
         }
 
         [Key]
+        [Column("id")]
+        public int Id { get; set; }
+
         [MaxLength(15)]
         [Column("matricula")]
+        [Required]
+        [Index("IdxFuncionario", IsUnique = true, Order = 0)]
         public string MatriculaFuncionario { get; set; }
+
+        [Column("codigo_empresa")]
+        [Required]
+        [Index("IdxFuncionario", IsUnique = true, Order = 1)]
+        public int CodigoEmpresa { get; set; }
+
         [Required]
         [MaxLength(60)]
         [Column("nome")]
@@ -30,6 +41,7 @@ namespace CIPAOnLine.Models
         [Index(IsUnique = true)]
         public string Login { get; set; }
 
+        
         [Column("cargo")]
         [MaxLength(80)]
         public string Cargo { get; set; }
@@ -61,6 +73,8 @@ namespace CIPAOnLine.Models
 
         [ForeignKey("CodigoGestor")]
         public virtual Gestor Gestor { get; set; }
+        [ForeignKey("CodigoEmpresa")]
+        public virtual Empresa Empresa { get; set; }
         public virtual ICollection<Candidato> Candidatos { get; set; }
         public virtual ICollection<Voto> Votos { get; set; }
         public virtual ICollection<VotoBranco> VotosBrancos { get; set; }

@@ -11,11 +11,11 @@ namespace CIPAOnLine.Models
     public class VotoBranco
     {
         [Key]
-        [Column("matricula_eleitor", Order = 1)]
-        [MaxLength(15)]
-        public string MatriculaEleitor { get; set; }
+        [Column("funcionario_id_eleitor", Order = 0)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public int FuncionarioIdEleitor { get; set; }
         [Key]
-        [Column("codigo_eleicao", Order = 2)]
+        [Column("codigo_eleicao", Order = 1)]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int CodigoEleicao { get; set; }
         [Required]
@@ -26,7 +26,7 @@ namespace CIPAOnLine.Models
         [Column("ip")]
         public string IP { get; set; }
 
-        [ForeignKey("MatriculaEleitor")]
+        [ForeignKey("FuncionarioIdEleitor")]
         public virtual Funcionario Eleitor { get; set; }
         [ForeignKey("CodigoEleicao")]
         public virtual Eleicao Eleicao { get; set; }

@@ -38,8 +38,9 @@ namespace CIPAOnLine.Controllers
         {
             try
             {
-                voto.MatriculaEleitor = usuariosService.GetUsuario(User.Identity.Name).MatriculaFuncionario;
-                if (votosService.VotoExiste(voto.MatriculaEleitor, voto.CodigoEleicao))
+                voto.FuncionarioIdEleitor = usuariosService.GetUsuario(User.Identity.Name).FuncionarioId.Value;
+
+                if (votosService.VotoExiste(voto.FuncionarioIdEleitor, voto.CodigoEleicao))
                 {
                     return Content(HttpStatusCode.BadRequest, "Voto já registrado!");
                 }

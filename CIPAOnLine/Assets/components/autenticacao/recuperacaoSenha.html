@@ -6,33 +6,40 @@
 
         </div>
         <h3>Sistema de Votação Online</h3>
-        <p>
-            
-        </p>
-        <!-- <p>Informe seu CPF e sua matrícula e enviaremos sua senha para o e-mail cadastrado em nossa base de dados</p> -->
-        <p>Informe seu CPF e enviaremos sua senha para o e-mail cadastrado em nossa base de dados</p>
+        <p>Informe seu Login e enviaremos um código de recuperação para o e-mail cadastrado em nossa base de dados</p>
 
         <form class="m-t" role="form" name="form">
 
-            <div class="form-group" ng-class="{'has-error': form.cpf.$invalid && form.cpf.$dirty}">
-                <input type="text" class="form-control" placeholder="CPF" name="cpf" id="cpf" autofocus ng-model="ct.recuperacao.CPF" ng-required="true" ui-cpf-mask>
+            <div class="form-group" ng-class="{'has-error': form.login.$invalid && form.login.$dirty}">
+                <input class="form-control" placeholder="Login" name="login" id="login" autofocus ng-model="ct.recuperacao.Login" required>
             </div>
-            <!-- <div class="form-group" ng-class="{'has-error': form.matricula.$invalid && form.matricula.$dirty}">
-                <input class="form-control" placeholder="Matrícula" name="matricula" id="matricula" autofocus ng-model="ct.recuperacao.MatriculaFuncionario" required>
-            </div> -->
+
+            <div class="form-group" ng-class="{'has-error': form.codigo.$invalid && form.codigo.$dirty}" ng-if="ct.mostraCodigo">
+                <input class="form-control" placeholder="Código de Recuperação" name="codigo" id="codigo" autofocus ng-model="ct.recuperacao.CodigoRecuperacao" required>
+            </div>
+
+            <div class="form-group" ng-class="{'has-error': form.novaSenha.$invalid && form.novaSenha.$dirty}" ng-if="ct.mostraCodigo">
+                <input type="password" class="form-control" placeholder="Nova Senha" name="novaSenha" id="novaSenha" autofocus ng-model="ct.recuperacao.Senha" required ng-minlength="8">
+                <span class="help-block" ng-show="form.novaSenha.$error.minlength && form.novaSenha.$dirty" style="color: #dc2727;">Qtda. Mínima de caracteres: 8</span>
+            </div>
+
+            <div class="form-group" ng-class="{'has-error': form.confirmaSenha.$invalid && form.confirmaSenha.$dirty}" ng-if=
+            "ct.mostraCodigo">
+                <input type="password" class="form-control" placeholder="Confirmação da Senha" name="confirmaSenha" id="confirmaSenha" autofocus ng-model="ct.recuperacao.ConfirmaSenha" required>
+            </div>
 
             <div class="alert alert-danger" ng-show="ct.erro">
                 <p class="alert-link" style="display: inline;">Erro!</p> {{ct.erro}}
             </div>
 
-            <button type="submit" class="btn btn-primary block full-width m-b" ng-disabled="form.$invalid" ng-click="ct.recuperarSenha(ct.recuperacao)">Recuperar <span class="loader-spinner pull-right" ng-show="ct.mostraLoader"></span></button>
+            <button type="submit" class="btn btn-primary block full-width m-b" ng-disabled="form.$invalid" ng-click="ct.recuperarSenha(ct.recuperacao)">{{ ct.mostraCodigo ? 'Recuperar' : 'Enviar Código' }} <span class="loader-spinner pull-right" ng-show="ct.mostraLoader"></span></button>
+
+            <button class="btn btn-success block full-width m-b" ng-if="!ct.mostraCodigo" ng-click="ct.mostraCodigo = true">Já possuo um código</button>
 
             <a class="btn btn-sm btn-white btn-block" ui-sref="login">Voltar</a>
-            <!-- <hr> -->
-            <!-- <a ui-sref="loginAdmin">Logar como Admin</a> -->
+
 
         </form>
-        <!-- <p class="m-t"> <small>Inspinia we app framework base on Bootstrap 3 &copy; 2014</small> </p> -->
     </div>
 </div>
 

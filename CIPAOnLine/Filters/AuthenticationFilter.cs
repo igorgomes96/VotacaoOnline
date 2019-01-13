@@ -1,4 +1,5 @@
 ﻿using CIPAOnLine.Exceptions;
+using CIPAOnLine.Jwt;
 using CIPAOnLine.Models;
 using CIPAOnLine.Services;
 using System;
@@ -49,7 +50,7 @@ namespace CIPAOnLine.Filters
             }
 
             // 3. If there are credentials but the filter does not recognize the authentication scheme, do nothing.
-            if (authorization.Scheme != "Basic")
+            if (authorization.Scheme != "Bearer")
             {
                 context.ErrorResult = new AuthenticationFailureResult("Tipo de autenticação não reconhecida!", request);
                 return Task.FromResult<object>(null);
@@ -57,7 +58,7 @@ namespace CIPAOnLine.Filters
 
             // 4. If there are credentials that the filter understands, try to validate them.
             // 5. If the credentials are bad, set the error result.
-            if (String.IsNullOrEmpty(authorization.Parameter))
+            if (string.IsNullOrEmpty(authorization.Parameter))
             {
                 context.ErrorResult = new AuthenticationFailureResult("Credenciais não encontradas", request);
                 return Task.FromResult<object>(null);
@@ -65,7 +66,7 @@ namespace CIPAOnLine.Filters
 
             string Token = authorization.Parameter;
 
-            IPrincipal principal = AuthenticateAsync(Token);
+            IPrincipal principal = AuthenticateAsync(Token).Result;
             if (principal == null)
                 context.ErrorResult = new AuthenticationFailureResult("Usuário não autenticado ou sessão expirada!", request);
 
@@ -80,44 +81,12 @@ namespace CIPAOnLine.Filters
         }
 
 
-        private IPrincipal AuthenticateAsync(string Token)
+        private Task<IPrincipal> AuthenticateAsync(string token)
         {
 
-            //Modelo db = new Modelo();
-            //Sessao s = null;
-            //try { 
-            ////Verifica a Sessão
-            //    s = await db.Sessoes.FindAsync(Token);
-            //} catch (Exception e)
-            //{
-            //    Trace.WriteLine(e.Message);
-            //}
-            ////Se não houver sessão aberta, retorna
-            //if (s == null) return null;
-
-            ////Se a sessão tiver expirado, exclui do banco e retorna
-            //if (s.Fim.Value < DateTime.Now)
-            //{
-            //    db.Sessoes.Remove(s);
-            //    db.SaveChanges();
-            //    return null;
-            //}
-
-            //s.Fim = DateTime.Now.AddHours(24.0);    //Atualiza prazo para expirar
-
-            try { 
-                string[] values = CryptoGraph.Decrypt(Token).Split(':');
-
-                if (values.Length != 3) return null;
-
-                DateTime expirationTime = DateTime.ParseExact(values[1], "yyyyMMddHHmm", CultureInfo.CreateSpecificCulture("pt-BR"));
-
-                if (DateTime.Now > expirationTime) return null;
-
-                IPrincipal p = new GenericPrincipal(new GenericIdentity(values[0]), new[] { values[2] });
-
-                //db.SaveChanges();
-                return p;
+            try
+            {
+                return TokenServices.AuthenticateJwtToken(token);
             } catch
             {
                 return null;

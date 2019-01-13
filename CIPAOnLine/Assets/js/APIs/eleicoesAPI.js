@@ -59,16 +59,16 @@ angular.module('cipaApp').service('eleicoesAPI', ['$http', 'config', function($h
         return $http.delete(config.baseUrl + resource + '/' + id);
     }
 
-    self.addFuncionario = function(id, matricula) {
-        return $http.post(config.baseUrl + resource + '/' + id + '/AddFuncionario/' + matricula);
+    self.addFuncionario = function(id, funcionarioId) {
+        return $http.post(config.baseUrl + resource + '/' + id + '/AddFuncionario/' + funcionarioId);
     }
 
     self.getTotalFuncionarioEleitores = function(codEleicao) {
         return $http.get(config.baseUrl + resource + '/TotalFuncionariosEleitores/' + codEleicao);
     }
 
-    self.deleteFuncionario = function(codEleicao, matricula) {
-        return $http.put(config.baseUrl + resource + '/' + codEleicao + '/RemoveFuncionario/' + matricula);
+    self.deleteFuncionario = function(codEleicao, funcionarioId) {
+        return $http.put(config.baseUrl + resource + '/' + codEleicao + '/RemoveFuncionario/' + funcionarioId);
     }
 
     self.deleteTodosFuncionarios = function(codEleicao) {

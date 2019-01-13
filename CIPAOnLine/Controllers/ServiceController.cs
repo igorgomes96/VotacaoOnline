@@ -1,4 +1,5 @@
 ﻿using CIPAOnLine.Filters;
+using CIPAOnLine.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,20 @@ namespace CIPAOnLine.Controllers
         public string ConverteFromBase64(string texto)
         {
             return Encoding.UTF8.GetString(Convert.FromBase64String(texto));
+        }
+
+        [HttpGet]
+        [Route("api/encrypt/{texto}")]
+        public string Encrypt(string texto) 
+        {
+            return CryptoGraph.Encrypt(texto);
+        }
+
+        [HttpGet]
+        [Route("api/decrypt/{texto}")]
+        public string Decrypt(string texto)
+        {
+            return CryptoGraph.Decrypt(texto);
         }
     }
 }

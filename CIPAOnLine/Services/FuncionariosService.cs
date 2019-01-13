@@ -14,42 +14,64 @@ namespace CIPAOnLine.Services
     {
         private Modelo db = new Modelo();
 
-
-        public Funcionario GetFuncionario(string matricula)
+        public Funcionario GetFuncionario(int id)
         {
-            matricula = string.Concat(matricula.SkipWhile(c => c == '0'));
-            Funcionario f = db.Funcionarios.Find(matricula);
-            if (f == null) throw new FuncionarioNaoEncontradoException(matricula);
+            Funcionario f = db.Funcionarios.Find(id);
+            if (f == null) throw new FuncionarioNaoEncontradoException(id);
             return f;
+        }
+
+        public Funcionario GetFuncionario(string matricula, int codigoEmpresa)
+        {
+            Funcionario func = db.Funcionarios.FirstOrDefault(f => f.MatriculaFuncionario == matricula && f.CodigoEmpresa == codigoEmpresa);
+            if (func == null) throw new FuncionarioNaoEncontradoException(matricula, codigoEmpresa);
+            return func;
         }
 
         public Funcionario AddOrUpdateFuncionario(Funcionario func)
         {
+            Funcionario funcionario = null;
             try
             {
-                func.MatriculaFuncionario = string.Concat(func.MatriculaFuncionario.SkipWhile(c => c == '0'));
 
-                Usuario user = db.Usuarios.Find(func.Login);
-                if (user != null) { 
-                    user.MatriculaFuncionario = func.MatriculaFuncionario;
-                    user.Nome = func.Nome;
+                funcionario = GetByLogin(func.Login);
+                if (funcionario != null) { 
+                    if (func.MatriculaFuncionario != funcionario.MatriculaFuncionario)
+                        throw new Exception($"Já existe um funcionário cadastrado com esse mesmo login ({func.Login}) porém com matrícula diferente: {funcionario.MatriculaFuncionario}, empresa {funcionario.Empresa?.Codigo} - {funcionario.Empresa?.RazaoSocial}.");
+
+                    func.Id = funcionario.Id;
+                    if (func.Thumbnail == null)
+                        func.Thumbnail = funcionario.Thumbnail;
                 }
-
-                Funcionario funcionario = GetFuncionario(func.MatriculaFuncionario);
-                if (func.Thumbnail == null)
-                    func.Thumbnail = funcionario.Thumbnail;
             }
             catch (FuncionarioNaoEncontradoException) { }
 
+            Usuario user = db.Usuarios.Find(func.Login);
+
+            // Se o usuário for administrador, não muda a empresa
+            if (user != null && user.Perfil == Perfil.ADMINISTRADOR && funcionario != null)
+            {
+                func.CodigoEmpresa = funcionario.CodigoEmpresa;
+            }
+
             db.Funcionarios.AddOrUpdate(func);
+
+            
+            if (user != null)
+            {
+                user.FuncionarioId = func.Id;
+                user.Nome = func.Nome;
+            }
+
             db.SaveChanges();
+
             return func;
         }
 
         public FuncionarioFoto AddOrUpdateFuncionarioFoto(FuncionarioFoto func)
         {
-            if (!FuncionarioExiste(func.MatriculaFuncionario))
-                throw new FuncionarioNaoEncontradoException(func.MatriculaFuncionario);
+            if (!FuncionarioExiste(func.FuncionarioId))
+                throw new FuncionarioNaoEncontradoException(func.FuncionarioId);
 
             db.FuncionariosFotos.AddOrUpdate(func);
             db.SaveChanges();
@@ -57,24 +79,29 @@ namespace CIPAOnLine.Services
             return func;
         }
 
-        public Funcionario Delete(string matricula)
+        public Funcionario Delete(int funcionarioId)
         {
-            Funcionario f = GetFuncionario(matricula);
-            Eleicao e = db.Eleicoes.FirstOrDefault(x => x.Funcionarios.Any(y => y.MatriculaFuncionario == matricula));
+            Funcionario f = GetFuncionario(funcionarioId);
+            Eleicao e = db.Eleicoes.FirstOrDefault(x => x.Funcionarios.Any(y => y.Id == funcionarioId));
             if (e != null)
                 throw new Exception($"Não é possível excluir esse funcionário pois ele está cadastrado na eleição #{e.Codigo} (gestão {e.Gestao}).");
 
-            Usuario u = db.Usuarios.FirstOrDefault(x => x.MatriculaFuncionario == f.MatriculaFuncionario);
+            Usuario u = db.Usuarios.FirstOrDefault(x => x.FuncionarioId == f.Id);
             if (u != null)
-                u.MatriculaFuncionario = null;
+                u.FuncionarioId = null;
             db.Entry(f).State = System.Data.Entity.EntityState.Deleted;
             db.SaveChanges();
             return f;
         }
         
-        public bool FuncionarioExiste(string matricula)
+        public bool FuncionarioExiste(string matricula, int codigoEmpresa)
         {
-            return db.Funcionarios.Count(x => x.MatriculaFuncionario == matricula) > 0;
+            return db.Funcionarios.Any(x => x.MatriculaFuncionario == matricula && x.CodigoEmpresa == codigoEmpresa);
+        }
+
+        public bool FuncionarioExiste(int id)
+        {
+            return db.Funcionarios.Any(x => x.Id == id);
         }
 
         public Funcionario GetByLogin(string login)

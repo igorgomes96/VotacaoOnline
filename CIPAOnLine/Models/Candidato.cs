@@ -18,11 +18,12 @@ namespace CIPAOnLine.Models
         }
 
         [Key]
-        [Column("matricula_funcionario", Order = 1)]
-        [MaxLength(15)]
-        public string MatriculaFuncionario { get; set; }
+        [Column("funcionario_id", Order = 0)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public int FuncionarioId { get; set; }
         [Key]
-        [Column("codigo_eleicao", Order = 2)]
+        [Column("codigo_eleicao", Order = 1)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int CodigoEleicao { get; set; }
         [Required]
         [Column("horario_candidatura")]
@@ -32,7 +33,7 @@ namespace CIPAOnLine.Models
         public bool? Validado { get; set; }
 
 
-        [ForeignKey("MatriculaFuncionario")]
+        [ForeignKey("FuncionarioId")]
         public virtual Funcionario Funcionario { get; set; }
         [ForeignKey("CodigoEleicao")]
         public virtual Eleicao Eleicao { get; set; }

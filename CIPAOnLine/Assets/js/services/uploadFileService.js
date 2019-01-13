@@ -10,7 +10,7 @@ angular.module('cipaApp').service('uploadFileService', ['messagesService', funct
           "url": url,
           "method": "POST",
           "headers": {
-            "authorization": "Basic " + token,
+            "authorization": "Bearer " + token,
             "cache-control": "no-cache"
           },
           "processData": false,

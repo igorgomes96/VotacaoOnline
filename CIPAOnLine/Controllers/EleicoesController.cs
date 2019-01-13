@@ -10,6 +10,7 @@ using CIPAOnLine.DTO;
 using CIPAOnLine.Filters;
 using CIPAOnLine.Services;
 using CIPAOnLine.Exceptions;
+using System.Security.Claims;
 
 namespace CIPAOnLine.Controllers
 {
@@ -81,8 +82,9 @@ namespace CIPAOnLine.Controllers
         {
             try
             {
+                if (User.IsInRole(Perfil.ADMINISTRADOR)) return Ok(true);
                 Usuario user = GetUsuario();
-                return Ok(eleicoesService.FuncionarioCadastrado(codEleicao, user.Login, user.MatriculaFuncionario));
+                return Ok(eleicoesService.FuncionarioCadastrado(codEleicao, user.Login, user.FuncionarioId.Value));
             }
             catch (Exception e)
             {
@@ -96,7 +98,7 @@ namespace CIPAOnLine.Controllers
         {
             try
             {
-                return Ok(eleicoesService.GetFiltroEleicoes(GetUsuario(), codigoModulo));
+                return Ok(eleicoesService.GetFiltroEleicoes((ClaimsPrincipal)User, codigoModulo));
             }
             catch (Exception e)
             {
@@ -123,13 +125,13 @@ namespace CIPAOnLine.Controllers
         }
 
         [HttpPut]
-        [Route("api/Eleicoes/{codEleicao}/RemoveFuncionario/{matricula}")]
+        [Route("api/Eleicoes/{codEleicao}/RemoveFuncionario/{funcionarioId}")]
         [ResponseType(typeof(void))]
-        public IHttpActionResult DeleteFuncionario(int codEleicao, string matricula)
+        public IHttpActionResult DeleteFuncionario(int codEleicao, int funcionarioId)
         {
             try
             {
-                return Ok(eleicoesService.DeleteFuncionario(eleicoesService.GetEleicao(codEleicao), matricula));
+                return Ok(eleicoesService.DeleteFuncionario(eleicoesService.GetEleicao(codEleicao), funcionarioId));
             }
             catch (EleicaoNaoEncontradaException)
             {
@@ -269,29 +271,6 @@ namespace CIPAOnLine.Controllers
             }
         }
 
-        //RETIRADO ENVIO DE E-MAIL APÓS FINALIZAÇÃO DE ETAPA
-        //[HttpPut]
-        //[Authorize(Roles = "Administrador")]
-        //[Route("api/Eleicoes/ProximaEtapa/{codigoEleicao}/ConfirmaEmails")]
-        //public IHttpActionResult SetProximaEtapa(int codigoEleicao, IEnumerable<EmailDTO> emails)
-        //{
-        //    Eleicao eleicao = eleicoesService.GetEleicao(codigoEleicao);
-
-        //    if (eleicao == null) return Content(HttpStatusCode.NotFound, "Código de Eleição não encontrado!");
-
-        //    try
-        //    {
-        //        return Ok(new EleicaoDTO(eleicao = eleicoesService.ProximaEtapa(eleicao, ((CustomIdentity)User.Identity).Usuario, emails)));
-        //    }
-        //    catch (EleicaoEncerradaException)
-        //    {
-        //        return Content(HttpStatusCode.BadRequest, "A eleição já foi encerrada!");
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return Content(HttpStatusCode.InternalServerError, e.Message);
-        //    }
-        //}
 
         [HttpGet]
         [ResponseType(typeof(EleicaoDTO))]
@@ -391,10 +370,6 @@ namespace CIPAOnLine.Controllers
         [ResponseType(typeof(EleicaoDTO))]
         public IHttpActionResult PutEleicao(int id, EleicaoDTO eleicao)
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    return BadRequest(ModelState);
-            //}
 
             try
             {
@@ -426,12 +401,12 @@ namespace CIPAOnLine.Controllers
         [HttpPost]
         [Authorize(Roles = "Administrador")]
         [ResponseType(typeof(EleicaoDTO))]
-        [Route("api/Eleicoes/{codigoEleicao}/AddFuncionario/{matricula}")]
-        public IHttpActionResult AddFuncionario(int codigoEleicao, string matricula)
+        [Route("api/Eleicoes/{codigoEleicao}/AddFuncionario/{funcionarioId}")]
+        public IHttpActionResult AddFuncionario(int codigoEleicao, int funcionarioId)
         {
             try
             {
-                return Ok(eleicoesService.AddFuncionario(codigoEleicao, matricula));
+                return Ok(eleicoesService.AddFuncionario(codigoEleicao, funcionarioId));
             }
             catch (EleicaoNaoEncontradaException)
             {

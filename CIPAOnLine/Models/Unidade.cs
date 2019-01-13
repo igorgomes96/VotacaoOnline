@@ -21,9 +21,8 @@ namespace CIPAOnLine.Models
         public int Codigo { get; set; }
 
         [Required]
-        [MaxLength(200)]
-        [Column("razao_social")]
-        public string RazaoSocial { get; set; }
+        [Column("codigo_empresa")]
+        public int CodigoEmpresa { get; set; }
 
         [Required]
         [MaxLength(100)]
@@ -40,6 +39,9 @@ namespace CIPAOnLine.Models
 
         [ForeignKey("CodigoGrupo")]
         public virtual Grupo Grupo { get; set; }
+
+        [ForeignKey("CodigoEmpresa")]
+        public virtual Empresa Empresa { get; set; }
 
         public virtual ICollection<Eleicao> Eleicoes { get; set; }
     }

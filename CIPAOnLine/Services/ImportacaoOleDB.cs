@@ -164,6 +164,7 @@ namespace CIPAOnLine.Services
 
             try
             {
+                Eleicao eleicao = eleicoesService.GetEleicao(codEleicao);
                 foreach (DataRow r in ds.Tables[0].Rows)
                 {
                     //Condição de parada
@@ -201,7 +202,7 @@ namespace CIPAOnLine.Services
                     //if (gestor == null) throw new GestorNaoEncontradoException(r[8].ToString());
                     //string cpf = new string(r[1].ToString().Where(x => char.IsDigit(x)).ToArray());
                     string login = r[1].ToString().Trim().ToLower();
-                    string matricula = string.Concat(r[0].ToString().SkipWhile(c => c == '0'));
+                    string matricula = r[0].ToString();
                     Funcionario func = new Funcionario
                     {
                         MatriculaFuncionario = matricula,
@@ -212,38 +213,28 @@ namespace CIPAOnLine.Services
                         DataAdmissao = dataAdmissao,
                         DataNascimento = dataNascimento,
                         CodigoGestor = gestor?.Codigo,
-                        Email = r[7].ToString()
+                        Email = r[7].ToString(),
+                        CodigoEmpresa = eleicao.Unidade.CodigoEmpresa
                     };
 
                     Funcionario atual = funcService.GetByLogin(login);
 
-                    if (atual == null || atual.MatriculaFuncionario == matricula)
+                    if (atual == null || atual.MatriculaFuncionario == matricula) {
+                        if (atual != null) func.Id = atual.Id;
                         funcService.AddOrUpdateFuncionario(func);
-                    else
+                    } else
                         throw new Exception($"Já existe um funcionário cadastrado com o login {login}! Matrícula: {atual.MatriculaFuncionario}.");
 
                     Usuario usuario = null;
                     try
                     {
                         usuario = userService.GetUsuario(login);
-                        usuario.MatriculaFuncionario = matricula;
+                        usuario.FuncionarioId = atual.Id;
                         usuario.Nome = func.Nome;
                         userService.AddOrUpdateUsuario(usuario);
                     }
                     catch (UsuarioNaoEncontradoException) { }
-                    eleicoesService.AddFuncionario(codEleicao, func.MatriculaFuncionario);
-
-
-
-                    //if (atual != null && atual.Login != func.Login)
-                    //{
-                    //    inconsistencias.Add(new InconsistenciaFuncionarioDTO(atual, func));
-                    //}
-                    //else
-                    //{
-                    //    funcService.AddOrUpdateFuncionario(func);
-                    //    eleicoesService.AddFuncionario(codEleicao, func.MatriculaFuncionario);
-                    //}
+                    eleicoesService.AddFuncionario(codEleicao, func.Id);
 
                     l++;
                 }               

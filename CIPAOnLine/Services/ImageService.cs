@@ -19,23 +19,23 @@ namespace CIPAOnLine.Services
             return bmp;
         }
 
-        public static Bitmap EnquadrarImagem(Bitmap source)
+        public static Bitmap EnquadrarImagem(Bitmap bmp)
         {
-            Rectangle? section = null;
-
-            if (source.Height > source.Width)
-            {
-                float dif = source.Height - source.Width;
-                section = new Rectangle(new Point(0, Convert.ToInt32(dif / 2)), new Size(source.Width, source.Width));
-            }
-            else
-            {
-                float dif = source.Width - source.Height;
-                section = new Rectangle(new Point(Convert.ToInt32(dif / 2), 0), new Size(source.Height, source.Height));
+            int t = 0, l = 0, size = 0;
+            if (bmp.Height > bmp.Width) {
+                size = bmp.Width;
+                t = (bmp.Height - bmp.Width) / 2;
+            } else {
+                size = bmp.Height;
+                l = (bmp.Width - bmp.Height) / 2;
             }
 
-            Bitmap CroppedImage = CropImage(source, section.Value);
-            return CroppedImage;
+            Bitmap res = new Bitmap(size, size);
+            Graphics g = Graphics.FromImage(res);
+            g.FillRectangle(new SolidBrush(Color.White), 0, 0, size, size);
+            
+            g.DrawImage(bmp, new Rectangle(0, 0, size, size), new Rectangle(l, t, bmp.Width - l * 2, bmp.Height - t * 2), GraphicsUnit.Pixel);
+            return res;
         }
 
         public static byte[] ConvertImageByte(Image image)

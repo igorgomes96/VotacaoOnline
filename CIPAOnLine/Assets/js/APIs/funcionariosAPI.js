@@ -7,6 +7,11 @@ angular.module('cipaApp').service('funcionariosAPI', ['$http', 'config', 'shared
         return $http.get(config.baseUrl + resource + '/' + id);
     }
 
+    self.getFuncionarioByLogin = function(login) {
+        return $http.post(config.baseUrl + 'findbylogin', { login: login});
+    }
+
+
     self.importarFuncionarios = function(arquivo, codEleicao) {
         var payload = new FormData();
 
@@ -20,10 +25,10 @@ angular.module('cipaApp').service('funcionariosAPI', ['$http', 'config', 'shared
         return $.ajax(uploadFileService.sendFile(config.baseUrl + resource + '/Importacao/' + codEleicao, payload, token));
     }
 
-    self.getFuncionarioByLogin = function(login) {
-        return $http.get(config.baseUrl + resource + '/Login/' + login);
+    self.getFuncionarioByMatriculaEmpresa = function(matricula, codigoEmpresa) {
+        return $http.get(config.baseUrl + resource + '/' + matricula + '/' + codigoEmpresa);
     }
-
+    
     self.postFuncionario = function(funcionario) {
         return $http.post(config.baseUrl + resource, funcionario);
     }

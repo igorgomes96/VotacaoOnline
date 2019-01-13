@@ -22,10 +22,28 @@ namespace CIPAOnLine.Controllers
         private FuncionariosService funcService = new FuncionariosService();
         private UsuariosService usuariosService = new UsuariosService();
 
+        [ResponseType(typeof(FuncionarioDTO))]
+        [HttpPost]
+        [Route("api/findbylogin")]
+        [AllowAnonymous]
+        public IHttpActionResult FindByLogin(Funcionario funcLogin)
+        {
+            try
+            {
+                if (funcLogin == null || funcLogin.Login == null) return Ok();
+                Funcionario func = funcService.GetByLogin(funcLogin.Login);
+                if (func == null) return NotFound();
+                return Ok(new FuncionarioDTO(func));
+            }
+            catch (FuncionarioNaoEncontradoException)
+            {
+                return Content(HttpStatusCode.NotFound, "Funcionário não encontrado!");
+            }
+        }
 
         [ResponseType(typeof(FuncionarioDTO))]
         [AuthenticationFilter]
-        public IHttpActionResult Get(string id)
+        public IHttpActionResult Get(int id)
         {
             try { 
                 return Ok(new FuncionarioDTO(funcService.GetFuncionario(id)));
@@ -35,22 +53,24 @@ namespace CIPAOnLine.Controllers
             }
         }
 
+        
+
         [ResponseType(typeof(FuncionarioDTO))]
-        [Route("api/Funcionarios/Login/{login}")]
-        [AllowAnonymous]
-        public IHttpActionResult GetByLogin(string login)
+        [AuthenticationFilter]
+        [Route("api/Funcionarios/{matricula}/{codigoEmpresa}")]
+        public IHttpActionResult GetByMatriculaEmpresa(string matricula, int codigoEmpresa)
         {
             try
             {
-                Funcionario func = funcService.GetByLogin(login);
-                if (func == null) throw new FuncionarioNaoEncontradoException(null);
-                return Ok(new FuncionarioDTO(func));
+                return Ok(new FuncionarioDTO(funcService.GetFuncionario(matricula, codigoEmpresa)));
             }
             catch (FuncionarioNaoEncontradoException)
             {
                 return Content(HttpStatusCode.NotFound, "Funcionário não encontrado!");
             }
         }
+
+        
 
         [HttpPost]
         [Route("api/Funcionarios/Importacao/{codEleicao}")]
@@ -137,10 +157,13 @@ namespace CIPAOnLine.Controllers
         [ResponseType(typeof(void))]
         [Authorize(Roles = "Administrador")]
         [AuthenticationFilter]
-        public IHttpActionResult Put(string id, Funcionario funcionario)
+        public IHttpActionResult Put(int id, Funcionario funcionario)
         {
             if (!ModelState.IsValid)
                 return Content(HttpStatusCode.BadRequest, ModelState);
+
+            if (funcionario.Id != id)
+                return BadRequest("Id do funcionário não correspondete ao ID da URL!");
 
             try
             {
@@ -159,7 +182,7 @@ namespace CIPAOnLine.Controllers
         [Authorize(Roles = "Administrador")]
         [ResponseType(typeof(FuncionarioDTO))]
         [AuthenticationFilter]
-        public IHttpActionResult Delete(string id)
+        public IHttpActionResult Delete(int id)
         {
             try { 
                 return Ok(new FuncionarioDTO(funcService.Delete(id)));

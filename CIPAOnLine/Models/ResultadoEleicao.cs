@@ -11,15 +11,20 @@ namespace CIPAOnLine.Models
     public class ResultadoEleicao
     {
         [Key]
-        [Column("codigo_eleicao", Order = 1)]
+        [Column("codigo_eleicao", Order = 0)]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int CodigoEleicao { get; set; }
-
         [Key]
-        [Column("matricula_funcionario", Order = 2)]
+        [Column("matricula_funcionario", Order = 1)]
         [MaxLength(15)]
         public string MatriculaFuncionario { get; set; }
-
+        [Key]
+        [Column("codigo_empresa", Order = 2)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public int CodigoEmpresa { get; set; }
+        [Column("razao_social")]
+        [MaxLength(100)]
+        public string RazaoSocial { get; set; }
         [Required]
         [Column("login")]
         [MaxLength(50)]

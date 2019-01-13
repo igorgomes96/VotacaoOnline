@@ -13,12 +13,14 @@ namespace CIPAOnLine.DTO
         {
             if (u == null) return;
             Codigo = u.Codigo;
-            RazaoSocial = u.RazaoSocial;
+            CodigoEmpresa = u.CodigoEmpresa;
+            RazaoSocial = u.Empresa?.RazaoSocial;
             Cidade = u.Cidade;
             Estabelecimento = u.Estabelecimento;
             CodigoGrupo = u.CodigoGrupo;
         }
         public int Codigo { get; set; }
+        public int CodigoEmpresa { get; set; }
         public string RazaoSocial { get; set; }
         public string Cidade { get; set; }
         public string Estabelecimento { get; set; }

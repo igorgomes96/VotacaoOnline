@@ -59,7 +59,7 @@
 	</div>
 
 
-	<div class="row" ng-show="!ct.votantes.Votantes && !ct.error">
+	<div class="row" ng-show="!ct.votantes.Votantes && !ct.error && ct.gestaoSelecionada">
 		<div class="col-md-12">
 			<div class="alert alert-danger">
 		        <p class="alert-link" style="display: inline;">Inválido!</p> Ainda não houveram votos para esta eleição!
@@ -121,7 +121,7 @@
 							<i class="fa fa-5x" ng-class="ct.votantes.PercentualVotantes < 50 ? 'fa-times' : 'fa-check'"></i>
 						</div>
 						<div class="col-xs-8 text-right">
-							<span> Percentual de Votos </span>
+							<span> Perc. de Votos </span>
 							<h2 class="font-bold">{{ct.votantes.PercentualVotantes | number:2}}%</h2>
 						</div>
 					</div>
@@ -197,25 +197,21 @@
 									</div>
 								</div>
 
-								<div class="scrollable" style="overflow: auto;padding:5px;height: 75%;" id="tblRelatorioEleitores">
+								<div class="table-responsive" style="overflow: auto;padding:5px;height: 75%;" id="tblRelatorioEleitores">
 									<table class="table table-condensed table-striped">
 										<thead>
 											<tr>
-												<!-- <th width="10%">Matrícula</th> -->
-												<th width="30%">Nome</th>
-												<th width="30%">Cargo</th>
-												<!-- <th>Área</th> -->
-												<th width="20%">Horário</th>
-												<th width="10%">IP</th>
+												<th>Nome</th>
+												<th>Cargo</th>
+												<th>Horário</th>
+												<th>IP</th>
 											</tr>
 										</thead>
 
 										<tbody>
 											<tr ng-repeat="e in ct.eleitores | filter:ct.filtroEleitores">
-												<!-- <td>{{e.MatriculaFuncionario}}</td> -->
 												<td>{{e.Nome}}</td>
-												<td>{{e.Cargo  | ellipsis:13:13}}</td>
-												<!-- <td>{{e.Area}}</td> -->
+												<td>{{e.Cargo}}</td>
 												<td>{{e.DataHorario | date:'dd/MM/yy HH:mm'}}</td>
 												<td>{{e.IP}}</td>
 											</tr>

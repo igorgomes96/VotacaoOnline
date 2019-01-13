@@ -28,13 +28,20 @@ angular.module('cipaApp').service('sessionStorageService', ['$window', function(
 	}
 
 
-
 	self.savePerfil = function(perfil) {
 		$window.sessionStorage.setItem('perfil', perfil);
 	}
 
 	self.getPerfil = function() {
 		return $window.sessionStorage.getItem('perfil');
+	}
+
+	self.saveEmpresa = function(empresa) {
+		$window.sessionStorage.setItem('empresa', empresa);
+	}
+
+	self.getEmpresa = function() {
+		return $window.sessionStorage.getItem('empresa');
 	}
 
 

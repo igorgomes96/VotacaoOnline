@@ -62,7 +62,7 @@ angular.module('cipaApp').controller('votacaoCtrl', ['votosBrancosAPI', '$scope'
 			if (value) {
 
 				var voto = {
-					MatriculaEleitor: usuario.MatriculaFuncionario,
+					FuncionarioIdEleitor: usuario.FuncionarioId,
 					CodigoEleicao: self.codEleicao
 				}
 
@@ -92,8 +92,8 @@ angular.module('cipaApp').controller('votacaoCtrl', ['votosBrancosAPI', '$scope'
 		.then(function(value) {
 			if (value) {
 				var voto = {
-					MatriculaEleitor: usuario.MatriculaFuncionario,
-					MatriculaCandidato: candidato.MatriculaFuncionario,
+					FuncionarioIdEleitor: usuario.FuncionarioId,
+					FuncionarioIdCandidato: candidato.Id,
 					CodigoEleicao: candidato.CodigoEleicao
 				}
 

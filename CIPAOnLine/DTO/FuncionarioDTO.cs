@@ -14,7 +14,9 @@ namespace CIPAOnLine.DTO
         public FuncionarioDTO (Funcionario f)
         {
             if (f == null) return;
+            Id = f.Id;
             MatriculaFuncionario = f.MatriculaFuncionario;
+            CodigoEmpresa = f.CodigoEmpresa;
             Nome = f.Nome;
             Login = f.Login;
             Cargo = f.Cargo;
@@ -33,7 +35,9 @@ namespace CIPAOnLine.DTO
             }
         }
 
+        public int Id { get; set; }
         public string MatriculaFuncionario { get; set; }
+        public int CodigoEmpresa { get; set; }
         public string Nome { get; set; }
         public string Login { get; set; }
         public string Cargo { get; set; }

@@ -14,11 +14,13 @@ namespace CIPAOnLine.DTO
         {
             if (cand == null) return;
             Codigo = cand.Codigo;
-            MatriculaFuncionario = cand.MatriculaFuncionario;
+            FuncionarioId = cand.FuncionarioId;
+            MatriculaFuncionario = cand.Candidato?.Funcionario?.MatriculaFuncionario;
             CodigoEleicao = cand.CodigoEleicao;
             Motivo = cand.Motivo;
         }
         public int Codigo { get; set; }
+        public int FuncionarioId { get; set; }
         public string MatriculaFuncionario { get; set; }
         public int CodigoEleicao { get; set; }
         public string Motivo { get; set; }

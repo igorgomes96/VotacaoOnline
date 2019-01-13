@@ -15,8 +15,11 @@ namespace CIPAOnLine.DTO
         public VotoDTO (Voto v)
         {
             if (v == null) return;
-            MatriculaEleitor = v.MatriculaEleitor;
-            MatriculaCandidato = v.MatriculaCandidato;
+            FuncionarioIdEleitor = v.FuncionarioIdEleitor;
+            FuncionarioIdCandidato = v.FuncionarioIdCandidato;
+            MatriculaEleitor = v.Eleitor?.MatriculaFuncionario;
+            FuncionarioIdCandidato = v.Candidato?.FuncionarioId;
+            MatriculaCandidato = v.Candidato?.Funcionario.MatriculaFuncionario;
             CodigoEleicao = v.CodigoEleicao;
             DataHorario = v.DataHorario;
             IP = v.IP;
@@ -25,14 +28,18 @@ namespace CIPAOnLine.DTO
         public VotoDTO(VotoBranco v)
         {
             if (v == null) return;
-            MatriculaEleitor = v.MatriculaEleitor;
+            FuncionarioIdEleitor = v.Eleitor?.Id;
+            MatriculaEleitor = v.Eleitor?.MatriculaFuncionario;
+            FuncionarioIdCandidato = null;
             MatriculaCandidato = null;
             CodigoEleicao = v.CodigoEleicao;
             DataHorario = v.DataHorario;
             IP = v.IP;
         }
 
+        public int? FuncionarioIdEleitor { get; set; }
         public string MatriculaEleitor { get; set; }
+        public int? FuncionarioIdCandidato { get; set; }
         public string MatriculaCandidato { get; set; }
         public int CodigoEleicao { get; set; }
         public DateTime DataHorario { get; set; }

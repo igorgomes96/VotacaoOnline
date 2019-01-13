@@ -15,18 +15,19 @@ namespace CIPAOnLine.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Codigo { get; set; }
 
-        [Column("matricula_funcionario")]
-        [MaxLength(15)]
-        public string MatriculaFuncionario { get; set; }
+        [Column("funcionario_id")]
+        [Required]
+        public int FuncionarioId { get; set; }
 
         [Column("codigo_eleicao")]
+        [Required]
         public int CodigoEleicao { get; set; }
 
         [Column("motivo")]
         [MaxLength(255)]
         public string Motivo { get; set; }
 
-        [ForeignKey("MatriculaFuncionario, CodigoEleicao")]
+        [ForeignKey("FuncionarioId, CodigoEleicao")]
         public virtual Candidato Candidato { get; set; }
     }
 }

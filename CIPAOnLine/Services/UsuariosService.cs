@@ -9,6 +9,7 @@ using System.Threading;
 using CIPAOnLine.DTO;
 using CIPAOnLine.Resources;
 using CIPAOnLine.Exceptions;
+using System.Security.Principal;
 
 namespace CIPAOnLine.Services
 {
@@ -16,6 +17,8 @@ namespace CIPAOnLine.Services
     {
         private Modelo db = new Modelo();
         private AuthService authService = new AuthService();
+        private FuncionariosService funcionariosService = new FuncionariosService();
+        
         public IEnumerable<Usuario> GetAdministradores()
         {
             return db.Usuarios.Where(x => x.Perfil == "Administrador").ToList();
@@ -33,27 +36,82 @@ namespace CIPAOnLine.Services
             return u;
         }
 
+        private void AddEmpresas(Usuario usuario, List<int> codigosEmpresas)
+        {
+            codigosEmpresas.ForEach(c =>
+            {
+                Empresa e = db.Empresas.Find(c);
+                usuario.Empresas.Add(e);
+            });
+        }
+
         /// <summary>
         /// Cria um usuário administrador.
         /// </summary>
         /// <param name="user"></param>
-        public void PostAdministrador(Usuario user)
+        public void PostAdministrador(UsuarioDTO user)
         {
-            bool usuarioExiste = true;
+
+            bool funcionarioExistente = false;
             Usuario userBD = db.Usuarios.Find(user.Login.Trim().ToLower());
 
-            if (userBD == null) {
-                userBD = authService.GetUserAD(user.Login);
-                userBD.MatriculaFuncionario = null;
-                if (userBD == null)
-                    throw new UsuarioNaoEncontradoException();
-                usuarioExiste = false;
+            if (user.FuncionarioId.HasValue)
+                funcionarioExistente = funcionariosService.FuncionarioExiste(user.FuncionarioId.Value);
+            else
+                funcionarioExistente = funcionariosService.FuncionarioExiste(user.MatriculaFuncionario, user.CodigoEmpresa);
+
+            if (!funcionarioExistente)
+            {
+                Funcionario funcLogin = funcionariosService.GetByLogin(user.Login);
+                if (funcLogin != null)
+                    throw new Exception("Já existe outro usuário cadastrado com esse Login!");
+
+                Funcionario funcionario = new Funcionario()
+                {
+                    MatriculaFuncionario = user.MatriculaFuncionario,
+                    Nome = user.Nome,
+                    Email = user.Email,
+                    Login = user.Login,
+                    CodigoEmpresa = user.CodigoEmpresa
+                };
+                funcionariosService.AddOrUpdateFuncionario(funcionario);
+            } else
+            {
+                Funcionario func = null;
+                if (user.FuncionarioId.HasValue)
+                    func = funcionariosService.GetFuncionario(user.FuncionarioId.Value);
+                else
+                    func = funcionariosService.GetFuncionario(user.MatriculaFuncionario, user.CodigoEmpresa);
+
+                func.CodigoEmpresa = user.CodigoEmpresa;
+                func.Nome = user.Nome;
+                func.Email = user.Email;
+                funcionariosService.AddOrUpdateFuncionario(func);
             }
 
-            userBD.Perfil = "Administrador";
+            if (userBD != null)
+            {
+                userBD.Nome = user.Nome;
+                userBD.Perfil = Perfil.ADMINISTRADOR;
+                userBD.Empresas.Clear();
+                AddEmpresas(userBD, user.Empresas.Select(e => e.Codigo).ToList());
+                db.SaveChanges();
+                return;
+            }
 
-            if (!usuarioExiste)
-                db.Usuarios.Add(userBD);
+           
+            userBD = new Usuario
+            {
+                Nome = user.Nome,
+                Login = user.Login,
+                FuncionarioId = user.FuncionarioId,
+                Perfil = Perfil.ADMINISTRADOR
+            };
+
+            db.Usuarios.Add(userBD);
+            db.SaveChanges();
+
+            AddEmpresas(userBD, user.Empresas.Select(e => e.Codigo).ToList());
 
             db.SaveChanges();
 
@@ -99,11 +157,28 @@ namespace CIPAOnLine.Services
 
             if (usuario == null) throw new UsuarioNaoEncontradoException();
 
-            usuario.Perfil = "Eleitor";
-            
+            usuario.Perfil = Perfil.ELEITOR;
+
             db.SaveChanges();
 
 
+        }
+
+        public void AddPermissaoEmpresa(string login, int codigoEmpresa)
+        {
+            Usuario usuario = db.Usuarios.FirstOrDefault(u => u.Login == login);
+
+            if (usuario == null)
+                throw new UsuarioNaoEncontradoException();
+
+            Empresa empresa = db.Empresas.Find(codigoEmpresa);
+            if (empresa == null)
+                throw new EmpresaNaoEncontradaException();
+
+            if (!usuario.Empresas.Any(e => e.Codigo == codigoEmpresa)) { 
+                usuario.Empresas.Add(empresa);
+                db.SaveChanges();
+            }
         }
 
         public bool UsuarioExiste(string login)

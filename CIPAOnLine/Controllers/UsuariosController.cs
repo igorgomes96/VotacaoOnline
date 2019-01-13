@@ -21,21 +21,13 @@ namespace CIPAOnLine.Controllers
     {
         private UsuariosService usuariosService = new UsuariosService();
 
-        [Authorize(Roles = "Administrador")]
-        public IEnumerable<UsuarioDTO> GetUsuarios(string matriculaFuncionario = null)
-        {
-            return usuariosService.GetUsuarios()
-                .Where(x => matriculaFuncionario == null || x.MatriculaFuncionario == matriculaFuncionario)
-                .Select(x => new UsuarioDTO(x));
-        }
-
         [ResponseType(typeof(UsuarioDTO))]
+        [Route("api/Usuarios")]
         [HttpGet]
-        [Route("api/Usuarios/{id}")]
-        public IHttpActionResult GetUsuario(string id)
+        public IHttpActionResult Get(string login)
         {
             try { 
-                return Ok(new UsuarioDTO(usuariosService.GetUsuario(id)));
+                return Ok(new UsuarioDTO(usuariosService.GetUsuario(login)));
             } catch (UsuarioNaoEncontradoException)
             {
                 return Content(HttpStatusCode.NotFound, "Usuário não cadastrado!");
@@ -62,11 +54,31 @@ namespace CIPAOnLine.Controllers
         [Authorize(Roles = "Administrador")]
         [Route("api/Usuarios/Administradores")]
         [ResponseType(typeof(string))]
-        public IHttpActionResult PostAdministrador(Usuario usuario)
+        public IHttpActionResult PostAdministrador(UsuarioDTO usuario)
         {
             try
             {
                 usuariosService.PostAdministrador(usuario);
+                return Ok();
+            }
+            catch (UsuarioNaoEncontradoException)
+            {
+                return Content(HttpStatusCode.BadRequest, "Usuário de rede não encontrado!");
+            }
+            catch (Exception e)
+            {
+                return Content(HttpStatusCode.BadRequest, e);
+            }
+        }
+
+        [Authorize(Roles = "Administrador")]
+        [Route("api/Usuarios/Empresa/{empresa}")]
+        [ResponseType(typeof(string))]
+        public IHttpActionResult PostPermissaoEmpresa(int empresa, UsuarioDTO usuario)
+        {
+            try
+            {
+                usuariosService.AddPermissaoEmpresa(usuario.Login, empresa);
                 return Ok();
             }
             catch (UsuarioNaoEncontradoException)
@@ -81,7 +93,7 @@ namespace CIPAOnLine.Controllers
 
 
         [Authorize(Roles = "Administrador")]
-        [Route("api/Usuarios/{login}")]
+        [Route("api/Usuarios")]
         [ResponseType(typeof(UsuarioDTO))]
         public IHttpActionResult DeleteUsuario(string login)
         {
@@ -100,7 +112,7 @@ namespace CIPAOnLine.Controllers
         }
 
         [Authorize(Roles = "Administrador")]
-        [Route("api/Usuarios/Administradores/{login}")]
+        [Route("api/Usuarios/Administradores")]
         [ResponseType(typeof(UsuarioDTO))]
         public IHttpActionResult DeleteAdministrador(string login)
         {

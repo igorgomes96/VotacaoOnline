@@ -3,12 +3,8 @@ angular.module('cipaApp').service('usuariosAPI', ['$http', 'config', function($h
     var self = this;
     var resource = 'Usuarios';
 
-    self.getUsuarios = function(matriculaFuncionario) {
-        return $http({method: 'GET', url:config.baseUrl + resource, params:{matriculaFuncionario:matriculaFuncionario}});
-    }
-
     self.getUsuario = function(id) {
-        return $http.get(config.baseUrl + resource + '/' + id);
+        return $http.get(config.baseUrl + resource + '?login=' + id);
     }
 
     self.getAdministradores = function() {
@@ -19,12 +15,16 @@ angular.module('cipaApp').service('usuariosAPI', ['$http', 'config', function($h
         return $http.post(config.baseUrl + resource + '/Administradores', user);
     }
 
-    self.deleteUsuario = function(cpf) {
-        return $http.delete(config.baseUrl + resource + '/' + cpf);
+    self.postPermissaoEmpresa = function(login, empresa) {
+        return $http.post(config.baseUrl + resource + '/Empresa/' + empresa, { Login: login });
     }
 
-    self.deleteAdministrador = function (cpf) {
-        return $http.delete(config.baseUrl + resource + '/Administradores/' + cpf);
+    self.deleteUsuario = function(login) {
+        return $http.delete(config.baseUrl + resource + '?login=' + login);
+    }
+
+    self.deleteAdministrador = function (login) {
+        return $http.delete(config.baseUrl + resource + '/Administradores?login=' + login);
     }
 
 

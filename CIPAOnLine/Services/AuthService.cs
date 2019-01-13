@@ -26,7 +26,7 @@ namespace CIPAOnLine.Services
             if (searchResult == null) return null;
 
             string nomeUser = searchResult.Properties.Contains("displayname") ? searchResult.Properties["displayname"][0].ToString() : null;
-            string matricula = searchResult.Properties.Contains("codmatricula") ? string.Concat(searchResult.Properties["codmatricula"][0].ToString().SkipWhile(c => c == '0')) : null;
+            string matricula = searchResult.Properties.Contains("codmatricula") ? string.Concat(searchResult.Properties["codmatricula"][0].ToString()) : null;
             string cargo = searchResult.Properties.Contains("department") ? searchResult.Properties["department"][0].ToString() : null;
             string email = searchResult.Properties.Contains("mail") ? searchResult.Properties["mail"][0].ToString() : null;
 
@@ -34,7 +34,7 @@ namespace CIPAOnLine.Services
             return new Usuario
             {
                 Login = userName,
-                MatriculaFuncionario = matricula,
+                // MatriculaFuncionario = matricula,
                 Nome = nomeUser
             };
 

@@ -1,0 +1,150 @@
+namespace CIPAOnLine.Migrations
+{
+    using System;
+    using System.Data.Entity.Migrations;
+    
+    public partial class FuncionarioidAsKey : DbMigration
+    {
+        public override void Up()
+        {
+            DropForeignKey("dbo.candidaturas_reprovadas", new[] { "matricula_funcionario", "codigo_eleicao" }, "dbo.candidatos");
+            DropForeignKey("dbo.votos", new[] { "matricula_candidato", "codigo_eleicao" }, "dbo.candidatos");
+            DropForeignKey("dbo.candidatos", "matricula_funcionario", "dbo.funcionarios");
+            DropForeignKey("dbo.funcionarios_fotos", "matricula_funcionario", "dbo.funcionarios");
+            DropForeignKey("dbo.votos", "matricula_eleitor", "dbo.funcionarios");
+            DropForeignKey("dbo.voto_branco", "matricula_eleitor", "dbo.funcionarios");
+            DropForeignKey("dbo.funcionarios_eleicoes", "matricula_funcionario", "dbo.funcionarios");
+            DropForeignKey("dbo.usuarios", "matricula_funcionario", "dbo.funcionarios");
+            DropIndex("dbo.candidatos", new[] { "matricula_funcionario" });
+            DropIndex("dbo.candidaturas_reprovadas", new[] { "matricula_funcionario", "codigo_eleicao" });
+            DropIndex("dbo.funcionarios_fotos", new[] { "matricula_funcionario" });
+            DropIndex("dbo.votos", new[] { "matricula_eleitor" });
+            DropIndex("dbo.votos", new[] { "matricula_candidato", "codigo_eleicao" });
+            DropIndex("dbo.voto_branco", new[] { "matricula_eleitor" });
+            DropIndex("dbo.usuarios", new[] { "matricula_funcionario" });
+            DropIndex("dbo.funcionarios_eleicoes", new[] { "matricula_funcionario" });
+            RenameColumn(table: "dbo.candidaturas_reprovadas", name: "matricula_funcionario", newName: "funcionario_id");
+            RenameColumn(table: "dbo.candidatos", name: "matricula_funcionario", newName: "funcionario_id");
+            RenameColumn(table: "dbo.votos", name: "matricula_candidato", newName: "funcionario_id_candidato");
+            RenameColumn(table: "dbo.funcionarios_eleicoes", name: "matricula_funcionario", newName: "funcionario_id");
+            RenameColumn(table: "dbo.funcionarios_fotos", name: "matricula_funcionario", newName: "funcionario_id");
+            RenameColumn(table: "dbo.votos", name: "matricula_eleitor", newName: "funcionario_id_eleitor");
+            RenameColumn(table: "dbo.voto_branco", name: "matricula_eleitor", newName: "funcionario_id_eleitor");
+            RenameColumn(table: "dbo.usuarios", name: "matricula_funcionario", newName: "funcionario_id");
+            DropPrimaryKey("dbo.candidatos");
+            DropPrimaryKey("dbo.funcionarios");
+            DropPrimaryKey("dbo.funcionarios_fotos");
+            DropPrimaryKey("dbo.votos");
+            DropPrimaryKey("dbo.voto_branco");
+            DropPrimaryKey("dbo.resultados_eleicoes");
+            DropPrimaryKey("dbo.funcionarios_eleicoes");
+            AddColumn("dbo.funcionarios", "id", c => c.Int(nullable: false, identity: true));
+            AddColumn("dbo.funcionarios", "codigo_empresa", c => c.Int(nullable: false));
+            AddColumn("dbo.resultados_eleicoes", "codigo_empresa", c => c.Int(nullable: false));
+            AlterColumn("dbo.candidatos", "funcionario_id", c => c.Int(nullable: false));
+            AlterColumn("dbo.candidaturas_reprovadas", "funcionario_id", c => c.Int(nullable: false));
+            AlterColumn("dbo.funcionarios_fotos", "funcionario_id", c => c.Int(nullable: false));
+            AlterColumn("dbo.votos", "funcionario_id_eleitor", c => c.Int(nullable: false));
+            AlterColumn("dbo.votos", "funcionario_id_candidato", c => c.Int(nullable: false));
+            AlterColumn("dbo.voto_branco", "funcionario_id_eleitor", c => c.Int(nullable: false));
+            AlterColumn("dbo.usuarios", "funcionario_id", c => c.Int());
+            AlterColumn("dbo.funcionarios_eleicoes", "funcionario_id", c => c.Int(nullable: false));
+            AddPrimaryKey("dbo.candidatos", new[] { "funcionario_id", "codigo_eleicao" });
+            AddPrimaryKey("dbo.funcionarios", "id");
+            AddPrimaryKey("dbo.funcionarios_fotos", "funcionario_id");
+            AddPrimaryKey("dbo.votos", new[] { "funcionario_id_eleitor", "funcionario_id_candidato", "codigo_eleicao" });
+            AddPrimaryKey("dbo.voto_branco", new[] { "funcionario_id_eleitor", "codigo_eleicao" });
+            AddPrimaryKey("dbo.resultados_eleicoes", new[] { "codigo_eleicao", "matricula_funcionario", "codigo_empresa" });
+            AddPrimaryKey("dbo.funcionarios_eleicoes", new[] { "codigo_eleicao", "funcionario_id" });
+            CreateIndex("dbo.candidatos", "funcionario_id");
+            CreateIndex("dbo.candidaturas_reprovadas", new[] { "funcionario_id", "codigo_eleicao" });
+            CreateIndex("dbo.funcionarios", new[] { "matricula", "codigo_empresa" }, unique: true, name: "idxFuncionario");
+            CreateIndex("dbo.usuarios", "funcionario_id");
+            CreateIndex("dbo.funcionarios_fotos", "funcionario_id");
+            CreateIndex("dbo.votos", "funcionario_id_eleitor");
+            CreateIndex("dbo.votos", new[] { "funcionario_id_candidato", "codigo_eleicao" });
+            CreateIndex("dbo.voto_branco", "funcionario_id_eleitor");
+            CreateIndex("dbo.funcionarios_eleicoes", "funcionario_id");
+            AddForeignKey("dbo.funcionarios", "codigo_empresa", "dbo.empresas", "codigo");
+            AddForeignKey("dbo.candidaturas_reprovadas", new[] { "funcionario_id", "codigo_eleicao" }, "dbo.candidatos", new[] { "funcionario_id", "codigo_eleicao" });
+            AddForeignKey("dbo.votos", new[] { "funcionario_id_candidato", "codigo_eleicao" }, "dbo.candidatos", new[] { "funcionario_id", "codigo_eleicao" });
+            AddForeignKey("dbo.candidatos", "funcionario_id", "dbo.funcionarios", "id");
+            AddForeignKey("dbo.usuarios", "funcionario_id", "dbo.funcionarios", "id");
+            AddForeignKey("dbo.funcionarios_fotos", "funcionario_id", "dbo.funcionarios", "id");
+            AddForeignKey("dbo.votos", "funcionario_id_eleitor", "dbo.funcionarios", "id");
+            AddForeignKey("dbo.voto_branco", "funcionario_id_eleitor", "dbo.funcionarios", "id");
+            AddForeignKey("dbo.funcionarios_eleicoes", "funcionario_id", "dbo.funcionarios", "id");
+        }
+        
+        public override void Down()
+        {
+            DropForeignKey("dbo.funcionarios_eleicoes", "funcionario_id", "dbo.funcionarios");
+            DropForeignKey("dbo.voto_branco", "funcionario_id_eleitor", "dbo.funcionarios");
+            DropForeignKey("dbo.votos", "funcionario_id_eleitor", "dbo.funcionarios");
+            DropForeignKey("dbo.funcionarios_fotos", "funcionario_id", "dbo.funcionarios");
+            DropForeignKey("dbo.usuarios", "funcionario_id", "dbo.funcionarios");
+            DropForeignKey("dbo.candidatos", "funcionario_id", "dbo.funcionarios");
+            DropForeignKey("dbo.votos", new[] { "funcionario_id_candidato", "codigo_eleicao" }, "dbo.candidatos");
+            DropForeignKey("dbo.candidaturas_reprovadas", new[] { "funcionario_id", "codigo_eleicao" }, "dbo.candidatos");
+            DropForeignKey("dbo.funcionarios", "codigo_empresa", "dbo.empresas");
+            DropIndex("dbo.funcionarios_eleicoes", new[] { "funcionario_id" });
+            DropIndex("dbo.voto_branco", new[] { "funcionario_id_eleitor" });
+            DropIndex("dbo.votos", new[] { "funcionario_id_candidato", "codigo_eleicao" });
+            DropIndex("dbo.votos", new[] { "funcionario_id_eleitor" });
+            DropIndex("dbo.funcionarios_fotos", new[] { "funcionario_id" });
+            DropIndex("dbo.usuarios", new[] { "funcionario_id" });
+            DropIndex("dbo.funcionarios", "idxFuncionario");
+            DropIndex("dbo.candidaturas_reprovadas", new[] { "funcionario_id", "codigo_eleicao" });
+            DropIndex("dbo.candidatos", new[] { "funcionario_id" });
+            DropPrimaryKey("dbo.funcionarios_eleicoes");
+            DropPrimaryKey("dbo.resultados_eleicoes");
+            DropPrimaryKey("dbo.voto_branco");
+            DropPrimaryKey("dbo.votos");
+            DropPrimaryKey("dbo.funcionarios_fotos");
+            DropPrimaryKey("dbo.funcionarios");
+            DropPrimaryKey("dbo.candidatos");
+            AlterColumn("dbo.funcionarios_eleicoes", "funcionario_id", c => c.String(nullable: false, maxLength: 15));
+            AlterColumn("dbo.usuarios", "funcionario_id", c => c.String(maxLength: 15));
+            AlterColumn("dbo.voto_branco", "funcionario_id_eleitor", c => c.String(nullable: false, maxLength: 15));
+            AlterColumn("dbo.votos", "funcionario_id_candidato", c => c.String(nullable: false, maxLength: 15));
+            AlterColumn("dbo.votos", "funcionario_id_eleitor", c => c.String(nullable: false, maxLength: 15));
+            AlterColumn("dbo.funcionarios_fotos", "funcionario_id", c => c.String(nullable: false, maxLength: 15));
+            AlterColumn("dbo.candidaturas_reprovadas", "funcionario_id", c => c.String(maxLength: 15));
+            AlterColumn("dbo.candidatos", "funcionario_id", c => c.String(nullable: false, maxLength: 15));
+            DropColumn("dbo.resultados_eleicoes", "codigo_empresa");
+            DropColumn("dbo.funcionarios", "codigo_empresa");
+            DropColumn("dbo.funcionarios", "id");
+            AddPrimaryKey("dbo.funcionarios_eleicoes", new[] { "codigo_eleicao", "matricula_funcionario" });
+            AddPrimaryKey("dbo.resultados_eleicoes", new[] { "codigo_eleicao", "matricula_funcionario" });
+            AddPrimaryKey("dbo.voto_branco", new[] { "matricula_eleitor", "codigo_eleicao" });
+            AddPrimaryKey("dbo.votos", new[] { "matricula_eleitor", "matricula_candidato", "codigo_eleicao" });
+            AddPrimaryKey("dbo.funcionarios_fotos", "matricula_funcionario");
+            AddPrimaryKey("dbo.funcionarios", "matricula");
+            AddPrimaryKey("dbo.candidatos", new[] { "matricula_funcionario", "codigo_eleicao" });
+            RenameColumn(table: "dbo.usuarios", name: "funcionario_id", newName: "matricula_funcionario");
+            RenameColumn(table: "dbo.voto_branco", name: "funcionario_id_eleitor", newName: "matricula_eleitor");
+            RenameColumn(table: "dbo.votos", name: "funcionario_id_eleitor", newName: "matricula_eleitor");
+            RenameColumn(table: "dbo.funcionarios_fotos", name: "funcionario_id", newName: "matricula_funcionario");
+            RenameColumn(table: "dbo.funcionarios_eleicoes", name: "funcionario_id", newName: "matricula_funcionario");
+            RenameColumn(table: "dbo.votos", name: "funcionario_id_candidato", newName: "matricula_candidato");
+            RenameColumn(table: "dbo.candidatos", name: "funcionario_id", newName: "matricula_funcionario");
+            RenameColumn(table: "dbo.candidaturas_reprovadas", name: "funcionario_id", newName: "matricula_funcionario");
+            CreateIndex("dbo.funcionarios_eleicoes", "matricula_funcionario");
+            CreateIndex("dbo.usuarios", "matricula_funcionario");
+            CreateIndex("dbo.voto_branco", "matricula_eleitor");
+            CreateIndex("dbo.votos", new[] { "matricula_candidato", "codigo_eleicao" });
+            CreateIndex("dbo.votos", "matricula_eleitor");
+            CreateIndex("dbo.funcionarios_fotos", "matricula_funcionario");
+            CreateIndex("dbo.candidaturas_reprovadas", new[] { "matricula_funcionario", "codigo_eleicao" });
+            CreateIndex("dbo.candidatos", "matricula_funcionario");
+            AddForeignKey("dbo.usuarios", "matricula_funcionario", "dbo.funcionarios", "matricula");
+            AddForeignKey("dbo.funcionarios_eleicoes", "matricula_funcionario", "dbo.funcionarios", "matricula");
+            AddForeignKey("dbo.voto_branco", "matricula_eleitor", "dbo.funcionarios", "matricula");
+            AddForeignKey("dbo.votos", "matricula_eleitor", "dbo.funcionarios", "matricula");
+            AddForeignKey("dbo.funcionarios_fotos", "matricula_funcionario", "dbo.funcionarios", "matricula");
+            AddForeignKey("dbo.candidatos", "matricula_funcionario", "dbo.funcionarios", "matricula");
+            AddForeignKey("dbo.votos", new[] { "matricula_candidato", "codigo_eleicao" }, "dbo.candidatos", new[] { "matricula_funcionario", "codigo_eleicao" });
+            AddForeignKey("dbo.candidaturas_reprovadas", new[] { "matricula_funcionario", "codigo_eleicao" }, "dbo.candidatos", new[] { "matricula_funcionario", "codigo_eleicao" });
+        }
+    }
+}

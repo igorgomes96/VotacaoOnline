@@ -1,4 +1,4 @@
-angular.module('cipaApp').controller('baseGeralCtrl', ['$scope', 'sharedDataService', 'funcionariosAPI', 'gestoresAPI', function($scope, sharedDataService, funcionariosAPI, gestoresAPI) {
+angular.module('cipaApp').controller('baseGeralCtrl', ['$scope', 'sharedDataService', 'empresasAPI', 'funcionariosAPI', 'gestoresAPI', function($scope, sharedDataService, empresasAPI, funcionariosAPI, gestoresAPI) {
 
 	var self = this;
 
@@ -11,6 +11,8 @@ angular.module('cipaApp').controller('baseGeralCtrl', ['$scope', 'sharedDataServ
 	self.gestorSelecionado = null;
 	self.novoGestor = null;
 	self.error = null;
+	self.empresas = [];
+	self.codigoEmpresa = null;
 
 	// ************* COMPARTILHADO *************
 	$scope.$emit('activeMenuEvent', {label: 'Base Geral'});
@@ -21,25 +23,39 @@ angular.module('cipaApp').controller('baseGeralCtrl', ['$scope', 'sharedDataServ
 
 	self.pesquisa = function(pesquisa) {
 		if (self.editando) return;
-		var call = null;
-		if ($.isNumeric(pesquisa))
-			call = funcionariosAPI.getFuncionario;
-		else
-			call = funcionariosAPI.getFuncionarioByLogin;
-
-		call(pesquisa)
-		.then(function(dado) {
-			dado.data.DataAdmissao = new Date(dado.data.DataAdmissao); 
-			dado.data.DataNascimento = new Date(dado.data.DataNascimento); 
-			self.atual = dado.data;
-		}, function(error) {
-			if (error.data && error.data.Message)
-				swal("Inválido!", error.data.Message, "error");
-			else if(error.data) 
-				swal("Inválido!", error.data, "error");
-			else
-				swal("Inválido!", error, "error");
-		});
+		if ($.isNumeric(pesquisa)) {
+			funcionariosAPI.getFuncionarioByMatriculaEmpresa(pesquisa, self.codigoEmpresa)
+			.then(function(dado) {
+				dado.data.DataAdmissao = new Date(dado.data.DataAdmissao);
+				dado.data.DataNascimento = new Date(dado.data.DataNascimento);
+				self.atual = dado.data;
+			}, function(error) {
+				if (error.status == 404)
+					swal("Não encontrado!", "Matrícula não encontrada!", "error");
+				else if (error.data && error.data.Message)
+					swal("Inválido!", error.data.Message, "error");
+				else if(error.data) 
+					swal("Inválido!", error.data, "error");
+				else
+					swal("Inválido!", error, "error");
+			});
+		} else {
+			funcionariosAPI.getFuncionarioByLogin(pesquisa)
+			.then(function(dado) {
+				dado.data.DataAdmissao = new Date(dado.data.DataAdmissao); 
+				dado.data.DataNascimento = new Date(dado.data.DataNascimento); 
+				self.atual = dado.data;
+			}, function(error) {
+				if (error.status == 404)
+					swal("Não encontrado!", "Login não encontrado!", "error");
+				else if (error.data && error.data.Message)
+					swal("Inválido!", error.data.Message, "error");
+				else if(error.data) 
+					swal("Inválido!", error.data, "error");
+				else
+					swal("Inválido!", error, "error");
+			});
+		}
 	}
 
 	self.keypressed = function(event, pesquisa) {
@@ -82,6 +98,23 @@ angular.module('cipaApp').controller('baseGeralCtrl', ['$scope', 'sharedDataServ
 		});
 	}
 
+	var loadEmpresas = function() {
+		empresasAPI.getEmpresas()
+		.then(function(dado) {
+			self.empresas = dado.data;
+			if (self.empresas && self.empresas.length)
+				self.codigoEmpresa = self.empresas[0].Codigo;
+		}, function(error) {
+			if (error.data && error.data.Message) {
+				swal("Erro!", error.data.Message, "error");
+			} else if (error.data) {
+				swal("Erro!", error.data, "error");
+			} else {
+				swal("Erro!", "Erro ao salvar usuário!", "error");
+			}
+		});
+	}
+
 
 	var loadGestores = function() {
 		gestoresAPI.getGestores()
@@ -105,8 +138,8 @@ angular.module('cipaApp').controller('baseGeralCtrl', ['$scope', 'sharedDataServ
 		$('#modalGestores').modal('hide');
 	}
 
-	self.excluirFuncionario = function(matricula) {
-		funcionariosAPI.deleteFuncionario(matricula)
+	self.excluirFuncionario = function(funcionarioId) {
+		funcionariosAPI.deleteFuncionario(funcionarioId)
 		.then(function() {
 			self.atual = null;
 			swal("Sucesso!", "Funcionário removido com sucesso!", "success");
@@ -121,7 +154,7 @@ angular.module('cipaApp').controller('baseGeralCtrl', ['$scope', 'sharedDataServ
 	}
 
 	self.salvarFuncionario = function(funcionario) {
-		funcionariosAPI.putFuncionario(funcionario.MatriculaFuncionario, funcionario)
+		funcionariosAPI.putFuncionario(funcionario.Id, funcionario)
 		.then(function() {
 			swal("Sucesso!", "Funcionário salvo com sucesso!", "success");
 		}, function(error) {
@@ -143,5 +176,6 @@ angular.module('cipaApp').controller('baseGeralCtrl', ['$scope', 'sharedDataServ
 	}
 
 	loadGestores();
+	loadEmpresas();
 
 }]);

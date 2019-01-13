@@ -16,16 +16,21 @@
 <div class="wrapper wrapper-content animated fadeInRight">
 	<!-- /Fixo -->
 	<div class="row">
-		<div class="col-md-6 col-sm-8 col-xs-12">
-			<label for="inputFiltro">Pesquisa</label>
+		<div class="col-md-4 col-sm-6 col-xs-12">
+			<label for="empresa">Empresa</label>
+			<div class="input-group">
+				<select class="form-control" id="empresa" name="empresa" ng-model="ct.codigoEmpresa" ng-options="e.Codigo as e.RazaoSocial for e in ct.empresas">
+					<option value="">(Selecione o empresa)</option>
+				</select>
+			</div>
 		</div>
-	</div>
-	<div class="row">
-		<div class="col-md-6 col-sm-8 col-xs-12">
+
+		<div class="col-md-4 col-sm-6 col-xs-12">
+			<label for="inputFiltro">Matrícula/Login</label>
 			<div class="input-group">
 				<input type="text" class="form-control" id="inputFiltro" name="inputFiltro" ng-model="pesquisa" placeholder="Digite a matrícula ou login do funcionário" ng-keypress="ct.keypressed($event, pesquisa)">
 				<span class="input-group-btn">
-					<button class="btn btn-primary" type="button" ng-click="ct.pesquisa(pesquisa)"><i class="fa fa-search"></i></button>
+					<button class="btn btn-primary" type="button" ng-click="ct.pesquisa(pesquisa)" ng-disabled="!ct.codigoEmpresa || !pesquisa"><i class="fa fa-search"></i></button>
 				</span>
 			</div>
 		</div>
@@ -93,7 +98,7 @@
 							</div>
 
 							<div class="col-md-5 col-sm-12">
-							
+
 								<div class="row">
 									<div class="col-sm-8 col-xs-12">
 										<label for="gestor">Gestor</label>
@@ -139,14 +144,14 @@
 						<div class="col-sm-12">
 							<button class="btn btn-default" ng-click="ct.cancelar()">Cancelar</button>
 							<button class="btn btn-primary" ng-click="ct.salvarFuncionario(ct.atual);ct.editando = false;" ng-disabled="formFuncionarios.$invalid">Salvar <i class="fa fa-save"></i></button>
-			            </div>
+						</div>
 					</div>
 
 					<div class="row" ng-hide="ct.editando || !ct.atual">
 						<div class="col-sm-12">
 							<button class="btn btn-primary" ng-click="ct.editar()">Editar <i class="fa fa-pencil"></i></button>
-							<button class="btn btn-danger" ng-click="ct.excluirFuncionario(ct.atual.MatriculaFuncionario)">Excluir <i class="fa fa-trash"></i></button>
-			            </div>
+							<button class="btn btn-danger" ng-click="ct.excluirFuncionario(ct.atual.Id)">Excluir <i class="fa fa-trash"></i></button>
+						</div>
 					</div>
 
 				</div>

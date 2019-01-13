@@ -8,6 +8,7 @@ using System.Data.Entity.Migrations;
 using System.Web;
 using CIPAOnLine.Resources;
 using System.Threading;
+using System.Security.Claims;
 
 namespace CIPAOnLine.Services
 {
@@ -24,7 +25,7 @@ namespace CIPAOnLine.Services
             IEnumerable<Eleicao> eleicoes = db.Eleicoes.ToList()
                     .Where(x => (codigoModulo == null || x.CodigoModulo == codigoModulo) && (aberta == null || (aberta.GetValueOrDefault() && x.DataFechamento == null) || (!aberta.GetValueOrDefault() && x.DataFechamento != null)));
             return eleicoes;
-            
+
         }
 
         private QtdaEleicaoDTO GetQtda(Eleicao eleicao)
@@ -60,22 +61,31 @@ namespace CIPAOnLine.Services
             return eleicao.Funcionarios;
         }
 
-        public ICollection<FiltroEleicaoDTO> GetFiltroEleicoes(Usuario usuario, int codigoModulo)
+        public ICollection<FiltroEleicaoDTO> GetFiltroEleicoes(ClaimsPrincipal claims, int codigoModulo)
         {
             //Abertas
             Dictionary<int, UnidadeFiltroDTO> unidadesAbertas = new Dictionary<int, UnidadeFiltroDTO>();
 
-            foreach (Eleicao el in db.Eleicoes.Where(x => x.DataFechamento == null && x.CodigoModulo == codigoModulo))
-            {
-                if (usuario.Perfil == "Administrador" || FuncionarioExiste(el.Codigo, usuario.Funcionario.MatriculaFuncionario)) { 
-                    if (!unidadesAbertas.ContainsKey(el.CodigoUnidade))
-                        unidadesAbertas.Add(el.CodigoUnidade, new UnidadeFiltroDTO { Unidade = new UnidadeDTO(el.Unidade), Eleicoes = new List<EleicaoDTO>() });
+            int? funcionarioId = null;
+            if (claims.Claims.Any(c => c.Type == ClaimTypes.NameIdentifier))
+                funcionarioId = int.Parse(claims.FindFirst(ClaimTypes.NameIdentifier).Value);
+            List<int> codigoEmpresas = claims.FindAll("company").Select(x => int.Parse(x.Value)).ToList();
 
-                    EleicaoDTO e = new EleicaoDTO(el)
+            foreach (Eleicao el in db.Eleicoes.Where(x => x.DataFechamento == null && x.CodigoModulo == codigoModulo).ToList())
+            {
+                if ((claims.IsInRole(Perfil.ADMINISTRADOR) && codigoEmpresas.Contains(el.Unidade.CodigoEmpresa)) || (funcionarioId.HasValue && FuncionarioExiste(el.Codigo, funcionarioId.Value)))
+                {
                     {
-                        QtdaEleicao = GetQtda(el)
-                    };
-                    unidadesAbertas[el.CodigoUnidade].Eleicoes.Add(e);
+                        if (!unidadesAbertas.ContainsKey(el.CodigoUnidade))
+                            unidadesAbertas.Add(el.CodigoUnidade, new UnidadeFiltroDTO { Unidade = new UnidadeDTO(el.Unidade), Eleicoes = new List<EleicaoDTO>() });
+
+                        EleicaoDTO e = new EleicaoDTO(el)
+                        {
+                            QtdaEleicao = GetQtda(el)
+                        };
+                        unidadesAbertas[el.CodigoUnidade].Eleicoes.Add(e);
+
+                    }
                 }
             }
 
@@ -83,9 +93,9 @@ namespace CIPAOnLine.Services
             //Fechadas
             Dictionary<int, UnidadeFiltroDTO> unidadesFechadas = new Dictionary<int, UnidadeFiltroDTO>();
 
-            foreach (Eleicao el in db.Eleicoes.Where(x => x.DataFechamento != null && x.CodigoModulo == codigoModulo))
+            foreach (Eleicao el in db.Eleicoes.Where(x => x.DataFechamento != null && x.CodigoModulo == codigoModulo).ToList())
             {
-                if (usuario.Perfil == "Administrador" || FuncionarioExiste(el.Codigo, usuario.Funcionario.MatriculaFuncionario))
+                if ((claims.IsInRole(Perfil.ADMINISTRADOR) && codigoEmpresas.Contains(el.Unidade.CodigoEmpresa)) || (funcionarioId.HasValue && FuncionarioExiste(el.Codigo, funcionarioId.Value)))
                 {
                     if (!unidadesFechadas.ContainsKey(el.CodigoUnidade))
                         unidadesFechadas.Add(el.CodigoUnidade, new UnidadeFiltroDTO { Unidade = new UnidadeDTO(el.Unidade), Eleicoes = new List<EleicaoDTO>() });
@@ -116,21 +126,23 @@ namespace CIPAOnLine.Services
 
         }
 
-        public bool DeleteFuncionario(Eleicao eleicao, string matricula)
+        public bool DeleteFuncionario(Eleicao eleicao, int funcionarioId)
         {
-            Candidato candidato = eleicao.Candidatos.FirstOrDefault(x => x.MatriculaFuncionario == matricula && x.CodigoEleicao == eleicao.Codigo);
-            if (candidato != null) { 
+            Candidato candidato = eleicao.Candidatos.FirstOrDefault(x => x.FuncionarioId == funcionarioId && x.CodigoEleicao == eleicao.Codigo);
+            if (candidato != null)
+            {
                 db.Candidatos.Remove(candidato);
                 db.SaveChanges();
             }
-            Funcionario f = eleicao.Funcionarios.FirstOrDefault(x => x.MatriculaFuncionario == matricula);
-            if (f != null) { 
+            Funcionario f = eleicao.Funcionarios.FirstOrDefault(x => x.Id == funcionarioId);
+            if (f != null)
+            {
                 eleicao.Funcionarios.Remove(f);
                 db.SaveChanges();
                 return true;
             }
             return false;
-            
+
         }
 
         public void DeleteTodosFuncionarios(Eleicao eleicao)
@@ -151,7 +163,8 @@ namespace CIPAOnLine.Services
             float total = GetQtdaFuncionarios(eleicao.Codigo);
 
             EleicaoQtdaRepresentantesDTO retorno = null;
-            if (eleicao.CodigoModulo == 1) {  //CIPA
+            if (eleicao.CodigoModulo == 1)
+            {  //CIPA
                 QtdaGrupo qtEfetivos = db.QtdasGrupos
                     .Where(x => x.CodigoGrupo == eleicao.Unidade.CodigoGrupo
                         && x.QtdaMin <= total && x.Efetivo)
@@ -167,11 +180,12 @@ namespace CIPAOnLine.Services
                 if (qtEfetivos == null || qtSuplentes == null)
                     throw new QtdaMinCipeiroGrupoNaoEncontradaException(eleicao.Unidade.CodigoGrupo, GetQtdaFuncionarios(eleicao.Codigo));
 
-                int acrescimo = total > qtEfetivos.AcrescimoLimite.QtdaLimite ? 
+                int acrescimo = total > qtEfetivos.AcrescimoLimite.QtdaLimite ?
                     (int)Math.Floor(((total - qtEfetivos.AcrescimoLimite.QtdaLimite) / qtEfetivos.AcrescimoLimite.IntervaloLimite) * qtEfetivos.AcrescimoLimite.QtdaAcrescimo) : 0;
 
                 retorno = new EleicaoQtdaRepresentantesDTO(eleicao, qtEfetivos.Valor + acrescimo, qtSuplentes.Valor + acrescimo);
-            } else //COMISSÃO
+            }
+            else //COMISSÃO
             {
                 QtdaComissaoInterna q = db.QtdasComissaoInterna.Where(x => x.QtdaMin >= total).FirstOrDefault();
                 retorno = new EleicaoQtdaRepresentantesDTO(eleicao, q.Valor, 0);
@@ -185,15 +199,14 @@ namespace CIPAOnLine.Services
         /// Adiciona o funcionário ao processo eleitoral. Se ele já estiver, retorna false; se não, true
         /// </summary>
         /// <param name="codEleicao"></param>
-        /// <param name="matricula"></param>
+        /// <param name="funcionarioId"></param>
         /// <returns></returns>
-        public bool AddFuncionario(int codEleicao, string matricula)
+        public bool AddFuncionario(int codEleicao, int funcionarioId)
         {
-            matricula = string.Concat(matricula.Trim().SkipWhile(c => c == '0'));
             Eleicao eleicao = GetEleicao(codEleicao);
-            Funcionario func = db.Funcionarios.Find(matricula);
+            Funcionario func = db.Funcionarios.Find(funcionarioId);
 
-            if (func == null) throw new FuncionarioNaoEncontradoException(matricula);
+            if (func == null) throw new FuncionarioNaoEncontradoException(funcionarioId);
 
             if (!eleicao.Funcionarios.Contains(func))
             {
@@ -216,11 +229,11 @@ namespace CIPAOnLine.Services
             };
         }
 
-        public bool FuncionarioExiste(int codEleicao, string matricula)
+        public bool FuncionarioExiste(int codEleicao, int funcionarioId)
         {
             Eleicao e = GetEleicao(codEleicao);
 
-            return e.Funcionarios.Any(x => x.MatriculaFuncionario.Trim() == matricula.Trim());
+            return e.Funcionarios.Any(x => x.Id == funcionarioId);
         }
 
         public IEnumerable<string> GetTodasGestoes(int codigoModulo)
@@ -238,7 +251,7 @@ namespace CIPAOnLine.Services
             return db.Eleicoes.Where(x => x.DataFechamento == null && x.CodigoModulo == codigoModulo && x.Funcionarios.Any(y => y.MatriculaFuncionario == matriculaFuncionario)).ToList();
         }
 
-        public Eleicao GetEleicaoPorGestaoPorUnidade (int codigoModulo, string gestao, int codigoUnidade)
+        public Eleicao GetEleicaoPorGestaoPorUnidade(int codigoModulo, string gestao, int codigoUnidade)
         {
             Eleicao e = db.Eleicoes.Where(x => x.Gestao == gestao && x.CodigoUnidade == codigoUnidade && x.CodigoModulo == codigoModulo).FirstOrDefault();
             if (e == null)
@@ -257,7 +270,7 @@ namespace CIPAOnLine.Services
             return e;
         }
 
-       
+
 
         private PrazoEtapa GetProximaEtapa(PrazoEtapa prazoEtapa)
         {
@@ -277,7 +290,7 @@ namespace CIPAOnLine.Services
 
         }
 
-        private PrazoEtapa GetProximaEtapa (Eleicao eleicao)
+        private PrazoEtapa GetProximaEtapa(Eleicao eleicao)
         {
             PrazoEtapa etapaAtual = db.PrazosEtapas.Find(eleicao.Codigo, eleicao.CodigoEtapa);
             return eleicao.PrazosEtapas
@@ -285,7 +298,7 @@ namespace CIPAOnLine.Services
                 .OrderBy(x => x.Etapa.CodigoEtapa).FirstOrDefault();
         }
 
-        private void PassarParaProximaEtapa (Eleicao eleicao, Usuario user)
+        private void PassarParaProximaEtapa(Eleicao eleicao, Usuario user)
         {
             PrazoEtapa etapaAtual = db.PrazosEtapas.Find(eleicao.Codigo, eleicao.CodigoEtapa);
 
@@ -344,39 +357,7 @@ namespace CIPAOnLine.Services
                 if (((float)qtdaVotos / (float)qtdaTotal) < 0.5)
                     throw new VotosInsuficientesException(qtdaTotal % 2 == 1 ? (int)((qtdaTotal + 1) / 2) : (int)(qtdaTotal / 2));
 
-                //if (proxima.DataProposta.GetValueOrDefault().Date > DateTime.Today)
-                //    throw new AntesDataPrevistaException(proxima.DataProposta.GetValueOrDefault());
             }
-
-            //ICollection<EmailDTO> emails = new List<EmailDTO>();
-
-            //if (etapaAtual.CodigoEtapa == 1)
-            //{
-            //    emails.Add(EmailService.EmailEditalFuncionarios(eleicao, user));
-            //    emails.Add(EmailService.EmailCronogramaSindicato(eleicao, user));
-            //}
-
-            //if (etapaAtual.CodigoEtapa == 3)
-            //{
-            //    emails.Add(EmailService.EmailConviteCandidatura(eleicao, user, GetProximaEtapa(eleicao)));
-            //}
-
-            //if (etapaAtual.CodigoEtapa == 5)
-            //{
-            //    emails.Add(EmailService.EmailRelacaoCandidatos(eleicao, user));
-            //}
-
-            //if (etapaAtual.CodigoEtapa == 8)
-            //{
-            //    emails.Add(EmailService.EmailConviteVotacao(eleicao, user, GetProximaEtapa(eleicao)));
-            //}
-
-            //if (etapaAtual.CodigoEtapa == 9)
-            //{
-            //    emails.Add(EmailService.EmailApuracao(eleicao, user));
-            //}
-
-            //if (emails.Count > 0) throw new ConfirmacaoEmailsException(emails);
 
             PassarParaProximaEtapa(eleicao, user);
 
@@ -384,25 +365,14 @@ namespace CIPAOnLine.Services
         }
 
 
-        //public Eleicao ProximaEtapa(Eleicao eleicao, Usuario user, IEnumerable<EmailDTO> emails)
-        //{
 
-        //    foreach (EmailDTO e in emails) {
-        //        Thread th = new Thread(EmailService.Send);
-        //        th.Start(e);
-        //    }
-
-        //    PassarParaProximaEtapa(eleicao, user);
-
-        //    return eleicao;
-        //}
-
-
-        private void SalvaResultado (int codEleicao)
+        private void SalvaResultado(int codEleicao)
         {
             VotosService votosService = new VotosService();
             ResultadoEleicao resultado = null;
             ResultadoDTO todos = votosService.GetResultado(codEleicao);
+
+            Eleicao eleicao = GetEleicao(codEleicao);
 
             int qtdaTotal = GetQtdaFuncionarios(codEleicao);
             int qtdaVotos = votosService.GetQtdaVotos(codEleicao);
@@ -416,6 +386,8 @@ namespace CIPAOnLine.Services
                 resultado = new ResultadoEleicao
                 {
                     CodigoEleicao = codEleicao,
+                    CodigoEmpresa = eleicao.Unidade.CodigoEmpresa,
+                    RazaoSocial = eleicao.Unidade.Empresa.RazaoSocial,
                     MatriculaFuncionario = q.MatriculaFuncionario,
                     Login = q.Login,
                     Cargo = q.Cargo,
@@ -423,7 +395,7 @@ namespace CIPAOnLine.Services
                     DataAdmissao = q.DataAdmissao,
                     QtdaVotos = q.QtdaVotos,
                     Thumbnail = q.Thumbnail,
-                    Foto = db.FuncionariosFotos.Where(x => x.MatriculaFuncionario == q.MatriculaFuncionario).FirstOrDefault()?.Foto,
+                    Foto = db.FuncionariosFotos.Where(x => x.FuncionarioId == q.Id).FirstOrDefault()?.Foto,
                     Efetivo = true
                 };
                 db.ResultadosEleicoes.AddOrUpdate(resultado);
@@ -434,6 +406,8 @@ namespace CIPAOnLine.Services
                 resultado = new ResultadoEleicao
                 {
                     CodigoEleicao = codEleicao,
+                    CodigoEmpresa = eleicao.Unidade.CodigoEmpresa,
+                    RazaoSocial = eleicao.Unidade.Empresa.RazaoSocial,
                     MatriculaFuncionario = q.MatriculaFuncionario,
                     Login = q.Login,
                     Cargo = q.Cargo,
@@ -441,7 +415,7 @@ namespace CIPAOnLine.Services
                     DataAdmissao = q.DataAdmissao,
                     QtdaVotos = q.QtdaVotos,
                     Thumbnail = q.Thumbnail,
-                    Foto = db.FuncionariosFotos.Where(x => x.MatriculaFuncionario == q.MatriculaFuncionario).FirstOrDefault()?.Foto,
+                    Foto = db.FuncionariosFotos.Where(x => x.FuncionarioId == q.Id).FirstOrDefault()?.Foto,
                     Efetivo = false
                 };
                 db.ResultadosEleicoes.AddOrUpdate(resultado);
@@ -472,7 +446,7 @@ namespace CIPAOnLine.Services
 
             Eleicao nova = new Eleicao
             {
-                CodigoEtapa = db.Etapas.Where(x => x.CodigoEtapa == db.Etapas.Where(y => y.CodigoModulo == eleicao.CodigoModulo).Min(y => y.CodigoEtapa)).FirstOrDefault().CodigoEtapa,
+                CodigoEtapa = db.Etapas.Where(x => x.CodigoEtapa == db.Etapas.Where(y => y.CodigoModulo == eleicao.CodigoModulo).Min(y => y.CodigoEtapa)).FirstOrDefault()?.CodigoEtapa,
                 CodigoUnidade = eleicao.CodigoUnidade,
                 CodigoModulo = eleicao.CodigoModulo,
                 Gestao = eleicao.Gestao,
@@ -508,14 +482,14 @@ namespace CIPAOnLine.Services
             return nova;
         }
 
-        public bool FuncionarioCadastrado(int codEleicao, string login, string matricula)
+        public bool FuncionarioCadastrado(int codEleicao, string login, int funcionarioId)
         {
             Eleicao eleicao = db.Eleicoes.Find(codEleicao);
             if (eleicao == null)
                 throw new EleicaoNaoEncontradaException();
 
-            return eleicao.Funcionarios.Any(x => x.Login == login && x.MatriculaFuncionario == matricula);
-            
+            return eleicao.Funcionarios.Any(x => x.Login == login && x.Id == funcionarioId);
+
         }
 
         public bool EleicaoExiste(int codigo)

@@ -30,7 +30,6 @@ namespace CIPAOnLine.Services
             return db.Gestores.FirstOrDefault(x => x.Nome.Equals(nome, StringComparison.InvariantCultureIgnoreCase));
         }
 
-        [Authorize(Roles = "Administrador")]
         public Gestor Save(Gestor gestor)
         { 
             db.Gestores.AddOrUpdate(gestor);

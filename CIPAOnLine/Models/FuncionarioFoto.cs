@@ -11,9 +11,9 @@ namespace CIPAOnLine.Models
     public class FuncionarioFoto
     {
         [Key, ForeignKey("Funcionario")]
-        [MaxLength(15)]
-        [Column("matricula_funcionario")]
-        public string MatriculaFuncionario { get; set; }
+        [Column("funcionario_id")]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public int FuncionarioId { get; set; }
 
         [Required]
         [Column("foto")]

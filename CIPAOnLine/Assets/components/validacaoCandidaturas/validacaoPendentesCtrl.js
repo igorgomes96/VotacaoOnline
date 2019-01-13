@@ -113,10 +113,8 @@ angular.module('cipaApp').controller('validacaoPendentesCtrl', ['$scope', '$stat
 
 
 
-
-
-	self.aprovarCandidatura = function(matricula, codEleicao) {
-		candidatosAPI.aprovarCandidatura(matricula, codEleicao)
+	self.aprovarCandidatura = function(funcionarioId, codEleicao) {
+		candidatosAPI.aprovarCandidatura(funcionarioId, codEleicao)
 		.then(function() {
 			swal("Sucesso!", "Candidatura Aprovada!", "success")
 			.then(function() {
@@ -133,14 +131,14 @@ angular.module('cipaApp').controller('validacaoPendentesCtrl', ['$scope', '$stat
 		});
 	}
 
-	self.reprovarCandidatura = function(matricula, codEleicao, motivo) {
+	self.reprovarCandidatura = function(funcionarioId, codEleicao, motivo) {
 		var reprovacao = {
 			CodigoEleicao: codEleicao,
-			MatriculaFuncionario: matricula,
+			FuncionarioId: funcionarioId,
 			Motivo: motivo
 		};
 
-		candidatosAPI.reprovarCandidatura(matricula, codEleicao, reprovacao)
+		candidatosAPI.reprovarCandidatura(funcionarioId, codEleicao, reprovacao)
 		.then(function() {
 			swal("Sucesso!", "Candidatura Reprovada!", "success")
 			.then(function() {
@@ -163,7 +161,7 @@ angular.module('cipaApp').controller('validacaoPendentesCtrl', ['$scope', '$stat
 			if (value) {
 				var dados = self.candidatos.map(function(x) {
 					return {
-						MatriculaFuncionario: x.MatriculaFuncionario,
+						FuncionarioId: x.Id,
 						CodigoEleicao: x.CodigoEleicao,
 						HorarioCandidatura: x.HorarioCandidatura,
 						Validado: true

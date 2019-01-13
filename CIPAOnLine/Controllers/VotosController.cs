@@ -101,12 +101,12 @@ namespace CIPAOnLine.Controllers
         {
             try
             {
-                if (votosService.VotoExiste(voto.MatriculaEleitor, voto.CodigoEleicao))
+                if (votosService.VotoExiste(voto.FuncionarioIdEleitor, voto.CodigoEleicao))
                 {
                     return Content(HttpStatusCode.BadRequest, "Voto já registrado!");
                 }
 
-                voto.MatriculaEleitor = usuariosService.GetUsuario(User.Identity.Name).MatriculaFuncionario;
+                voto.FuncionarioIdEleitor = usuariosService.GetUsuario(User.Identity.Name).FuncionarioId.Value;
                 return Content(HttpStatusCode.Created, new VotoDTO(votosService.RegistraVoto(voto)));
             } catch (CandidatoNaoEncontradoException)
             {

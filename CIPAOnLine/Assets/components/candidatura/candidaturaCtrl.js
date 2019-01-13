@@ -24,7 +24,7 @@ angular.module('cipaApp').controller('candidaturaCtrl', ['etapasValue', 'sharedD
 			self.usuario = dado.data;
 
 			if (self.eleicaoAtual) {
-				candidatosAPI.getCandidato(self.usuario.MatriculaFuncionario, self.eleicaoAtual.Codigo)
+				candidatosAPI.getCandidato(self.usuario.FuncionarioId, self.eleicaoAtual.Codigo)
 				.then(function(retorno) {
 
 					if (retorno.data && retorno.data.MotivoReprovacao)
@@ -100,12 +100,14 @@ angular.module('cipaApp').controller('candidaturaCtrl', ['etapasValue', 'sharedD
 		//exibeLoader();
 
 		var candidato = {
+			FuncionarioId: self.usuario.FuncionarioId,
 			MatriculaFuncionario: self.usuario.MatriculaFuncionario,
 			CodigoEleicao: self.eleicaoAtual.Codigo,
 			LoginFuncionario: self.usuario.Login,
 			NomeFuncionario: self.usuario.Nome,
 			CargoFuncionario: self.usuario.Cargo,
 			AreaFuncionario: self.usuario.Area,
+			EmailFuncionario: self.usuario.Email,
 			DataAdmissaoFuncionario: self.usuario.DataAdmissao,
 			Sobre: self.usuario.Sobre
 		};

@@ -28,7 +28,7 @@ namespace CIPAOnLine.Services
             ICollection<QtdaVotosDTO> votos =
                     (from cand in db.Candidatos.Where(x => x.CodigoEleicao == codEleicao && x.Validado.HasValue && x.Validado.Value).ToList()
                     select new QtdaVotosDTO(cand,
-                        db.Votos.Count(y => y.MatriculaCandidato == cand.MatriculaFuncionario && y.CodigoEleicao == codEleicao)))
+                        db.Votos.Count(y => y.FuncionarioIdCandidato == cand.FuncionarioId && y.CodigoEleicao == codEleicao)))
                     .OrderBy(x => x.Candidato.Nome).OrderBy(x => x.Candidato.DataAdmissao).OrderByDescending(x => x.QtdaVotos).ToList();
 
             votos.Add(new QtdaVotosDTO
@@ -77,7 +77,7 @@ namespace CIPAOnLine.Services
 
             IEnumerable<CandidatoEleitoDTO> query =
                 db.Candidatos.Where(x => x.CodigoEleicao == codEleicao).ToList()
-                .Select(x => new CandidatoEleitoDTO(x, db.Votos.Count(y => y.MatriculaCandidato == x.MatriculaFuncionario && y.CodigoEleicao == codEleicao)))
+                .Select(x => new CandidatoEleitoDTO(x, db.Votos.Count(y => y.FuncionarioIdCandidato == x.FuncionarioId && y.CodigoEleicao == codEleicao)))
                 .OrderByDescending(x => x.QtdaVotos).ThenBy(x => x.DataAdmissao).ThenBy(x => x.DataNascimento).ThenBy(x => x.Nome).Take(qtda.Efetivos + qtda.Suplentes);
 
             if (query.Count() < (qtda.Suplentes + qtda.Efetivos))
@@ -98,11 +98,11 @@ namespace CIPAOnLine.Services
             voto.IP = HttpContext.Current.Request.UserHostAddress;
             voto.DataHorario = DateTime.Now;
 
-            if (!eleicoesService.FuncionarioExiste(voto.CodigoEleicao, voto.MatriculaCandidato))
+            if (!eleicoesService.FuncionarioExiste(voto.CodigoEleicao, voto.FuncionarioIdCandidato))
                 throw new CandidatoNaoEncontradoException();
 
-            if (!eleicoesService.FuncionarioExiste(voto.CodigoEleicao, voto.MatriculaEleitor))
-                throw new FuncionarioNaoEncontradoException(voto.MatriculaEleitor);
+            if (!eleicoesService.FuncionarioExiste(voto.CodigoEleicao, voto.FuncionarioIdEleitor))
+                throw new FuncionarioNaoEncontradoException(voto.FuncionarioIdEleitor);
 
             db.Votos.Add(voto);
             db.SaveChanges();
@@ -116,8 +116,8 @@ namespace CIPAOnLine.Services
             voto.IP = HttpContext.Current.Request.UserHostAddress;
             voto.DataHorario = DateTime.Now;
 
-            if (!eleicoesService.FuncionarioExiste(voto.CodigoEleicao, voto.MatriculaEleitor))
-                throw new FuncionarioNaoEncontradoException(voto.MatriculaEleitor);
+            if (!eleicoesService.FuncionarioExiste(voto.CodigoEleicao, voto.FuncionarioIdEleitor))
+                throw new FuncionarioNaoEncontradoException(voto.FuncionarioIdEleitor);
 
             db.VotosBrancos.Add(voto);
             db.SaveChanges();
@@ -125,15 +125,18 @@ namespace CIPAOnLine.Services
             return voto;
         }
 
-        public List<ResultadoEleicao> VerificarEleicoesPorFuncionario(string matricula, string login)
+        public List<ResultadoEleicao> VerificarEleicoesPorFuncionario(int funcionarioId, string login)
         {
-            return db.ResultadosEleicoes.Where(x => x.Login == login && x.MatriculaFuncionario == matricula).ToList();
+            FuncionariosService funcService = new FuncionariosService();
+            Funcionario funcionario = funcService.GetFuncionario(funcionarioId);
+            return db.ResultadosEleicoes
+                .Where(x => x.Login == login && x.MatriculaFuncionario == funcionario.MatriculaFuncionario && x.CodigoEmpresa == funcionario.CodigoEmpresa).ToList();
         }
 
-        public bool VotoExiste(string eleitor, int codEleicao)
+        public bool VotoExiste(int eleitor, int codEleicao)
         {
-            return db.Votos.Count(e => e.MatriculaEleitor == eleitor && e.CodigoEleicao == codEleicao) +
-                db.VotosBrancos.Count(e => e.MatriculaEleitor == eleitor && e.CodigoEleicao == codEleicao) > 0;
+            return db.Votos.Count(e => e.FuncionarioIdEleitor == eleitor && e.CodigoEleicao == codEleicao) +
+                db.VotosBrancos.Count(e => e.FuncionarioIdEleitor == eleitor && e.CodigoEleicao == codEleicao) > 0;
         }
 
         public void Dispose()

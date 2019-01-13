@@ -27,11 +27,11 @@ namespace CIPAOnLine.Services
 
         public IEnumerable<CandidatoFotoDTO> GetCandidatosParaVoto(Eleicao eleicao, Usuario usuario)
         {
-            if (eleicao.CodigoEtapa != 9)
+            if (eleicao.CodigoEtapa != 9 && eleicao.CodigoEtapa != 24)
                 throw new ForaEtapaVotacaoException(eleicao);
 
-            if (db.Votos.Count(x => x.CodigoEleicao == eleicao.Codigo && x.MatriculaEleitor == usuario.MatriculaFuncionario) > 0 ||
-                    db.VotosBrancos.Count(x => x.CodigoEleicao == eleicao.Codigo && x.MatriculaEleitor == usuario.MatriculaFuncionario) > 0)
+            if (db.Votos.Count(x => x.CodigoEleicao == eleicao.Codigo && x.FuncionarioIdEleitor == usuario.FuncionarioId) > 0 ||
+                    db.VotosBrancos.Count(x => x.CodigoEleicao == eleicao.Codigo && x.FuncionarioIdEleitor == usuario.FuncionarioId) > 0)
                 throw new VotoJaRealizadoException(usuario.Funcionario, eleicao);
 
             return db.Candidatos.ToList()
@@ -40,14 +40,14 @@ namespace CIPAOnLine.Services
                 .Select(x => new CandidatoFotoDTO(x));
         }
 
-        public Candidato GetCandidato(string matricula, int codEleicao)
+        public Candidato GetCandidato(int funcionarioId, int codEleicao)
         {
             EleicoesService eleicoesService = new EleicoesService();
 
-            if (!eleicoesService.FuncionarioExiste(codEleicao, matricula))
-                throw new FuncionarioNaoCadastradoEleicaoException(matricula, codEleicao);
-            IEnumerable<Candidato> teste = db.Candidatos.Where(x => matricula == x.MatriculaFuncionario);
-            Candidato c = db.Candidatos.Find(matricula, codEleicao);
+            if (!eleicoesService.FuncionarioExiste(codEleicao, funcionarioId))
+                throw new FuncionarioNaoCadastradoEleicaoException(funcionarioId, codEleicao);
+            IEnumerable<Candidato> teste = db.Candidatos.Where(x => funcionarioId == x.FuncionarioId);
+            Candidato c = db.Candidatos.Find(funcionarioId, codEleicao);
 
             if (c == null) throw new CandidatoNaoEncontradoException();
 
@@ -62,7 +62,7 @@ namespace CIPAOnLine.Services
         private bool Elegivel(Candidato c, Eleicao eleicao, Funcionario func)
         {
             VotosService votosService = new VotosService();
-            List<ResultadoEleicao> resultados = votosService.VerificarEleicoesPorFuncionario(c.MatriculaFuncionario, func.Login);
+            List<ResultadoEleicao> resultados = votosService.VerificarEleicoesPorFuncionario(c.FuncionarioId, func.Login);
 
             int anoPassado = eleicao.DataInicio.Year - 1;
             int anoRetrasado = anoPassado - 1;
@@ -78,45 +78,46 @@ namespace CIPAOnLine.Services
 
             //Adiciona ao contexto, ou atualiza
             Eleicao eleicao = eleicoesService.GetEleicao(c.CodigoEleicao);
-            Funcionario func = funcService.GetFuncionario(c.MatriculaFuncionario);
+            Funcionario func = funcService.GetFuncionario(c.FuncionarioId);
 
-            if (eleicao.Funcionarios.Count(x => x.MatriculaFuncionario == c.MatriculaFuncionario) <= 0)
-                throw new FuncionarioNaoCadastradoEleicaoException(c.MatriculaFuncionario, c.CodigoEleicao);
+            if (eleicao.Funcionarios.Count(x => x.Id == c.FuncionarioId) <= 0)
+                throw new FuncionarioNaoCadastradoEleicaoException(c.FuncionarioId, c.CodigoEleicao);
 
             if (!Elegivel(c, eleicao, func))
                 throw new FuncionarioNaoElegivelException("Não é permitida a inscrição de funcionários eleitos nas duas útlimas gestões!");
 
-            if (!CandidatoExiste(c.MatriculaFuncionario, c.CodigoEleicao))
+
+            string modulo = eleicao.CodigoModulo == 2 ? "a Comissão Interna de Trabalhadores" : "a CIPA";
+
+            EmailDTO email = new EmailDTO
             {
-                string modulo = eleicao.CodigoModulo == 2 ? "a Comissão Interna de Trabalhadores" : "a CIPA";
-                EmailDTO email = new EmailDTO
-                {
-                    Message = string.Format(Resources.Emails.EmailCandidatura,
-                        modulo, func.Login, func.Nome,
-                        func.Cargo, func.Area),
-                    To = new string[] { func.Email },
-                    Copy = func.Gestor != null ? new string[] { func.Gestor.Email } : new string[] { },
-                    Subject = "Candidatura Realizada"
-                };
+                Message = EmailService.ReplaceParams(Resources.Emails.EmailConfirmacaoCandidatura,
+                    Tuple.Create("@MODULO", modulo), Tuple.Create("@NOME", func.Nome),
+                    Tuple.Create("@CARGO", func.Cargo), Tuple.Create("@AREA", func.Area)),
+                To = new string[] { func.Email },
+                Copy = func.Gestor != null ? new string[] { func.Gestor.Email } : new string[] { },
+                Subject = "Candidatura Realizada"
+            };
 
-                Thread th = new Thread(EmailService.Send);
-                th.Start(email);
-            }
-
+            Thread th = new Thread(EmailService.Send);
+            th.Start(email);
+            
             db.Candidatos.AddOrUpdate(c);
             db.SaveChanges();
             return c;
         }
 
-        public void ExcluirMotivoReprovacao (Candidato c)
+
+
+        public void ExcluirMotivoReprovacao(Candidato c)
         {
-            CandidaturaReprovada reprovacao = db.CandidaturasReprovadas.FirstOrDefault(x => x.CodigoEleicao == c.CodigoEleicao && x.MatriculaFuncionario == c.MatriculaFuncionario);
+            CandidaturaReprovada reprovacao = db.CandidaturasReprovadas.FirstOrDefault(x => x.CodigoEleicao == c.CodigoEleicao && x.FuncionarioId == c.FuncionarioId);
 
             if (reprovacao != null)
                 db.CandidaturasReprovadas.Remove(reprovacao);
 
             db.SaveChanges();
-        } 
+        }
 
         public IEnumerable<CandidatoFotoDTO> GetCandidatosParaValidacao(Eleicao eleicao, bool? aprovado = null)
         {
@@ -133,12 +134,12 @@ namespace CIPAOnLine.Services
             string modulo = candidato.Eleicao.CodigoModulo == 2 ? "a Comissão Interna de Trabalhadores" : "a CIPA";
             EmailDTO email = new EmailDTO
             {
-                Message = string.Format(Resources.Emails.EmailAprovacaoCandidatura, 
-                    modulo, candidato.Funcionario.Login, candidato.Funcionario.Nome, 
-                    candidato.Funcionario.Cargo, candidato.Funcionario.Area),
+                Message = EmailService.ReplaceParams(Resources.Emails.EmailAprovacaoCandidatura,
+                    Tuple.Create("@MODULO", modulo), Tuple.Create("@NOME", candidato.Funcionario.Nome),
+                    Tuple.Create("@CARGO", candidato.Funcionario.Cargo), Tuple.Create("@AREA", candidato.Funcionario.Area)),
                 To = new string[] { candidato.Funcionario.Email },
-                Copy = (candidato.Funcionario != null && candidato.Funcionario.Gestor != null) ? 
-                    new string[] {candidato.Funcionario.Gestor.Email} : new string[] { },
+                Copy = (candidato.Funcionario != null && candidato.Funcionario.Gestor != null) ?
+                    new string[] { candidato.Funcionario.Gestor.Email } : new string[] { },
                 Subject = "Candidatura Aprovada"
             };
 
@@ -155,8 +156,9 @@ namespace CIPAOnLine.Services
         {
             candidatos.ToList().ForEach(x =>
             {
-                Candidato c = db.Candidatos.Find(x.MatriculaFuncionario, x.CodigoEleicao);
-                if (c != null) {
+                Candidato c = db.Candidatos.Find(x.FuncionarioId, x.CodigoEleicao);
+                if (c != null)
+                {
                     AprovarCandidatura(c);
                     //c.Validado = flag;
                 }
@@ -165,24 +167,26 @@ namespace CIPAOnLine.Services
             return candidatos;
         }
 
-        public CandidaturaReprovada ReprovarCandidatura (CandidaturaReprovada candidatura)
+        public CandidaturaReprovada ReprovarCandidatura(CandidaturaReprovada candidatura)
         {
             candidatura.Codigo = 0;
             db.Entry(candidatura).State = System.Data.Entity.EntityState.Added;
 
-            try {
-                Candidato cand = GetCandidato(candidatura.MatriculaFuncionario, candidatura.CodigoEleicao);
+            try
+            {
+                Candidato cand = GetCandidato(candidatura.FuncionarioId, candidatura.CodigoEleicao);
 
                 db.SaveChanges();
 
                 string modulo = cand.Eleicao.CodigoModulo == 2 ? "a Comissão Interna de Trabalhadores" : "a CIPA";
                 EmailDTO email = new EmailDTO
                 {
-                    Message = string.Format(Resources.Emails.EmailReprovacaoCandidatura,
-                        modulo, cand.Funcionario.Login, cand.Funcionario.Nome,
-                        cand.Funcionario.Cargo, cand.Funcionario.Area, candidatura.Motivo),
+                    Message = EmailService.ReplaceParams(Resources.Emails.EmailReprovacaoCandidatura,
+                    Tuple.Create("@MODULO", modulo), Tuple.Create("@NOME", cand.Funcionario.Nome),
+                    Tuple.Create("@CARGO", cand.Funcionario.Cargo), Tuple.Create("@AREA", cand.Funcionario.Area),
+                    Tuple.Create("@MOTIVO", candidatura.Motivo)),
                     To = new string[] { cand.Funcionario.Email },
-                    Copy = (cand.Funcionario != null && cand.Funcionario.Gestor != null) ? 
+                    Copy = (cand.Funcionario != null && cand.Funcionario.Gestor != null) ?
                         new string[] { cand.Funcionario.Gestor.Email } : new string[] { },
                     Subject = "Candidatura Reprovada"
                 };
@@ -190,15 +194,16 @@ namespace CIPAOnLine.Services
                 Thread th = new Thread(EmailService.Send);
                 th.Start(email);
 
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
-                if (CandidatoExiste(candidatura.MatriculaFuncionario, candidatura.CodigoEleicao))
+                if (CandidatoExiste(candidatura.FuncionarioId, candidatura.CodigoEleicao))
                     throw new CandidatoNaoEncontradoException();
                 else
                     throw e;
             }
 
-            Candidato c = db.Candidatos.Find(candidatura.MatriculaFuncionario, candidatura.CodigoEleicao);
+            Candidato c = db.Candidatos.Find(candidatura.FuncionarioId, candidatura.CodigoEleicao);
             c.Validado = false;
             db.SaveChanges();
             return candidatura;
@@ -209,9 +214,9 @@ namespace CIPAOnLine.Services
             return candidatos.Select(x => new CandidatoDTO(x));
         }
 
-        public bool CandidatoExiste (string matricula, int codigoEleicao)
+        public bool CandidatoExiste(int funcionarioId, int codigoEleicao)
         {
-            return db.Candidatos.Count(x => x.MatriculaFuncionario == matricula && x.CodigoEleicao == codigoEleicao) > 0;
+            return db.Candidatos.Count(x => x.FuncionarioId == funcionarioId && x.CodigoEleicao == codigoEleicao) > 0;
         }
 
         public void Dispose()

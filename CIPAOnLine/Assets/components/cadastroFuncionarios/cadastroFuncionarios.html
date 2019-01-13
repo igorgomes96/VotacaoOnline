@@ -108,7 +108,7 @@
 					<div class="row">
 					  	<div class="col-sm-10 col-xs-12">
 					    	<div class="input-group">
-					      		<input type="text" class="form-control" id="buscar" placeholder="Digite por matrícula" ng-model="ct.busca" ng-disabled="ct.editando" ng-keydown="ct.keydownBuscaFuncionario($event, ct.busca)" style="z-index: 0">
+					      		<input type="text" class="form-control" id="buscar" placeholder="Digite a matrícula" ng-model="ct.busca" ng-disabled="ct.editando" ng-keydown="ct.keydownBuscaFuncionario($event, ct.busca)" style="z-index: 0">
 					      		<span class="input-group-btn">
 					        		<button class="btn btn-default" type="button" ng-click="ct.buscaFuncionario(ct.busca)" style="z-index: 0" ng-disabled="ct.editando"><i class="fa fa-search"></i></button>
 					      		</span>
@@ -260,21 +260,24 @@
 								<th>Login</th>
 								<th>Nome</th>
 								<th>Cargo</th>
-								<th width="5%"></th>
+								<th></th>
 							</tr>
 						</thead>
 
 						<tbody>
-							<tr ng-repeat="f in ct.funcionarios | filter:filtro | orderBy:'Nome'" ng-click="ct.buscaFuncionario(f.MatriculaFuncionario)" ng-class="{active: f.MatriculaFuncionario == ct.atual.MatriculaFuncionario}">
+							<tr ng-repeat="f in ct.funcionarios | filter:{'Nome': filtro} | orderBy:'Nome'" ng-class="{active: f.MatriculaFuncionario == ct.atual.MatriculaFuncionario}">
 								<td>{{f.MatriculaFuncionario}}</td>
 								<td>{{f.Login}}</td>
 								<td>{{f.Nome}}</td>
 								<td>{{f.Cargo}}</td>
-								<td>
-									<button class="btn btn-xs btn-danger" style="margin-bottom: 0" ng-click="ct.removerFuncionario(f.MatriculaFuncionario)">
-										<i class="fa fa-trash"></i>
-									</button>
-								</td>
+                                <td class="text-right" width="8%">
+                                    <button class="btn btn-xs btn-success" ng-click="ct.buscaFuncionario(f.MatriculaFuncionario)">
+                                        <i class="fa fa-pencil"></i>
+                                    </button>
+                                    <button class="btn btn-xs btn-danger" ng-click="ct.removerFuncionario(f.Id)">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </td>
 							</tr>
 						</tbody>
 					</table>

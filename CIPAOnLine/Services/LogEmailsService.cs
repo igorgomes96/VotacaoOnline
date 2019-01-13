@@ -23,7 +23,7 @@ namespace CIPAOnLine.Services
             {
                 Para = to,
                 Assunto = email.Subject,
-                Erro = ex.Message
+                Erro = $"{ex.Message}"
             };
             db.LogEmails.Add(log);
             db.SaveChanges();

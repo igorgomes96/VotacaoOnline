@@ -1,4 +1,4 @@
-﻿angular.module('cipaApp').controller('eleicoesCtrl', ['eleicoesAPI', 'unidadesAPI', 'messagesService', 'sharedDataService', 'etapasAPI', 'sindicatosAPI', '$stateParams', '$state', '$scope', 'gruposAPI', function(eleicoesAPI, unidadesAPI, messagesService, sharedDataService, etapasAPI, sindicatosAPI, $stateParams, $state, $scope, gruposAPI) {
+﻿angular.module('cipaApp').controller('eleicoesCtrl', ['eleicoesAPI', 'unidadesAPI', 'messagesService', 'sharedDataService', 'etapasAPI', 'sindicatosAPI', '$stateParams', '$state', '$scope', 'gruposAPI', 'empresasAPI', function(eleicoesAPI, unidadesAPI, messagesService, sharedDataService, etapasAPI, sindicatosAPI, $stateParams, $state, $scope, gruposAPI, empresasAPI) {
 	
 	var self = this;
 	self.eleicaoAtual = {};
@@ -10,6 +10,7 @@
 	self.abaConfirmaEmails = 0;
 	self.editandoSindicato = false;
 	self.editandoUnidade = false;
+	self.empresas = [];
 	self.grupos = [];
 
 
@@ -105,6 +106,7 @@
 
 	loadFiltroEleicoes();
 
+
 	// \************* COMPARTILHADO *************
 
 	self.novaEleicao = function() {
@@ -134,6 +136,14 @@
 		});
 	}
 
+	var loadEmpresas = function() {
+		empresasAPI.getEmpresas()
+		.then(function(dado) {
+			self.empresas = dado.data;
+		}, function(error) {
+			messagesService.exibeMensagemErro(error.status, 'Erro ao carregar as empresas.');
+		});
+	}
 
 	self.salvarEleicao = function(eleicao) {
 		eleicao.CodigoModulo = self.codigoModulo;
@@ -445,16 +455,6 @@
 		});
 	}
 
-	// var loadEleicao = function(codigo) {
-	// 	eleicoesAPI.getEleicao(codigo)
-	// 	.then(function(dado) {
-	// 		dado.data.PrazosEtapasObj.forEach(function(x) {
-	// 			x.DataProposta = new Date(x.DataProposta);
-	// 		});
-	// 		self.eleicaoAtual = dado.data;
-	// 	});
-	// }
-
 	self.salvarPrazoEtapa = function(prazo) {
 		if (!prazo.DataProposta) { 
 			swal("Inválido!", "Informe uma data válida!", "error");
@@ -483,6 +483,7 @@
 	loadUnidades();
 	loadSindicatos();
 	loadGrupos();
+	loadEmpresas();
 	//loadFiltroEleicoes();
 	
 

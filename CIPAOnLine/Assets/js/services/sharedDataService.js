@@ -1,9 +1,8 @@
-angular.module('cipaApp').service('sharedDataService', ['sessionStorageService', function(sessionStorageService) {
+angular.module('cipaApp').service('sharedDataService', ['sessionStorageService', '$rootScope', function(sessionStorageService, $rootScope) {
 
     var self = this;
 
     var usuario = null;
-    var codigoModulo = null;
     var codigoEleicao = null;
     var nextState = null;
     var perfil = null;
@@ -14,11 +13,15 @@ angular.module('cipaApp').service('sharedDataService', ['sessionStorageService',
 
     self.setCodigoEleicao = function(codigo) {
         codigoEleicao = codigo;
+        $rootScope.$emit('eleicaoAlterada', codigoEleicao);
     }
 
     self.setUsuario = function(user) {
         usuario = user;
         perfil = usuario.Perfil;
+        if (usuario.hasOwnProperty('CodigoEmpresa'))
+            self.setEmpresa(usuario.CodigoEmpresa);
+        
         if (perfil)
             sessionStorageService.savePerfil(perfil);
     }
@@ -28,6 +31,14 @@ angular.module('cipaApp').service('sharedDataService', ['sessionStorageService',
             usuario = sessionStorageService.getUser();
 
         return usuario;
+    }
+
+    self.getEmpresa = function() {
+        return sessionStorageService.getEmpresa();
+    }
+
+    self.setEmpresa = function(codigoEmpresa) {
+        return sessionStorageService.saveEmpresa(codigoEmpresa);
     }
 
     self.getPerfil = function() {
@@ -48,15 +59,11 @@ angular.module('cipaApp').service('sharedDataService', ['sessionStorageService',
     }
 
     self.setCodigoModulo = function(codigo) {
-        codigoModulo = codigo;
         sessionStorageService.saveCodigoModulo(codigo);
     }
 
     self.getCodigoModulo = function() {
-        if (!codigoModulo)
-            codigoModulo = sessionStorageService.getCodigoModulo();
-
-        return codigoModulo;
+        return sessionStorageService.getCodigoModulo();
 
     }
 

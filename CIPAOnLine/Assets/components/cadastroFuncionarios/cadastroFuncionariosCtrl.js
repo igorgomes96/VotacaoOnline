@@ -212,8 +212,8 @@ angular.module('cipaApp').controller('cadastroFuncionariosCtrl', ['$state', '$sc
 		});
 	}
 
-	self.removerFuncionario = function(matricula) {
-		eleicoesAPI.deleteFuncionario(self.codEleicao, matricula)
+	self.removerFuncionario = function(funcionarioId) {
+		eleicoesAPI.deleteFuncionario(self.codEleicao, funcionarioId)
 		.then(function() {
 			self.atual = null;
 			loadFuncionarios();
@@ -230,7 +230,7 @@ angular.module('cipaApp').controller('cadastroFuncionariosCtrl', ['$state', '$sc
 
 	self.buscaFuncionario = function(matricula) {
 		if (self.editando) return;
-		funcionariosAPI.getFuncionario(matricula)
+		funcionariosAPI.getFuncionarioByMatriculaEmpresa(matricula, sharedDataService.getEmpresa())
 		.then(function(dado) {
 			dado.data.DataAdmissao = new Date(dado.data.DataAdmissao); 
 			dado.data.DataNascimento = new Date(dado.data.DataNascimento); 
@@ -317,13 +317,15 @@ angular.module('cipaApp').controller('cadastroFuncionariosCtrl', ['$state', '$sc
 			funcionario.MatriculaFuncionario = funcionario.Login;
 		
 		if (self.novo) {
+			funcionario.CodigoEmpresa = sharedDataService.getEmpresa();
+			console.log(funcionario);
 			funcionariosAPI.postFuncionario(funcionario)
 			.then(function(dado) {
 				removeInconsistenciasPorMatricula(funcionario.MatriculaFuncionario);
 				if (!self.inconsistencias) {
 					self.cancelarInconsistencias();
 				}
-				return eleicoesAPI.addFuncionario(self.codEleicao, funcionario.MatriculaFuncionario);
+				return eleicoesAPI.addFuncionario(self.codEleicao, dado.data.Id);
 			}).then(function() {
 				swal("Sucesso!", "Funcionário salvo com sucesso!", "success");
 				loadFuncionarios();
@@ -338,13 +340,13 @@ angular.module('cipaApp').controller('cadastroFuncionariosCtrl', ['$state', '$sc
 			});
 		}
 		else {
-			funcionariosAPI.putFuncionario(funcionario.MatriculaFuncionario, funcionario)
+			funcionariosAPI.putFuncionario(funcionario.Id, funcionario)
 			.then(function() {
 				removeInconsistenciasPorMatricula(funcionario.MatriculaFuncionario);
 				if (!self.inconsistencias) {
 					self.cancelarInconsistencias();
 				}
-				return eleicoesAPI.addFuncionario(self.codEleicao, funcionario.MatriculaFuncionario);
+				return eleicoesAPI.addFuncionario(self.codEleicao, funcionario.Id);
 			}).then(function() {
 				swal("Sucesso!", "Funcionário salvo com sucesso!", "success");
 				loadFuncionarios();

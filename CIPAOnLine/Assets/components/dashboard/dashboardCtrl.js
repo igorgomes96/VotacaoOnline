@@ -98,9 +98,8 @@ angular.module('cipaApp').controller('dashboardCtrl', ['isAllowed', '$scope', '$
     self.erroCandidatosInsuficientes = null;
     self.votos = [];
     self.codEleicao = null;
-
     self.error = null;
-
+    var usuario = sharedDataService.getUsuario();
 
     var loadApuracaoEleitos = function() {
         //var spinnerListApuracao = exibeSpinner('#list-apuracao');
@@ -276,7 +275,7 @@ angular.module('cipaApp').controller('dashboardCtrl', ['isAllowed', '$scope', '$
         if (self.codEleicao)
             $state.go(stateRedirect, {codEleicao: self.codEleicao}, {reload: true});
     } else {
-        if (isAllowed.data) {
+        if ((usuario && usuario.Perfil === 'Administrador') || isAllowed.data) {
             loadEleicaoAtual(self.codEleicao);
             loadApuracaoEleitos();
             loadRelatorioEleitores();

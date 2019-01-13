@@ -15,7 +15,8 @@
     <AssemblyName>CIPAOnLine</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
-    <IISExpressSSLPort />
+    <IISExpressSSLPort>
+    </IISExpressSSLPort>
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
@@ -53,15 +54,40 @@
       <HintPath>..\packages\EntityFramework6.Npgsql.3.1.1\lib\net45\EntityFramework6.Npgsql.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.IdentityModel.JsonWebTokens, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.JsonWebTokens.5.3.0\lib\net451\Microsoft.IdentityModel.JsonWebTokens.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Logging, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Logging.5.3.0\lib\net451\Microsoft.IdentityModel.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Tokens, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Tokens.5.3.0\lib\net451\Microsoft.IdentityModel.Tokens.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Data, Version=6.10.8.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.6.10.8\lib\net452\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Data.Entity.EF6, Version=6.10.8.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.Entity.6.10.8\lib\net452\MySql.Data.Entity.EF6.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Npgsql, Version=3.2.5.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
       <HintPath>..\packages\Npgsql.3.2.5\lib\net451\Npgsql.dll</HintPath>
     </Reference>
+    <Reference Include="NReco.ImageGenerator, Version=1.1.1.0, Culture=neutral, PublicKeyToken=0ef6c878974c90ac, processorArchitecture=MSIL">
+      <HintPath>..\packages\NReco.ImageGenerator.1.1.1\lib\net20\NReco.ImageGenerator.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel" />
     <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Configuration.Install" />
     <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.Drawing.Design" />
+    <Reference Include="System.IdentityModel.Tokens.Jwt, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IdentityModel.Tokens.Jwt.5.3.0\lib\net451\System.IdentityModel.Tokens.Jwt.dll</HintPath>
+    </Reference>
     <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.4\lib\net45\System.Net.Http.Formatting.dll</HintPath>
@@ -129,7 +155,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assets\components\autenticacao\admin.html" />
     <Content Include="Assets\components\autenticacao\autenticacaoCtrl.js" />
     <Content Include="Assets\components\autenticacao\login.html" />
     <Content Include="Assets\components\autenticacao\recuperacaoSenha.html" />
@@ -200,6 +225,7 @@
     <Content Include="Assets\css\plugins\summernote\summernote-bs3.css" />
     <Content Include="Assets\css\plugins\summernote\summernote.css" />
     <Content Include="Assets\css\style.css" />
+    <Content Include="Assets\Dump20190109.sql" />
     <Content Include="Assets\font-awesome\css\font-awesome.css" />
     <Content Include="Assets\font-awesome\css\font-awesome.min.css" />
     <Content Include="Assets\font-awesome\fonts\fontawesome-webfont.eot" />
@@ -256,6 +282,7 @@
     <Content Include="Assets\js\APIs\candidatosAPI.js" />
     <Content Include="Assets\js\APIs\eleicoesAPI.js" />
     <Content Include="Assets\js\APIs\emailsAPI.js" />
+    <Content Include="Assets\js\APIs\empresasAPI.js" />
     <Content Include="Assets\js\APIs\etapasAPI.js" />
     <Content Include="Assets\js\APIs\funcionariosAPI.js" />
     <Content Include="Assets\js\APIs\gestoresAPI.js" />
@@ -701,7 +728,17 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="index.html" />
-    <Content Include="Log.txt" />
+    <None Include="Properties\PublishProfiles\Default Settings.pubxml" />
+    <None Include="Resources\email-confirmacao-candidatura.html" />
+    <Content Include="Resources\email-aprovacao-candidatura.html" />
+    <None Include="Resources\email-apuracao-votos.html" />
+    <Content Include="Resources\email-candidatos.html" />
+    <Content Include="Resources\email-edital.html" />
+    <Content Include="Resources\email-inscricoes.html" />
+    <Content Include="Resources\email-reprovacao-candidatura.html" />
+    <Content Include="Resources\email-sindicato.html" />
+    <Content Include="Resources\email-votacao.html" />
+    <Content Include="Resources\recovery-senha.html" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -714,6 +751,7 @@
     <Compile Include="Controllers\CandidatosController.cs" />
     <Compile Include="Controllers\EleicoesController.cs" />
     <Compile Include="Controllers\EmailsController.cs" />
+    <Compile Include="Controllers\EmpresasController.cs" />
     <Compile Include="Controllers\EtapasController.cs" />
     <Compile Include="Controllers\FuncionariosController.cs" />
     <Compile Include="Controllers\GestoresController.cs" />
@@ -760,6 +798,7 @@
     <Compile Include="Exceptions\CandidatosInsuficientesException.cs" />
     <Compile Include="Exceptions\CandidaturasPendentesException.cs" />
     <Compile Include="Exceptions\ConfirmacaoEmailsException.cs" />
+    <Compile Include="Exceptions\EmpresaNaoEncontradaException.cs" />
     <Compile Include="Exceptions\LoginInvalidoException.cs" />
     <Compile Include="Exceptions\LoginJaCadastradoException.cs" />
     <Compile Include="Exceptions\CronogramaInconsistenteException.cs" />
@@ -785,35 +824,20 @@
     <Compile Include="Exceptions\VotoJaRealizadoException.cs" />
     <Compile Include="Exceptions\VotosInsuficientesException.cs" />
     <Compile Include="Filters\AuthenticationFilter.cs" />
-    <Compile Include="Filters\CustomIdentity.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201806251732276_Initial.cs" />
-    <Compile Include="Migrations\201806251732276_Initial.Designer.cs">
-      <DependentUpon>201806251732276_Initial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201806261631447_Exclusão Sessão.cs" />
-    <Compile Include="Migrations\201806261631447_Exclusão Sessão.Designer.cs">
-      <DependentUpon>201806261631447_Exclusão Sessão.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201806261638180_Exclusão Senha Usuário.cs" />
-    <Compile Include="Migrations\201806261638180_Exclusão Senha Usuário.Designer.cs">
-      <DependentUpon>201806261638180_Exclusão Senha Usuário.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201806291350396_Retirada DRT e Cargo de Usuario.cs" />
-    <Compile Include="Migrations\201806291350396_Retirada DRT e Cargo de Usuario.Designer.cs">
-      <DependentUpon>201806291350396_Retirada DRT e Cargo de Usuario.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201807231315077_Ajustes.cs" />
-    <Compile Include="Migrations\201807231315077_Ajustes.Designer.cs">
-      <DependentUpon>201807231315077_Ajustes.cs</DependentUpon>
+    <Compile Include="Jwt\TokenServices.cs" />
+    <Compile Include="Migrations\201901091010371_InitialMySQL.cs" />
+    <Compile Include="Migrations\201901091010371_InitialMySQL.Designer.cs">
+      <DependentUpon>201901091010371_InitialMySQL.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AcrescimoLimite.cs" />
     <Compile Include="Models\Candidato.cs" />
     <Compile Include="Models\CandidaturaReprovada.cs" />
     <Compile Include="Models\Eleicao.cs" />
+    <Compile Include="Models\Empresa.cs" />
     <Compile Include="Models\Etapa.cs" />
     <Compile Include="Models\Funcionario.cs" />
     <Compile Include="Models\FuncionarioFoto.cs" />
@@ -842,6 +866,7 @@
     <Compile Include="Services\CandidatosService.cs" />
     <Compile Include="Services\CryptoGraph.cs" />
     <Compile Include="Services\EleicoesService.cs" />
+    <Compile Include="Services\EmpresasService.cs" />
     <Compile Include="Services\EtapasService.cs" />
     <Compile Include="Services\FuncionariosService.cs" />
     <Compile Include="Services\GestoresService.cs" />
@@ -872,20 +897,8 @@
     <Folder Include="Assets\js\plugins\Highcharts5.0.1.4\api\css\images\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201806251732276_Initial.resx">
-      <DependentUpon>201806251732276_Initial.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201806261631447_Exclusão Sessão.resx">
-      <DependentUpon>201806261631447_Exclusão Sessão.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201806261638180_Exclusão Senha Usuário.resx">
-      <DependentUpon>201806261638180_Exclusão Senha Usuário.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201806291350396_Retirada DRT e Cargo de Usuario.resx">
-      <DependentUpon>201806291350396_Retirada DRT e Cargo de Usuario.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201807231315077_Ajustes.resx">
-      <DependentUpon>201807231315077_Ajustes.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201901091010371_InitialMySQL.resx">
+      <DependentUpon>201901091010371_InitialMySQL.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Emails.resx">
       <Generator>ResXFileCodeGenerator</Generator>

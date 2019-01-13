@@ -3,7 +3,7 @@ angular.module("cipaApp").factory("anexaTokenInterceptor", ['sessionStorageServi
 		request: function(config) {
 			var user = sessionStorageService.getUser();
 			if (user && user.Token) 
-				config.headers['Authorization'] = 'Basic ' + user.Token;
+                config.headers['Authorization'] = 'Bearer ' + user.Token;
 			return config;
 		}
 	}

@@ -9,5 +9,6 @@ namespace CIPAOnLine.DTO
     {
         public string Login { get; set; }
         public string Senha { get; set; }
+        public string CodigoRecuperacao { get; set; }
     }
 }

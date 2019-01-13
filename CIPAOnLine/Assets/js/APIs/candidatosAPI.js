@@ -15,8 +15,8 @@ angular.module('cipaApp').service('candidatosAPI', ['$http', 'config', 'sharedDa
         return $http({method: 'GET', url:config.baseUrl + resource + '/Validacao/' + codEleicao, params:{aprovado:aprovado}});
     }
 
-    self.getCandidato = function(matricula, codEleicao) {
-        return $http.get(config.baseUrl + resource + '/' + matricula + '/' + codEleicao);
+    self.getCandidato = function(funcionarioId, codEleicao) {
+        return $http.get(config.baseUrl + resource + '/' + funcionarioId + '/' + codEleicao);
     }
 
     self.addOrUpdateCandidato = function(candidato, foto) {
@@ -33,21 +33,16 @@ angular.module('cipaApp').service('candidatosAPI', ['$http', 'config', 'sharedDa
         return $.ajax(uploadFileService.sendFile(config.baseUrl + resource + '/AddOrUpdate', payload, token));
     }
 
-    self.aprovarCandidatura = function(matricula, codEleicao) {
-        return $http.put(config.baseUrl + resource + '/' + matricula + '/' + codEleicao + '/Aprovar');
+    self.aprovarCandidatura = function(funcionarioId, codEleicao) {
+        return $http.put(config.baseUrl + resource + '/' + funcionarioId + '/' + codEleicao + '/Aprovar');
     }
 
-    self.reprovarCandidatura = function(matricula, codEleicao, reprovacao) {
-        return $http.post(config.baseUrl + resource + '/' + matricula + '/' + codEleicao + '/Reprovar', reprovacao);
+    self.reprovarCandidatura = function(funcionarioId, codEleicao, reprovacao) {
+        return $http.post(config.baseUrl + resource + '/' + funcionarioId + '/' + codEleicao + '/Reprovar', reprovacao);
     }
 
     self.aprovarCandidaturaTodos = function(candidatos) {
         return $http.post(config.baseUrl + resource + '/AprovarTodos', candidatos);
     }
-
-    self.deleteCandidato = function(matricula, codEleicao) {
-        return $http.delete(config.baseUrl + resource + '/' + matricula + '/' + codEleicao);
-    }
-
 
 }]);

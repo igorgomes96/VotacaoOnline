@@ -1,5 +1,6 @@
 namespace CIPAOnLine.Models
 {
+    using MySql.Data.Entity;
     using Npgsql;
     using System;
     using System.Configuration;
@@ -11,10 +12,11 @@ namespace CIPAOnLine.Models
     using System.Diagnostics;
     using System.Linq;
 
+    [DbConfigurationType(typeof(MySqlEFConfiguration))]
     public class Modelo : DbContext
     {
 
-        public Modelo() : base("name=Modelo")
+        public Modelo() : base("name=ModeloMySQL")
         {
             Database.SetInitializer(new CreateDatabaseIfNotExists<Modelo>());
             //Database.SetInitializer(new DropCreateDatabaseIfModelChanges<Modelo>());
@@ -36,10 +38,19 @@ namespace CIPAOnLine.Models
                 .Map(x =>
                 {
                     x.MapLeftKey("codigo_eleicao");
-                    x.MapRightKey("matricula_funcionario");
+                    x.MapRightKey("funcionario_id");
                     x.ToTable("funcionarios_eleicoes");
-                });  
+                });
 
+            modelBuilder.Entity<Empresa>()
+                .HasMany(e => e.Usuarios)
+                .WithMany(u => u.Empresas)
+                .Map(m =>
+                {
+                    m.MapLeftKey("codigo_empresa");
+                    m.MapRightKey("login_usuario");
+                    m.ToTable("usuario_empresa");
+                });
 
             base.OnModelCreating(modelBuilder);
         }
@@ -65,6 +76,7 @@ namespace CIPAOnLine.Models
         public virtual DbSet<AcrescimoLimite> AcrescimosLimites { get; set; }
         public virtual DbSet<TemplateEmail> Templates { get; set; }
         public virtual DbSet<VotoBranco> VotosBrancos { get; set; }
+        public virtual DbSet<Empresa> Empresas { get; set; }
 
     }
 
