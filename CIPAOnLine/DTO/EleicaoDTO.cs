@@ -69,7 +69,7 @@ namespace CIPAOnLine.DTO
                     NomeEtapa = etapa.NomeEtapa,
                     DataRealizada = concluida?.DataRealizada,
                     DataProposta = concluida?.DataProposta,
-                    Ordem = concluida?.Etapa?.CodigoEtapa != null ? concluida.Etapa.CodigoEtapa : 0,
+                    Ordem = concluida?.Etapa.Ordem != null ? concluida.Etapa.Ordem.Value : (concluida?.Etapa?.CodigoEtapa != null ? concluida.Etapa.CodigoEtapa : 0),
                     CodigoTemplate = etapa.CodigoTemplate
                 });
             }

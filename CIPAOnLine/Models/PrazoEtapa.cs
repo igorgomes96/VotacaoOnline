@@ -26,6 +26,9 @@ namespace CIPAOnLine.Models
         [Column("data_proposta")]
         public DateTime? DataProposta { get; set; }
 
+        [Column("ordem")]
+        public int? Ordem { get; set; }
+
 
         [ForeignKey("CodigoEleicao")]
         public virtual Eleicao Eleicao { get; set; }

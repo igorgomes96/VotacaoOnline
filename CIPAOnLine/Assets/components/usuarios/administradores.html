@@ -68,7 +68,7 @@
                         <div class="row">
                             <div class="form-group col-xs-12" ng-class="{'has-error': form.empresa.$dirty && form.empresa.$invalid}">
                                 <label for="empresa">Empresa</label>
-                                <select class="form-control" name="empresa" id="empresa" ng-options="e.Codigo as e.RazaoSocial for e in ct.empresas" ng-model="ct.admin.CodigoEmpresa">
+                                <select class="form-control" name="empresa" id="empresa" ng-options="e.Codigo as e.RazaoSocial for e in ct.empresas" ng-model="ct.admin.CodigoEmpresa" required>
                                     <option value="">(Selecione)</option>
                                 </select>
                             </div>
@@ -85,8 +85,7 @@
 
                         <hr>
 
-                        <input type="submit" name="submitAdmin" class="btn btn-primary" value="Salvar" ng-disabled="form.$invalid">
-
+                        <input type="submit" name="submitAdmin" class="btn btn-primary" value="Salvar" ng-disabled="ct.form.$invalid">
                     </form>
                     
 

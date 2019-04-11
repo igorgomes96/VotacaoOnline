@@ -33,6 +33,9 @@ namespace CIPAOnLine.Models
         [Column("codigo_template")]
         public int? CodigoTemplate { get; set; }
 
+        [Column("ordem")]
+        public int? Ordem { get; set; }
+
 
         [ForeignKey("CodigoModulo")]
         public virtual Modulo Modulo { get; set; }

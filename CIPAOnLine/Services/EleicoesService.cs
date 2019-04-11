@@ -15,10 +15,8 @@ namespace CIPAOnLine.Services
     public class EleicoesService : IDisposable
     {
         private Modelo db = new Modelo();
-        private EtapasService etapasService = new EtapasService();
         private UnidadesService unidadesService = new UnidadesService();
         private SindicatosService sindicatosService = new SindicatosService();
-        private FuncionariosService funcService = new FuncionariosService();
 
         public IEnumerable<Eleicao> GetEleicoes(int? codigoModulo = null, bool? aberta = null)
         {
@@ -285,8 +283,8 @@ namespace CIPAOnLine.Services
         {
             Eleicao eleicao = GetEleicao(prazoEtapa.CodigoEleicao);
             return eleicao.PrazosEtapas
-                .Where(x => x.Etapa.CodigoEtapa < prazoEtapa.CodigoEtapa)
-                .OrderByDescending(x => x.Etapa.CodigoEtapa).FirstOrDefault();
+                .Where(x => x.Ordem < prazoEtapa.Ordem)
+                .OrderByDescending(x => x.Ordem).FirstOrDefault();
 
         }
 
@@ -294,8 +292,8 @@ namespace CIPAOnLine.Services
         {
             PrazoEtapa etapaAtual = db.PrazosEtapas.Find(eleicao.Codigo, eleicao.CodigoEtapa);
             return eleicao.PrazosEtapas
-                .Where(x => x.Etapa.CodigoEtapa > etapaAtual.Etapa.CodigoEtapa)
-                .OrderBy(x => x.Etapa.CodigoEtapa).FirstOrDefault();
+                .Where(x => x.Ordem > etapaAtual.Ordem)
+                .OrderBy(x => x.Ordem).FirstOrDefault();
         }
 
         private void PassarParaProximaEtapa(Eleicao eleicao, Usuario user)
@@ -305,7 +303,7 @@ namespace CIPAOnLine.Services
             PrazoEtapa proxima = GetProximaEtapa(eleicao);
 
             PrazoEtapa ultima = eleicao.PrazosEtapas.Where(x => x.Etapa.CodigoModulo == eleicao.CodigoModulo)
-                .OrderByDescending(x => x.Etapa.CodigoEtapa).FirstOrDefault();
+                .OrderByDescending(x => x.Ordem).FirstOrDefault();
 
             if (proxima == null && etapaAtual != ultima) throw new EleicaoEncerradaException(eleicao);
 
@@ -329,7 +327,7 @@ namespace CIPAOnLine.Services
 
             // Verifica se a data atual é maior que a data prevista para o encerramento do período de candidatura,
             // se há candidatos suficientes e se não existem candidaturas pendentes de aprovação
-            if (etapaAtual.CodigoEtapa == 4 || etapaAtual.CodigoEleicao == 19)
+            if (etapaAtual.CodigoEtapa == 4 || etapaAtual.CodigoEtapa == 19)
             {
                 EleicaoQtdaRepresentantesDTO qtda = GetQtdaRepresentantes(eleicao.Codigo);
                 int qtdaCandidatos = eleicao.Candidatos.Count();
@@ -346,7 +344,7 @@ namespace CIPAOnLine.Services
 
             // Verifica se a data atual é maior que a data prevista para o encerramento do período de votação e
             // se há votos suficientes para o encerramento desse período
-            if (etapaAtual.CodigoEtapa == 9 || etapaAtual.CodigoEleicao == 24)
+            if (etapaAtual.CodigoEtapa == 9 || etapaAtual.CodigoEtapa == 24)
             {
                 VotosService votosService = new VotosService();
                 ResultadoDTO todos = votosService.GetResultado(eleicao.Codigo);
@@ -468,7 +466,8 @@ namespace CIPAOnLine.Services
                     CodigoEleicao = nova.Codigo,
                     CodigoEtapa = pe.CodigoEtapa,
                     DataProposta = pe.DataProposta,
-                    DataRealizada = pe.DataRealizada
+                    DataRealizada = pe.DataRealizada,
+                    Ordem = pe.Ordem
                 };
 
                 if (pe.CodigoEtapa == 1) p.DataRealizada = DateTime.Today;

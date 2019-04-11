@@ -53,7 +53,9 @@ namespace CIPAOnLine.Services
         {
 
             bool funcionarioExistente = false;
-            Usuario userBD = db.Usuarios.Find(user.Login.Trim().ToLower());
+            user.Login = user.Login.Trim().ToLower();
+            user.Email = user.Email.Trim().ToLower();
+            Usuario userBD = db.Usuarios.Find(user.Login);
 
             if (user.FuncionarioId.HasValue)
                 funcionarioExistente = funcionariosService.FuncionarioExiste(user.FuncionarioId.Value);

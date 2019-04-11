@@ -33,6 +33,10 @@ namespace CIPAOnLine.Services
             Funcionario funcionario = null;
             try
             {
+                if (funcionario.Email != null)
+                    funcionario.Email = funcionario.Email.Trim().ToLower();
+                if (funcionario.Login != null)
+                    funcionario.Login = funcionario.Login.Trim().ToLower();
 
                 funcionario = GetByLogin(func.Login);
                 if (funcionario != null) { 

@@ -13,7 +13,7 @@ namespace CIPAOnLine.Services
         public IEnumerable<Etapa> GetEtapas(int codModulo)
         {
             return db.Etapas.ToList()
-                .Where(x => x.CodigoModulo == codModulo).OrderBy(x => x.CodigoEtapa);
+                .Where(x => x.CodigoModulo == codModulo).OrderBy(x => x.Ordem).ThenBy(x => x.CodigoEtapa);
         }
 
         public Etapa GetEtapa(string nomeEtapa)

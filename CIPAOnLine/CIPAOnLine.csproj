@@ -832,6 +832,10 @@
     <Compile Include="Migrations\201901091010371_InitialMySQL.Designer.cs">
       <DependentUpon>201901091010371_InitialMySQL.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904102330387_OrdemEtapa.cs" />
+    <Compile Include="Migrations\201904102330387_OrdemEtapa.Designer.cs">
+      <DependentUpon>201904102330387_OrdemEtapa.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AcrescimoLimite.cs" />
     <Compile Include="Models\Candidato.cs" />
@@ -899,6 +903,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201901091010371_InitialMySQL.resx">
       <DependentUpon>201901091010371_InitialMySQL.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904102330387_OrdemEtapa.resx">
+      <DependentUpon>201904102330387_OrdemEtapa.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Emails.resx">
       <Generator>ResXFileCodeGenerator</Generator>
