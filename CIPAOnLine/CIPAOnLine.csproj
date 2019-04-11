@@ -836,6 +836,10 @@
     <Compile Include="Migrations\201904102330387_OrdemEtapa.Designer.cs">
       <DependentUpon>201904102330387_OrdemEtapa.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904110029390_PrazoEtapaOrdem.cs" />
+    <Compile Include="Migrations\201904110029390_PrazoEtapaOrdem.Designer.cs">
+      <DependentUpon>201904110029390_PrazoEtapaOrdem.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AcrescimoLimite.cs" />
     <Compile Include="Models\Candidato.cs" />
@@ -906,6 +910,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201904102330387_OrdemEtapa.resx">
       <DependentUpon>201904102330387_OrdemEtapa.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904110029390_PrazoEtapaOrdem.resx">
+      <DependentUpon>201904110029390_PrazoEtapaOrdem.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Emails.resx">
       <Generator>ResXFileCodeGenerator</Generator>
