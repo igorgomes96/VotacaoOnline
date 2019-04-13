@@ -88,8 +88,10 @@ namespace CIPAOnLine.Controllers
         [AllowAnonymous]
         public IHttpActionResult PrimeiroAcesso(UsuarioDTO usuario)
         {
+            if (usuario == null) return BadRequest("Usuário não informado!");
+            usuario.Login = usuario.Login.ToLower();
             bool usuarioExiste = usuariosService.UsuarioExiste(usuario.Login);
-            Funcionario funcionario = null;
+            Funcionario funcionario;
             if (!usuarioExiste)
             {
                 if (!funcionariosService.FuncionarioExiste(usuario.MatriculaFuncionario, usuario.CodigoEmpresa))

@@ -138,18 +138,36 @@ namespace CIPAOnLine.Controllers
             try
             {
                 //Lê a foto do candidato
-                var bytes = File.ReadAllBytes(provider.FileData[0].LocalFileName);
-                var ms = new MemoryStream(bytes);
-                img = Image.FromStream(ms);
-                img = ImageService.EnquadrarImagem((Bitmap)img);
-                thumbnail = ImageService.GetThumbnail(img, 75, 75);
 
-                if (img.Height > 350)
-                    img = ImageService.GetThumbnail(img, 350, 350);
+                var httpPostedFile = HttpContext.Current.Request.Files["foto"];
+                if (httpPostedFile != null)
+                {
+                    int length = httpPostedFile.ContentLength;
+                    var bytes = new byte[length]; //get imagedata  
+                    httpPostedFile.InputStream.Read(bytes, 0, length);
+                    var stream = new MemoryStream(bytes);
+                    img = Image.FromStream(stream, false, false);
+                    img = ImageService.EnquadrarImagem((Bitmap)img);
+                    thumbnail = ImageService.GetThumbnail(img, 75, 75);
+                    stream.Dispose();
+                    if (img.Height > 350)
+                        img = ImageService.GetThumbnail(img, 350, 350);
+                }
+
+
+
+                //var bytes = File.ReadAllBytes(provider.FileData[0].LocalFileName);
+                //var stream = new MemoryStream(bytes);
+                //img = Image.FromStream(stream, false, false);
+                //img = ImageService.EnquadrarImagem((Bitmap)img);
+                //thumbnail = ImageService.GetThumbnail(img, 75, 75);
+                //stream.Dispose();
+                //if (img.Height > 350)
+                //    img = ImageService.GetThumbnail(img, 350, 350);
             }
-            catch (Exception e)
+            catch
             {
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, $"Erro ao processar imagem: {e.Message}. Por favor, escolha outra! ");
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, $"Erro ao processar imagem. Por favor, escolha outra! ");
             }
 
             int funcionarioId = int.Parse(obj["FuncionarioId"].ToString());

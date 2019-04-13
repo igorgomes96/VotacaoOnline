@@ -17,10 +17,13 @@ namespace CIPAOnLine.DTO
             DiasPrazo = etapa.DiasPrazo;
             CodigoModulo = etapa.CodigoModulo;
             CodigoTemplate = etapa.CodigoTemplate;
+            Ordem = etapa.Ordem;
+            
         }
         public int CodigoEtapa { get; set; }
         public string NomeEtapa { get; set; }
         public int? DiasPrazo { get; set; }
+        public int? Ordem { get; set; }
         public int CodigoModulo { get; set; }
         public int? CodigoTemplate { get; set; }
     }

@@ -66,7 +66,7 @@ namespace CIPAOnLine.Filters
 
             string Token = authorization.Parameter;
 
-            IPrincipal principal = AuthenticateAsync(Token).Result;
+            IPrincipal principal = AuthenticateAsync(Token)?.Result;
             if (principal == null)
                 context.ErrorResult = new AuthenticationFailureResult("Usuário não autenticado ou sessão expirada!", request);
 

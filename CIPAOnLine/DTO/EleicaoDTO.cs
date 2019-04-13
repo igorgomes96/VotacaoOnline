@@ -48,6 +48,7 @@ namespace CIPAOnLine.DTO
             if (e.EtapaAtual != null)
             {
                 NomeEtapa = e.EtapaAtual.NomeEtapa;
+                OrdemEtapa = e.EtapaAtual.Ordem;
             }
             if (e.Unidade != null)
             {
@@ -60,16 +61,16 @@ namespace CIPAOnLine.DTO
 
             foreach (Etapa etapa in etapasService.GetEtapas(CodigoModulo))
             {
-                PrazoEtapa concluida = e.PrazosEtapas?.FirstOrDefault(x => x.CodigoEtapa == etapa.CodigoEtapa);
+                PrazoEtapa prazo = e.PrazosEtapas?.FirstOrDefault(x => x.CodigoEtapa == etapa.CodigoEtapa);
 
                 ((HashSet<PrazosEtapasDTO>)PrazosEtapasObj).Add(new PrazosEtapasDTO
                 {
                     CodigoEtapa = etapa.CodigoEtapa,
                     CodigoEleicao = Codigo,
                     NomeEtapa = etapa.NomeEtapa,
-                    DataRealizada = concluida?.DataRealizada,
-                    DataProposta = concluida?.DataProposta,
-                    Ordem = concluida?.Etapa.Ordem != null ? concluida.Etapa.Ordem.Value : (concluida?.Etapa?.CodigoEtapa != null ? concluida.Etapa.CodigoEtapa : 0),
+                    DataRealizada = prazo?.DataRealizada,
+                    DataProposta = prazo?.DataProposta,
+                    Ordem = prazo.Ordem ?? etapa.Ordem.Value,
                     CodigoTemplate = etapa.CodigoTemplate
                 });
             }
@@ -79,6 +80,7 @@ namespace CIPAOnLine.DTO
         public DateTime DataInicio { get; set; }
         public DateTime? DataFechamento { get; set; }
         public int? CodigoEtapa { get; set; }
+        public int? OrdemEtapa { get; set; }
         public string NomeEtapa { get; set; }
         public int CodigoUnidade { get; set; }
         public int CodigoModulo { get; set; }

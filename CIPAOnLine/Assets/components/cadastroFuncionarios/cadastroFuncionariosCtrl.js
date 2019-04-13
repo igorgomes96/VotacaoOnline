@@ -255,7 +255,7 @@ angular.module('cipaApp').controller('cadastroFuncionariosCtrl', ['$state', '$sc
 				response = JSON.parse(response);
 				$('#modalInconsistencias').modal('show');
 			} else {
-                swal("Sucesso!", "Funcionários importados com sucesso!", "success");
+                swal("Sucesso!", 'Funcionários importados com sucesso! Clique em "Atualizar" para ver a lista de funcionário importados.', "success");
                 setTimeout(function () {
                     loadGestores();
                     loadFuncionarios();
@@ -402,28 +402,7 @@ angular.module('cipaApp').controller('cadastroFuncionariosCtrl', ['$state', '$sc
 		self.editando = false;
 		self.novo = false;
 		self.atual = null;
-	}
-
-	var atualizaProperties = function() {
-		if (!self.atual)
-			self.atual = {};
-
-		$(".bootstrap-switch-element").each(function() {
-			//self.atual[$(this).attr("name")] = $(this)[0].checked;
-			self.atual.ElegivelVoto = self.atual.ElegivelCandidatura = $(this)[0].checked;
-		});
-	}
-
-
-	/*$(".bootstrap-switch-element").on('switchChange.bootstrapSwitch', function(event, state) {
-
-		if (!preventEvent) {
-			self.atual.ElegivelVoto = self.atual.ElegivelCandidatura = $(this)[0].checked;
-		}
-
-	});*/
-
-	
+	}	
 
 	$(document).ready(function() {
 

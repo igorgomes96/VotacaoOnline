@@ -31,12 +31,13 @@ namespace CIPAOnLine.Services
         public Funcionario AddOrUpdateFuncionario(Funcionario func)
         {
             Funcionario funcionario = null;
+            if (func == null) throw new Exception("Funcionário inválido!");
             try
             {
-                if (funcionario.Email != null)
-                    funcionario.Email = funcionario.Email.Trim().ToLower();
-                if (funcionario.Login != null)
-                    funcionario.Login = funcionario.Login.Trim().ToLower();
+                if (func.Email != null)
+                    func.Email = func.Email.Trim().ToLower();
+                if (func.Login != null)
+                    func.Login = func.Login.Trim().ToLower();
 
                 funcionario = GetByLogin(func.Login);
                 if (funcionario != null) { 

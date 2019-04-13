@@ -1,15 +1,10 @@
-﻿using CIPAOnLine.Exceptions;
+﻿using CIPAOnLine.DTO;
+using CIPAOnLine.Exceptions;
 using CIPAOnLine.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
-using System.Data.Entity.Migrations;
-using System.Text;
-using System.Threading;
-using CIPAOnLine.DTO;
-using CIPAOnLine.Resources;
-using System.Linq;
 
 namespace CIPAOnLine.Services
 {
@@ -110,9 +105,9 @@ namespace CIPAOnLine.Services
             {
                 throw new Exception("Erro ao salvar os dados: " + e.Message);
             }
-            catch (Exception e)
+            catch
             {
-                throw new Exception("Ocorreu um erro inesperado! " + e.Message);
+                throw new Exception("Ocorreu um erro inesperado!");
             }
             finally
             {
@@ -150,7 +145,7 @@ namespace CIPAOnLine.Services
 
             }
         }
-        
+
 
         public List<InconsistenciaFuncionarioDTO> ImportacaoFuncionarios(DataSet ds, int codEleicao)
         {
@@ -189,7 +184,8 @@ namespace CIPAOnLine.Services
                     if (r[8].ToString() == "")
                     {
                         gestor = null;
-                    } else
+                    }
+                    else
                     {
                         gestor = gestoresService.Get(r[8].ToString());
                         if (gestor == null)
@@ -198,9 +194,6 @@ namespace CIPAOnLine.Services
                         }
                     }
 
-
-                    //if (gestor == null) throw new GestorNaoEncontradoException(r[8].ToString());
-                    //string cpf = new string(r[1].ToString().Where(x => char.IsDigit(x)).ToArray());
                     string login = r[1].ToString().Trim().ToLower();
                     string matricula = r[0].ToString();
                     Funcionario func = new Funcionario
@@ -219,10 +212,12 @@ namespace CIPAOnLine.Services
 
                     Funcionario atual = funcService.GetByLogin(login);
 
-                    if (atual == null || atual.MatriculaFuncionario == matricula) {
+                    if (atual == null || atual.MatriculaFuncionario == matricula)
+                    {
                         if (atual != null) func.Id = atual.Id;
                         funcService.AddOrUpdateFuncionario(func);
-                    } else
+                    }
+                    else
                         throw new Exception($"Já existe um funcionário cadastrado com o login {login}! Matrícula: {atual.MatriculaFuncionario}.");
 
                     Usuario usuario = null;
@@ -237,7 +232,7 @@ namespace CIPAOnLine.Services
                     eleicoesService.AddFuncionario(codEleicao, func.Id);
 
                     l++;
-                }               
+                }
 
             }
             catch (ResourceNotFoundException e)

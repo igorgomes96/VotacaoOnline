@@ -65,7 +65,7 @@ namespace CIPAOnLine.Controllers
             try
             {
                 Eleicao e = eleicoesService.GetEleicoes(codigoModulo, true)
-                    .FirstOrDefault(x => x.Funcionarios.Any(y => y.Login == User.Identity.Name));
+                    .FirstOrDefault(x => x.Funcionarios.Any(y => y.Login.Equals(User.Identity.Name, StringComparison.CurrentCultureIgnoreCase)));
                 if (e == null)
                     return Ok();
                 return Ok(new EleicaoDTO(e));
