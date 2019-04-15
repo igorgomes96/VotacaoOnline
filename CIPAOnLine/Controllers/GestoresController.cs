@@ -53,6 +53,8 @@ namespace CIPAOnLine.Controllers
         {
             try
             {
+                if (gestoresService.GestorPossuiVinculo(id))
+                    return BadRequest("Esse gestor está vinculado a um ou mais funcionários, por isso não será possível excluí-lo.");
                 return Ok(gestoresService.Delete(id));
             } catch (GestorNaoEncontradoException)
             {

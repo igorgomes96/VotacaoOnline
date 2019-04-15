@@ -82,10 +82,6 @@ small.sobre-mim {
     display: none; 
 }
 
-.contact-box-content {
-    /*height: 155px;*/
-}
-
 .table-condensed>tbody>tr>td {
     padding: 4px !important;
 }
@@ -105,6 +101,9 @@ small.sobre-mim {
     }
 }
 
-.input-group {
-    /*display: initial !important;*/
+.containerTableModal {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    max-height: 250px;
 }
+

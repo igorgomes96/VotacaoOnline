@@ -27,8 +27,8 @@ namespace CIPAOnLine.Controllers
             try { 
                 return Ok(unService.GetUnidades()
                     .Select(x => new UnidadeDTO(x)));
-            } catch (Exception e) {
-                return Content(HttpStatusCode.InternalServerError, e.Message);
+            } catch {
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
         }
 
@@ -41,9 +41,9 @@ namespace CIPAOnLine.Controllers
             } catch (UnidadeNaoEncontradaException)
             {
                 return Content(HttpStatusCode.NotFound, "Unidade não encontrada!");
-            } catch (Exception e)
+            } catch
             {
-                return Content(HttpStatusCode.InternalServerError, e.Message);
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
         }
 
@@ -61,12 +61,12 @@ namespace CIPAOnLine.Controllers
             try
             {
                 return Ok(new UnidadeDTO(unService.SaveUnidade(unidade)));
-            } catch (Exception e)
+            } catch
             {
                 if (unService.UnidadeExiste(unidade.Codigo))
                     return Content(HttpStatusCode.Conflict, "Código de unidade já existe no banco de dados!");
 
-                return Content(HttpStatusCode.InternalServerError, e.Message);
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
         }
 
@@ -80,9 +80,9 @@ namespace CIPAOnLine.Controllers
             } catch (UnidadeNaoEncontradaException)
             {
                 return Content(HttpStatusCode.NotFound, "Unidade não cadastrada!");
-            } catch (Exception e)
+            } catch
             {
-                return Content(HttpStatusCode.InternalServerError, e.Message);
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
         }
 

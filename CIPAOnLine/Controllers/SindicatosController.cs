@@ -30,9 +30,9 @@ namespace CIPAOnLine.Controllers
             } catch (SindicatoNaoEncontradoException)
             {
                 return Content(HttpStatusCode.NotFound, "Sindicato não cadastrado!");
-            } catch (Exception e)
+            } catch 
             {
-                return Content(HttpStatusCode.InternalServerError, e.Message);
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
         }
 
@@ -46,9 +46,9 @@ namespace CIPAOnLine.Controllers
 
             try { 
                 return Ok(new SindicatoDTO(sindicatosService.SaveSindicato(sindicato)));
-            } catch(Exception e)
+            } catch
             {
-                return Content(HttpStatusCode.InternalServerError, e.Message);
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
         }
 
@@ -63,9 +63,9 @@ namespace CIPAOnLine.Controllers
             {
                 return Content(HttpStatusCode.NotFound, "Sindicato não cadastrado!");
             }
-            catch (Exception e)
+            catch
             {
-                return Content(HttpStatusCode.InternalServerError, e.Message);
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
         }
     }

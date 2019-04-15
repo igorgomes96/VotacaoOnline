@@ -7,7 +7,7 @@ namespace CIPAOnLine.Exceptions
 {
     public class FuncionarioNaoElegivelException : Exception
     {
-        public FuncionarioNaoElegivelException() { }
+        public FuncionarioNaoElegivelException(): base("Funcionário não é elegível para esta eleição.") { }
         public FuncionarioNaoElegivelException(string message) : base(message) { }
     }
 }

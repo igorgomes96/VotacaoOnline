@@ -26,63 +26,6 @@ namespace CIPAOnLine.Controllers
         private AuthService authService = new AuthService();
         private FuncionariosService funcionariosService = new FuncionariosService();
 
-        //[HttpPost]
-        //[Route("api/Autentica")]
-        //[AllowAnonymous]
-        //public IHttpActionResult Login(UsuarioSenhaDTO usuario)
-        //{
-        //    if (usuario == null || usuario.Login == null || usuario.Senha == null) return BadRequest();
-
-        //    Modelo db = new Modelo();
-        //    Usuario user = null;
-
-        //    SearchResult searchResult = authService.GetUserAD(usuario.Login, usuario.Senha);
-
-        //    if (!authService.AuthenticateUserOnAD(searchResult))
-        //        return BadRequest("Usuário ou senha incorretos!");
-
-        //    try {
-        //        Usuario userAD = authService.GetUserAD(usuario.Login);
-        //        user = db.Usuarios.Find(usuario.Login);
-
-        //        if (user == null)
-        //        {
-        //            user = userAD;
-        //            user.MatriculaFuncionario = null;
-        //            Funcionario func = funcionariosService.GetByLogin(user.Login);
-
-        //            if (func != null) { 
-        //                user.Nome = func.Nome;
-        //                user.MatriculaFuncionario = func.MatriculaFuncionario;
-        //            }
-
-        //            user.Perfil = "Eleitor";
-        //            db.Usuarios.Add(user);
-        //        }
-
-
-        //        db.SaveChanges();
-        //    } catch (Exception e)
-        //    {
-        //        return Content(HttpStatusCode.InternalServerError, e);
-        //    }
-
-        //    // Login : Expiration Time : Role
-        //    string token = CryptoGraph.Encrypt(usuario.Login + ":" + DateTime.Now.AddHours(6).ToString("yyyyMMddHHmm") + ":" + (user == null ? "Eleitor" : "Administrador"));
-
-        //    db.Dispose();
-
-        //    return Ok(new
-        //    {
-        //        Token = token,
-        //        Usuario = user.Nome,
-        //        usuario.Login,
-        //        user.MatriculaFuncionario,
-        //        user.Perfil
-        //    });
-
-        //}
-
         [HttpPost]
         [Route("api/Autenticacao/PrimeiroAcesso")]
         [AllowAnonymous]
@@ -175,9 +118,9 @@ namespace CIPAOnLine.Controllers
             {
                 return Content(HttpStatusCode.NotFound, "Usuário não encontrado!");
             }
-            catch (Exception e)
+            catch
             {
-                return InternalServerError(e);
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
         }
 
@@ -242,9 +185,9 @@ namespace CIPAOnLine.Controllers
                     return BadRequest("Senha incorreta!");
 
             }
-            catch (Exception e)
+            catch
             {
-                return Content(HttpStatusCode.InternalServerError, e);
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
 
             string token = TokenServices.GenerateToken(user.Login, roles: user.Perfil);

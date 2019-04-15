@@ -31,9 +31,9 @@ namespace CIPAOnLine.Controllers
             } catch (UsuarioNaoEncontradoException)
             {
                 return Content(HttpStatusCode.NotFound, "Usuário não cadastrado!");
-            } catch (Exception e)
+            } catch
             {
-                return Content(HttpStatusCode.InternalServerError, e.Message);
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
         }
 
@@ -45,9 +45,9 @@ namespace CIPAOnLine.Controllers
             try
             {
                 return Ok(usuariosService.GetAdministradores().Select(x => new UsuarioDTO(x)));
-            } catch (Exception e)
+            } catch
             {
-                return Content(HttpStatusCode.InternalServerError, e);
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
         }
 
@@ -65,9 +65,9 @@ namespace CIPAOnLine.Controllers
             {
                 return Content(HttpStatusCode.BadRequest, "Usuário de rede não encontrado!");
             }
-            catch (Exception e)
+            catch
             {
-                return Content(HttpStatusCode.BadRequest, e);
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
         }
 
@@ -85,9 +85,9 @@ namespace CIPAOnLine.Controllers
             {
                 return Content(HttpStatusCode.BadRequest, "Usuário de rede não encontrado!");
             }
-            catch (Exception e)
+            catch
             {
-                return Content(HttpStatusCode.InternalServerError, e);
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
         }
 
@@ -105,9 +105,9 @@ namespace CIPAOnLine.Controllers
             {
                 return Content(HttpStatusCode.BadRequest, "Usuário de rede não encontrado!");
             }
-            catch (Exception e)
+            catch
             {
-                return Content(HttpStatusCode.InternalServerError, e);
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
         }
 
@@ -121,9 +121,9 @@ namespace CIPAOnLine.Controllers
                 usuariosService.DeleteAdministrador(login);
                 return Ok();
             }
-            catch (Exception e)
+            catch
             {
-                return Content(HttpStatusCode.InternalServerError, e);
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
         }
 

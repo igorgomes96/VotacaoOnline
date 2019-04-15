@@ -38,6 +38,16 @@ namespace CIPAOnLine.Services
             return gestor;
         }
 
+        /// <summary>
+        /// Verifica se há algum funcionário vinculado a esse gestor.
+        /// </summary>
+        /// <param name="codigo"></param>
+        /// <returns></returns>
+        public bool GestorPossuiVinculo(int codigo)
+        {
+            return db.Funcionarios.Any(f => f.CodigoGestor == codigo);
+        }
+
         
         public Gestor Delete (string nome)
         {

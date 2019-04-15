@@ -38,6 +38,9 @@ namespace CIPAOnLine.Controllers
             catch (FuncionarioNaoEncontradoException)
             {
                 return Content(HttpStatusCode.NotFound, "Funcionário não encontrado!");
+            } catch
+            {
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
         }
 
@@ -50,6 +53,9 @@ namespace CIPAOnLine.Controllers
             } catch (FuncionarioNaoEncontradoException)
             {
                 return Content(HttpStatusCode.NotFound, "Funcionário não encontrado!");
+            } catch
+            {
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
         }
 
@@ -67,6 +73,10 @@ namespace CIPAOnLine.Controllers
             catch (FuncionarioNaoEncontradoException)
             {
                 return Content(HttpStatusCode.NotFound, "Funcionário não encontrado!");
+            }
+            catch
+            {
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
         }
 
@@ -98,7 +108,7 @@ namespace CIPAOnLine.Controllers
                 //if (inconsistencias != null && inconsistencias.Count > 0) return Request.CreateResponse(HttpStatusCode.Accepted, inconsistencias);
             } catch (Exception e)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, e.Message);
             }
 
             return Request.CreateResponse(HttpStatusCode.OK);
@@ -120,9 +130,9 @@ namespace CIPAOnLine.Controllers
                 return Content(HttpStatusCode.BadRequest, "Já existe um funcionário cadastrado com o login informado! (Mat.: " + e.Funcionario.MatriculaFuncionario + "; Nome: " + e.Funcionario.Nome + ")");
             } catch (FuncionarioInconsistenteException e) {
                 return Content(HttpStatusCode.Accepted, new { FuncionarioAtual = new FuncionarioDTO(e.FuncionarioAtual), FuncionarioNovo = new FuncionarioDTO(e.FuncionarioNovo) });
-            } catch (Exception e)
+            } catch
             {
-                return Content(HttpStatusCode.InternalServerError, e.Message);
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
         }
 
@@ -148,9 +158,9 @@ namespace CIPAOnLine.Controllers
             {
                 return Content(HttpStatusCode.BadRequest, "Já existe um funcionário cadastrado com o Login informado! (Mat.: " + e.Funcionario.MatriculaFuncionario + "; Nome: " + e.Funcionario.Nome + ")");
             }
-            catch (Exception e)
+            catch
             {
-                return Content(HttpStatusCode.InternalServerError, e.Message);
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
         }
 
@@ -173,9 +183,9 @@ namespace CIPAOnLine.Controllers
             {
                 return Content(HttpStatusCode.BadRequest, "Já existe um funcionário cadastrado com o login informado! (Mat.: " + e.Funcionario.MatriculaFuncionario + "; Nome: " + e.Funcionario.Nome + ")");
             }
-            catch (Exception e)
+            catch
             {
-                return Content(HttpStatusCode.InternalServerError, e.Message);
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
         }
 
@@ -189,9 +199,9 @@ namespace CIPAOnLine.Controllers
             } catch (FuncionarioNaoEncontradoException)
             {
                 return Content(HttpStatusCode.NotFound, "Funcionário não cadastrado!");
-            } catch (Exception e)
+            } catch
             {
-                return Content(HttpStatusCode.InternalServerError, e.Message);
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
         }
 

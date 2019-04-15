@@ -48,7 +48,6 @@ namespace CIPAOnLine.DTO
             if (e.EtapaAtual != null)
             {
                 NomeEtapa = e.EtapaAtual.NomeEtapa;
-                OrdemEtapa = e.EtapaAtual.Ordem;
             }
             if (e.Unidade != null)
             {
@@ -62,6 +61,9 @@ namespace CIPAOnLine.DTO
             foreach (Etapa etapa in etapasService.GetEtapas(CodigoModulo))
             {
                 PrazoEtapa prazo = e.PrazosEtapas?.FirstOrDefault(x => x.CodigoEtapa == etapa.CodigoEtapa);
+
+                if (e.CodigoEtapa == prazo.CodigoEtapa)
+                    OrdemEtapa = prazo.Ordem ?? etapa.Ordem.Value;
 
                 ((HashSet<PrazosEtapasDTO>)PrazosEtapasObj).Add(new PrazosEtapasDTO
                 {

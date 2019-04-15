@@ -4,6 +4,7 @@ using CIPAOnLine.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Http;
 
@@ -19,9 +20,9 @@ namespace CIPAOnLine.Controllers
             {
                 EmailService.Send(email);
                 return Ok();
-            } catch (Exception ex)
+            } catch
             {
-                return InternalServerError(ex);
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
         }
 
@@ -35,9 +36,9 @@ namespace CIPAOnLine.Controllers
             } catch (EleicaoNaoEncontradaException)
             {
                 return NotFound();
-            } catch (Exception e)
+            } catch
             {
-                return InternalServerError(e);
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
         }
 
@@ -53,9 +54,9 @@ namespace CIPAOnLine.Controllers
             {
                 return NotFound();
             }
-            catch (Exception e)
+            catch
             {
-                return InternalServerError(e);
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
         }
     }
