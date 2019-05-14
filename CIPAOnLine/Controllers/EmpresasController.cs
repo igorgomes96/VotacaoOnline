@@ -42,9 +42,15 @@ namespace CIPAOnLine.Controllers
         [ResponseType(typeof(void))]
         public IHttpActionResult Put(int id, Empresa empresa)
         {
-            if (id != empresa.Codigo) return BadRequest("Código passado por parâmetro é diferente do código do empresa passado no corpo da requisição.");
-            empresasService.Save(empresa);
-            return Ok();
+            try
+            {
+                if (id != empresa.Codigo) return BadRequest("Código passado por parâmetro é diferente do código do empresa passado no corpo da requisição.");
+                empresasService.Save(empresa);
+                return Ok();
+            } catch
+            {
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
+            }
         }
 
         [Authorize(Roles = "Administrador")]
@@ -59,9 +65,9 @@ namespace CIPAOnLine.Controllers
             {
                 return NotFound();
             }
-            catch (Exception e)
+            catch
             {
-                return InternalServerError(e);
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
         }
     }

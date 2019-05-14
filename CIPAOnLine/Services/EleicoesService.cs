@@ -126,9 +126,14 @@ namespace CIPAOnLine.Services
 
         public bool DeleteFuncionario(Eleicao eleicao, int funcionarioId)
         {
+
             Candidato candidato = eleicao.Candidatos.FirstOrDefault(x => x.FuncionarioId == funcionarioId && x.CodigoEleicao == eleicao.Codigo);
             if (candidato != null)
             {
+                var reprovacoes = db.CandidaturasReprovadas.Where(c => c.FuncionarioId == funcionarioId && c.CodigoEleicao == eleicao.Codigo).ToList();
+                foreach (var reprovacao in reprovacoes)
+                    db.CandidaturasReprovadas.Remove(reprovacao);
+
                 db.Candidatos.Remove(candidato);
                 db.SaveChanges();
             }

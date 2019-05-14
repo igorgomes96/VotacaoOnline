@@ -28,9 +28,9 @@ namespace CIPAOnLine.Controllers
             {
                 return NotFound();
             }
-            catch (Exception ex)
+            catch
             {
-                return InternalServerError(ex);
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
         }
 
@@ -55,9 +55,9 @@ namespace CIPAOnLine.Controllers
             {
                 return Content(HttpStatusCode.InternalServerError, e.Message);
             }
-            catch (Exception e)
+            catch
             {
-                return Content(HttpStatusCode.InternalServerError, e.Message);
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
         }
     }

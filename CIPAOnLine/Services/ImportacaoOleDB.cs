@@ -53,6 +53,12 @@ namespace CIPAOnLine.Services
             catch (OleDbException e)
             {
                 if (e.Message.Split(new char[] { '.' })[0] != "'Gestores' is not a valid name") throw;
+            } catch (ExcelException e)
+            {
+                throw new Exception($"Ocorreu um erro ao processar os dados da linha {e.Linha}, na aba '{e.Aba}' da planilha.");
+            } catch
+            {
+                throw new Exception("Erro ao importar os gestores!");
             }
             finally
             {
@@ -122,27 +128,35 @@ namespace CIPAOnLine.Services
 
         public void ImportacaoGestores(DataSet ds)
         {
-            GestoresService service = new GestoresService();
-
-            foreach (DataRow r in ds.Tables[0].Rows)
+            int linha = 2;
+            try
             {
-                //Condição de parada
-                if (r[0] == null || r[0].ToString() == "")
-                    return;
-
-                Gestor g = new Gestor
+                GestoresService service = new GestoresService();
+                foreach (DataRow r in ds.Tables[0].Rows)
                 {
-                    Nome = r[0].ToString(),
-                    Email = r[1].ToString()
-                };
+                    
+                    //Condição de parada
+                    if (r[0] == null || r[0].ToString() == "")
+                        return;
 
-                Gestor atual = service.Get(g.Nome);
+                    Gestor g = new Gestor
+                    {
+                        Nome = r[0].ToString(),
+                        Email = r[1].ToString()
+                    };
 
-                if (atual != null)
-                    g.Codigo = atual.Codigo;
+                    Gestor atual = service.Get(g.Nome);
 
-                service.Save(g);
+                    if (atual != null)
+                        g.Codigo = atual.Codigo;
 
+                    service.Save(g);
+                    linha++;
+                }
+            }
+            catch (Exception e)
+            {
+                throw new ExcelException(e.Message, ds.DataSetName, linha);
             }
         }
 

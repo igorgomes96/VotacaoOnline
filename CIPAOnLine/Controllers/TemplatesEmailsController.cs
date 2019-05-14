@@ -27,9 +27,9 @@ namespace CIPAOnLine.Controllers
                 if (template == null) return NotFound();
                 return Ok(template);
             }
-            catch (Exception ex)
+            catch
             {
-                return InternalServerError(ex);
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
         }
 
@@ -39,9 +39,9 @@ namespace CIPAOnLine.Controllers
             {
                 return Ok(templatesEmailsService.PostTemplate(template));
             }
-            catch (Exception ex)
+            catch
             {
-                return InternalServerError(ex);
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
         }
 
@@ -53,9 +53,9 @@ namespace CIPAOnLine.Controllers
                 templatesEmailsService.PutTemplate(template);
                 return Ok();
             }
-            catch (Exception ex)
+            catch
             {
-                return InternalServerError(ex);
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
         }
 
@@ -66,9 +66,9 @@ namespace CIPAOnLine.Controllers
                 if (template == null) return NotFound();
                 return Ok(template);
             }
-            catch (Exception ex)
+            catch
             {
-                return InternalServerError(ex);
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
         }
     }

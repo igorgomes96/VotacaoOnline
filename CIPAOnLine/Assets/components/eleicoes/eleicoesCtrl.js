@@ -174,7 +174,7 @@
 		if (self.eleicaoAtual) {
 			if (self.eleicaoAtual.DataFechamento || (self.eleicaoAtual.OrdemEtapa > etapa.Ordem))
 				return 'finalizada';
-			if (etapa.Ordem == self.eleicaoAtual.OrdemEtapa)
+			if (etapa.CodigoEtapa == self.eleicaoAtual.CodigoEtapa)
 				return 'atual';
 			return 'futura';
 		}

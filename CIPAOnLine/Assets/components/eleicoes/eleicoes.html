@@ -207,7 +207,6 @@
 
 					<div class="vertical-timeline-block" ng-repeat="e in ct.eleicaoAtual.PrazosEtapasObj | orderBy:'Ordem'">
 						<div class="vertical-timeline-icon" ng-class="{'blue-bg': ct.statusEtapa(e) == 'atual', 'gray-bg': ct.statusEtapa(e) == 'futura', 'navy-bg': ct.statusEtapa(e) == 'finalizada'}">
-
 							<i class="fa" ng-class="ct.statusEtapa(e) == 'finalizada' ? 'fa-calendar-check-o' : 'fa-calendar'"></i>
 						</div>
 

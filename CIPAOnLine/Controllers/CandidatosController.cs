@@ -56,9 +56,9 @@ namespace CIPAOnLine.Controllers
             {
                 return Content(HttpStatusCode.Forbidden, "Você já realizou seu voto. Não é possível anular ou alterar!");
             }
-            catch (Exception ex)
+            catch
             {
-                return Content(HttpStatusCode.InternalServerError, ex);
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
         }
 
@@ -76,9 +76,9 @@ namespace CIPAOnLine.Controllers
             {
                 return Content(HttpStatusCode.BadRequest, "A eleição não está na etapa de candidaturas!");
             }
-            catch (Exception ex)
+            catch
             {
-                return Content(HttpStatusCode.InternalServerError, ex);
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
         }
 
@@ -104,9 +104,9 @@ namespace CIPAOnLine.Controllers
             {
                 return Content(HttpStatusCode.Forbidden, "Usuário não está cadastrado na eleição " + codEleicao);
             }
-            catch (Exception e)
+            catch
             {
-                return Content(HttpStatusCode.InternalServerError, e.Message);
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
         }
 
@@ -116,124 +116,120 @@ namespace CIPAOnLine.Controllers
         [Route("api/Candidatos/AddOrUpdate")]
         public async Task<HttpResponseMessage> AddOrUpdateCandidato()
         {
-            FuncionariosService funcService = new FuncionariosService();
-
-            // Verifica se request contém multipart/form-data.
-            if (!Request.Content.IsMimeMultipartContent())
-                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
-
-            //Diretório App_Data, para salvar o arquivo temporariamente
-            string root = HttpContext.Current.Server.MapPath("~/App_Data");
-            var provider = new MultipartFormDataStreamProvider(root);
-
-            // Lê o arquivo da requisição assincronamente
-            await Request.Content.ReadAsMultipartAsync(provider);
-
-            //Deserializa os dados do Candidato
-            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
-            var obj = json_serializer.DeserializeObject(provider.FormData.Get("candidato")) as Dictionary<string, object>;
-
-            Image thumbnail = null;
-            Image img = null;
             try
             {
-                //Lê a foto do candidato
+                FuncionariosService funcService = new FuncionariosService();
 
-                var httpPostedFile = HttpContext.Current.Request.Files["foto"];
-                if (httpPostedFile != null)
+                // Verifica se request contém multipart/form-data.
+                if (!Request.Content.IsMimeMultipartContent())
+                    throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
+
+                //Diretório App_Data, para salvar o arquivo temporariamente
+                string root = HttpContext.Current.Server.MapPath("~/App_Data");
+                var provider = new MultipartFormDataStreamProvider(root);
+
+                // Lê o arquivo da requisição assincronamente
+                await Request.Content.ReadAsMultipartAsync(provider);
+
+                //Deserializa os dados do Candidato
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                var obj = json_serializer.DeserializeObject(provider.FormData.Get("candidato")) as Dictionary<string, object>;
+
+                Image thumbnail = null;
+                Image img = null;
+                try
                 {
-                    int length = httpPostedFile.ContentLength;
-                    var bytes = new byte[length]; //get imagedata  
-                    httpPostedFile.InputStream.Read(bytes, 0, length);
-                    var stream = new MemoryStream(bytes);
-                    img = Image.FromStream(stream, false, false);
-                    img = ImageService.EnquadrarImagem((Bitmap)img);
-                    thumbnail = ImageService.GetThumbnail(img, 75, 75);
-                    stream.Dispose();
-                    if (img.Height > 350)
-                        img = ImageService.GetThumbnail(img, 350, 350);
+                    //Lê a foto do candidato
+
+                    var httpPostedFile = HttpContext.Current.Request.Files["foto"];
+                    if (httpPostedFile != null)
+                    {
+                        int length = httpPostedFile.ContentLength;
+                        var bytes = new byte[length]; //get imagedata  
+                        httpPostedFile.InputStream.Read(bytes, 0, length);
+                        var stream = new MemoryStream(bytes);
+                        img = Image.FromStream(stream, false, false);
+                        img = ImageService.EnquadrarImagem((Bitmap)img);
+                        thumbnail = ImageService.GetThumbnail(img, 75, 75);
+                        stream.Dispose();
+                        if (img.Height > 350)
+                            img = ImageService.GetThumbnail(img, 350, 350);
+                    }
+                }
+                catch
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, $"Erro ao processar imagem. Por favor, escolha outra! ");
                 }
 
+                int funcionarioId = int.Parse(obj["FuncionarioId"].ToString());
+                //Cria uma instância de Funcionario
+                Funcionario funcionario = null;
+                try
+                {
+                    funcionario = funcService.GetFuncionario(funcionarioId);
+                }
+                catch (FuncionarioNaoEncontradoException)
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Funcionário não encontrado!");
+                }
 
+                funcionario.Login = obj["LoginFuncionario"].ToString();
+                funcionario.Nome = obj["NomeFuncionario"].ToString();
+                funcionario.Cargo = obj["CargoFuncionario"].ToString();
+                funcionario.Area = obj["AreaFuncionario"].ToString();
+                funcionario.Email = obj["EmailFuncionario"].ToString();
+                funcionario.Sobre = (obj.ContainsKey("Sobre") && obj["Sobre"] != null) ? obj["Sobre"].ToString() : null;
+                funcionario.DataAdmissao = DateTime.Parse(obj["DataAdmissaoFuncionario"].ToString());
+                funcionario.Thumbnail = ImageService.ConvertImageByte(thumbnail);
 
-                //var bytes = File.ReadAllBytes(provider.FileData[0].LocalFileName);
-                //var stream = new MemoryStream(bytes);
-                //img = Image.FromStream(stream, false, false);
-                //img = ImageService.EnquadrarImagem((Bitmap)img);
-                //thumbnail = ImageService.GetThumbnail(img, 75, 75);
-                //stream.Dispose();
-                //if (img.Height > 350)
-                //    img = ImageService.GetThumbnail(img, 350, 350);
+                funcService.AddOrUpdateFuncionario(funcionario);
+
+                FuncionarioFoto funcFoto = new FuncionarioFoto
+                {
+                    FuncionarioId = funcionario.Id,
+                    Foto = ImageService.ConvertImageByte(img)
+                };
+
+                funcService.AddOrUpdateFuncionarioFoto(funcFoto);
+                bool? validado = null;
+                //if (User.IsInRole("Administrador")) validado = true;
+
+                //Cria uma intância do candidato
+                Candidato c = new Candidato
+                {
+                    FuncionarioId = funcionarioId,
+                    CodigoEleicao = int.Parse(obj["CodigoEleicao"].ToString()),
+                    HorarioCandidatura = DateTime.Now,
+                    Validado = validado
+                };
+
+                //Tenta salvar as atualizações
+                try
+                {
+                    c = candidatosService.AddOrUpdateCandidato(c);
+                    candidatosService.ExcluirMotivoReprovacao(c);
+                    //Excluir o arquivo
+                    File.Delete(provider.FileData[0].LocalFileName);
+                }
+                catch (FuncionarioNaoCadastradoEleicaoException)
+                {
+                    return Request.CreateResponse(HttpStatusCode.BadRequest, "Você não está inscrito nessa eleição! Contate o administrador.");
+                }
+                catch (FuncionarioNaoElegivelException e)
+                {
+                    return Request.CreateResponse(HttpStatusCode.BadRequest, e.Message);
+                }
+                catch
+                {
+                    return Request.CreateResponse(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
+                }
+
+                return Request.CreateResponse(HttpStatusCode.OK, new CandidatoDTO(c));
             }
             catch
             {
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, $"Erro ao processar imagem. Por favor, escolha outra! ");
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
-
-            int funcionarioId = int.Parse(obj["FuncionarioId"].ToString());
-            //Cria uma instância de Funcionario
-            Funcionario funcionario = null;
-            try
-            {
-                funcionario = funcService.GetFuncionario(funcionarioId);
-            }
-            catch (FuncionarioNaoEncontradoException)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Funcionário não encontrado!");
-            }
-
-            funcionario.Login = obj["LoginFuncionario"].ToString();
-            funcionario.Nome = obj["NomeFuncionario"].ToString();
-            funcionario.Cargo = obj["CargoFuncionario"].ToString();
-            funcionario.Area = obj["AreaFuncionario"].ToString();
-            funcionario.Email = obj["EmailFuncionario"].ToString();
-            funcionario.Sobre = (obj.ContainsKey("Sobre") && obj["Sobre"] != null) ? obj["Sobre"].ToString() : null;
-            funcionario.DataAdmissao = DateTime.Parse(obj["DataAdmissaoFuncionario"].ToString());
-            funcionario.Thumbnail = ImageService.ConvertImageByte(thumbnail);
-
-            funcService.AddOrUpdateFuncionario(funcionario);
-
-            FuncionarioFoto funcFoto = new FuncionarioFoto
-            {
-                FuncionarioId = funcionario.Id,
-                Foto = ImageService.ConvertImageByte(img)
-            };
-
-            funcService.AddOrUpdateFuncionarioFoto(funcFoto);
-            bool? validado = null;
-            //if (User.IsInRole("Administrador")) validado = true;
-
-            //Cria uma intância do candidato
-            Candidato c = new Candidato
-            {
-                FuncionarioId = funcionarioId,
-                CodigoEleicao = int.Parse(obj["CodigoEleicao"].ToString()),
-                HorarioCandidatura = DateTime.Now,
-                Validado = validado
-            };
-
-            //Tenta salvar as atualizações
-            try
-            {
-                c = candidatosService.AddOrUpdateCandidato(c);
-                candidatosService.ExcluirMotivoReprovacao(c);
-                //Excluir o arquivo
-                File.Delete(provider.FileData[0].LocalFileName);
-            }
-            catch (FuncionarioNaoCadastradoEleicaoException)
-            {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, "Você não está inscrito nessa eleição! Contate o administrador.");
-            }
-            catch (FuncionarioNaoElegivelException e)
-            {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, e.Message);
-            }
-            catch (Exception e)
-            {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, e.Message);
-            }
-
-            return Request.CreateResponse(HttpStatusCode.OK, new CandidatoDTO(c));
         }
 
         [Route("api/Candidatos/{funcionarioId}/{codEleicao}/Aprovar")]
@@ -250,9 +246,9 @@ namespace CIPAOnLine.Controllers
             {
                 return Ok(new CandidatoDTO(candidatosService.AprovarCandidatura(c)));
             }
-            catch (Exception e)
+            catch
             {
-                return Content(HttpStatusCode.InternalServerError, e.Message);
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
         }
 
@@ -266,9 +262,9 @@ namespace CIPAOnLine.Controllers
             {
                 return Ok(candidatosService.ToDTO(candidatosService.AprovarTodos(candidatos)));
             }
-            catch (Exception e)
+            catch
             {
-                return Content(HttpStatusCode.InternalServerError, e.Message);
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
         }
 
@@ -291,9 +287,9 @@ namespace CIPAOnLine.Controllers
             {
                 return Ok(new CandidaturaReprovadaDTO(candidatosService.ReprovarCandidatura(reprovacao)));
             }
-            catch (Exception e)
+            catch
             {
-                return Content(HttpStatusCode.InternalServerError, e.Message);
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
         }
 

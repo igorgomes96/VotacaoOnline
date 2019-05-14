@@ -52,9 +52,9 @@ namespace CIPAOnLine.Controllers
                             return new EleicaoDTO(x, qtda);
                         }).ToList());
             }
-            catch (Exception e)
+            catch
             {
-                return Content(HttpStatusCode.InternalServerError, e.Message);
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
         }
 
@@ -70,9 +70,9 @@ namespace CIPAOnLine.Controllers
                     return Ok();
                 return Ok(new EleicaoDTO(e));
             }
-            catch (Exception e)
+            catch
             {
-                return Content(HttpStatusCode.InternalServerError, e.Message);
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
         }
 
@@ -86,9 +86,9 @@ namespace CIPAOnLine.Controllers
                 Usuario user = GetUsuario();
                 return Ok(eleicoesService.FuncionarioCadastrado(codEleicao, user.Login, user.FuncionarioId.Value));
             }
-            catch (Exception e)
+            catch
             {
-                return Content(HttpStatusCode.InternalServerError, e.Message);
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
 
         }
@@ -100,9 +100,9 @@ namespace CIPAOnLine.Controllers
             {
                 return Ok(eleicoesService.GetFiltroEleicoes((ClaimsPrincipal)User, codigoModulo));
             }
-            catch (Exception e)
+            catch
             {
-                return Content(HttpStatusCode.InternalServerError, e.Message);
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
         }
 
@@ -118,9 +118,9 @@ namespace CIPAOnLine.Controllers
             {
                 return Content(HttpStatusCode.NotFound, "Eleição não cadastrada!");
             }
-            catch (Exception e)
+            catch
             {
-                return Content(HttpStatusCode.InternalServerError, e.Message);
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
         }
 
@@ -137,9 +137,9 @@ namespace CIPAOnLine.Controllers
             {
                 return Content(HttpStatusCode.NotFound, "Eleição não encontrada");
             }
-            catch (Exception e)
+            catch
             {
-                return Content(HttpStatusCode.InternalServerError, e.Message);
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
         }
 
@@ -157,9 +157,9 @@ namespace CIPAOnLine.Controllers
             {
                 return Content(HttpStatusCode.NotFound, "Eleição não encontrada");
             }
-            catch (Exception e)
+            catch
             {
-                return Content(HttpStatusCode.InternalServerError, e.Message);
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
         }
 
@@ -183,9 +183,9 @@ namespace CIPAOnLine.Controllers
             {
                 return Content(HttpStatusCode.NotFound, "Eleição não cadastrada!");
             }
-            catch (Exception e)
+            catch
             {
-                return Content(HttpStatusCode.InternalServerError, e.Message);
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
 
             return Ok();
@@ -200,9 +200,9 @@ namespace CIPAOnLine.Controllers
             {
                 return Ok(eleicoesService.GetTodasGestoes(codModulo));
             }
-            catch (Exception e)
+            catch
             {
-                return Content(HttpStatusCode.InternalServerError, e.Message);
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
         }
 
@@ -221,9 +221,9 @@ namespace CIPAOnLine.Controllers
             {
                 return Content(HttpStatusCode.NotFound, "Código de eleição não cadastrado!");
             }
-            catch (Exception e)
+            catch
             {
-                return Content(HttpStatusCode.InternalServerError, e.Message);
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
         }
 
@@ -265,9 +265,9 @@ namespace CIPAOnLine.Controllers
             {
                 return Content(HttpStatusCode.BadRequest, "É necessário que mais de 50% (" + e.QtdaMinVotos + ") do quadro de funcionários votem para concluir a etapa de votação!");
             }
-            catch (Exception e)
+            catch
             {
-                return Content(HttpStatusCode.InternalServerError, e.Message);
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
         }
 
@@ -285,9 +285,9 @@ namespace CIPAOnLine.Controllers
             {
                 return NotFound();
             }
-            catch (Exception e)
+            catch
             {
-                return InternalServerError(e);
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
         }
 
@@ -306,9 +306,9 @@ namespace CIPAOnLine.Controllers
             {
                 return Content(HttpStatusCode.NotFound, "Eleição não cadastrada!");
             }
-            catch (Exception e)
+            catch
             {
-                return Content(HttpStatusCode.InternalServerError, e.Message);
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
         }
 
@@ -329,9 +329,9 @@ namespace CIPAOnLine.Controllers
             {
                 return Content(HttpStatusCode.InternalServerError, "Não foram cadastradas corretamente as informações de quantidade de efetivos e suplentes a quantidade de funcionários dessa unidade!");
             }
-            catch (Exception e)
+            catch
             {
-                return Content(HttpStatusCode.InternalServerError, e.Message);
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
         }
 
@@ -360,9 +360,9 @@ namespace CIPAOnLine.Controllers
             {
                 return Content(HttpStatusCode.Conflict, "Eleição já cadastrada!");
             }
-            catch (Exception e)
+            catch
             {
-                return Content(HttpStatusCode.InternalServerError, e.Message);
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
         }
 
@@ -392,9 +392,9 @@ namespace CIPAOnLine.Controllers
             {
                 return Content(HttpStatusCode.Conflict, "Eleição já cadastrada!");
             }
-            catch (Exception e)
+            catch
             {
-                return Content(HttpStatusCode.InternalServerError, e.Message);
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
         }
 
@@ -415,6 +415,9 @@ namespace CIPAOnLine.Controllers
             catch (FuncionarioNaoEncontradoException)
             {
                 return Content(HttpStatusCode.NotFound, "Funcionário não cadastrado!");
+            } catch
+            {
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }
         }
 
