@@ -34,43 +34,69 @@
                         <div class="sk-rect5"></div>
                     </div>
 
-                    <form role="form" name="ct.form" ng-submit="ct.salvar(ct.admin)">
+                    <form role="form" name="ct.form" ng-submit="ct.salvar(ct.admin)" novalidate>
 
                         <div class="row">
-                            <div class="form-group col-xs-12" ng-class="{'has-error': form.loginUser.$dirty && form.loginUser.$invalid}">
+                            <div class="form-group col-xs-12"
+                                ng-class="{'has-error': form.loginUser.$dirty && form.loginUser.$invalid}">
                                 <label for="loginUser">Login</label>
-                                <input type="text" class="form-control" id="loginUser" name="loginUser" ng-model="ct.admin.Login" placeholder="Login" required ng-blur="ct.buscaUsuario(ct.admin.Login)">
+                                <input type="text" class="form-control" id="loginUser" name="loginUser"
+                                    ng-model="ct.admin.Login" placeholder="Login" required
+                                    ng-blur="ct.buscaUsuario(ct.admin.Login)">
                             </div>
                         </div>
 
                         <div class="row">
-                            <div class="form-group col-xs-12" ng-class="{'has-error': form.matricula.$dirty && form.matricula.$invalid}">
+                            <div class="form-group col-xs-12"
+                                ng-class="{'has-error': form.matricula.$dirty && form.matricula.$invalid}">
                                 <label for="matricula">Matricula</label>
-                                <input type="text" class="form-control" id="matricula" name="matricula" placeholder="Matrícula do Funcionário" ng-model="ct.admin.MatriculaFuncionario" required>
+                                <input type="text" class="form-control" id="matricula" name="matricula"
+                                    placeholder="Matrícula do Funcionário" ng-model="ct.admin.MatriculaFuncionario"
+                                    required>
                             </div>
                         </div>
 
 
                         <div class="row">
-                            <div class="form-group col-xs-12" ng-class="{'has-error': form.nome.$dirty && form.nome.$invalid}">
+                            <div class="form-group col-xs-12"
+                                ng-class="{'has-error': form.nome.$dirty && form.nome.$invalid}">
                                 <label for="nome">Nome</label>
-                                <input type="text" class="form-control" id="nome" name="nome" ng-model="ct.admin.Nome" placeholder="Nome" required>
+                                <input type="text" class="form-control" id="nome" name="nome" ng-model="ct.admin.Nome"
+                                    placeholder="Nome" required>
                             </div>
                         </div>
 
                         <div class="row">
-                            <div class="form-group col-xs-12" ng-class="{'has-error': form.email.$dirty && form.email.$invalid}">
+                            <div class="form-group col-xs-12"
+                                ng-class="{'has-error': form.email.$dirty && form.email.$invalid}">
                                 <label for="email">Email</label>
-                                <input type="email" class="form-control" id="email" name="email" ng-model="ct.admin.Email" placeholder="Email" required>
+                                <input type="email" class="form-control" id="email" name="email"
+                                    ng-model="ct.admin.Email" placeholder="Email" required>
                             </div>
                         </div>
 
                         <div class="row">
-                            <div class="form-group col-xs-12" ng-class="{'has-error': form.empresa.$dirty && form.empresa.$invalid}">
+                            <div class="form-group col-xs-12"
+                                ng-class="{'has-error': form.empresa.$dirty && form.empresa.$invalid}">
                                 <label for="empresa">Empresa</label>
-                                <select class="form-control" name="empresa" id="empresa" ng-options="e.Codigo as e.RazaoSocial for e in ct.empresas" ng-model="ct.admin.CodigoEmpresa" required>
-                                    <option value="">(Selecione)</option>
-                                </select>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="input-group">
+                                            <select class="form-control" name="empresa" id="empresa"
+                                                ng-options="e.Codigo as e.RazaoSocial for e in ct.empresas"
+                                                ng-model="ct.admin.CodigoEmpresa" required>
+                                                <option value="">(Selecione)</option>
+                                            </select>
+
+                                            <span class="input-group-btn" ng-if="!ct.eleicaoAtual.DataFechamento">
+                                                <button class="btn btn-default" data-toggle="modal"
+                                                    data-target="#modalEmpresas" type="button"><i
+                                                        class="fa fa-list"></i></button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
 
@@ -85,9 +111,10 @@
 
                         <hr>
 
-                        <input type="submit" name="submitAdmin" class="btn btn-primary" value="Salvar" ng-disabled="ct.form.$invalid">
+                        <input type="submit" name="submitAdmin" class="btn btn-primary" value="Salvar"
+                            ng-disabled="ct.form.$invalid">
                     </form>
-                    
+
 
                 </div>
             </div>
@@ -114,7 +141,9 @@
                         <div class="col-xs-12">
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                <input type="text" class="form-control" id="inputFiltro" name="inputFiltro" ng-model="filtro" placeholder="Digite uma expressão para filtrar" ng-model-options="{debounce:500}">
+                                <input type="text" class="form-control" id="inputFiltro" name="inputFiltro"
+                                    ng-model="filtro" placeholder="Digite uma expressão para filtrar"
+                                    ng-model-options="{debounce:500}">
                             </div>
                         </div>
                     </div>
@@ -125,20 +154,20 @@
                                 <thead>
                                     <tr>
                                         <th>Login</th>
-                                        <!-- <th>Matrícula</th> -->
                                         <th>Nome</th>
-                                        <th></th>
+                                        <th width="15%"></th>
                                     </tr>
                                 </thead>
 
                                 <tbody>
                                     <tr ng-repeat="a in ct.administradores | filter:filtro">
                                         <td>{{a.Login}}</td>
-                                        <!-- <td>{{a.MatriculaFuncionario}}</td> -->
                                         <td>{{a.Nome}}</td>
                                         <td class="text-right">
-                                            <button class="btn btn-success btn-xs" ng-click="ct.editar(a)"><i class="fa fa-pencil"></i></button>
-                                            <button class="btn btn-danger btn-xs" ng-click="ct.excluir(a.Login)"><i class="fa fa-trash"></i></button>
+                                            <button class="btn btn-success btn-xs" ng-click="ct.editar(a)"><i
+                                                    class="fa fa-pencil"></i></button>
+                                            <button class="btn btn-danger btn-xs" ng-click="ct.excluir(a.Login)"><i
+                                                    class="fa fa-trash"></i></button>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -152,3 +181,5 @@
 
     </div>
 </div>
+
+<div ng-include="'Assets/components/usuarios/modalEmpresas.html'"></div>
