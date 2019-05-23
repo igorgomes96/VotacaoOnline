@@ -40,7 +40,8 @@ namespace CIPAOnLine.Services
                     func.Login = func.Login.Trim().ToLower();
 
                 funcionario = GetByLogin(func.Login);
-                if (funcionario != null) { 
+                if (funcionario != null)
+                {
                     if (func.MatriculaFuncionario != funcionario.MatriculaFuncionario)
                         throw new Exception($"Já existe um funcionário cadastrado com esse mesmo login ({func.Login}) porém com matrícula diferente: {funcionario.MatriculaFuncionario}, empresa {funcionario.Empresa?.Codigo} - {funcionario.Empresa?.RazaoSocial}.");
 
@@ -53,6 +54,15 @@ namespace CIPAOnLine.Services
 
             Usuario user = db.Usuarios.Find(func.Login);
 
+            // Verifica se já há um funcionário com a mesma matrícula em outra empresa
+            var mesmaMatricula = db.Funcionarios.Where(f => f.MatriculaFuncionario == func.MatriculaFuncionario).ToList();
+            if (mesmaMatricula.Count() > 1)
+            {
+                var empresas = mesmaMatricula.Select(f => f.CodigoEmpresa.ToString()).Aggregate("", (acc, curr) => acc + ", " + curr).Substring(2);
+                var logins = mesmaMatricula.Select(f => f.Login).Aggregate("", (acc, curr) => acc + ", " + curr).Substring(2);
+                throw new Exception($"O funcionário {func.Nome} ({func.MatriculaFuncionario}) está cadastrado em diferentes empresas ({empresas}), com diferente logins ({logins}), porém com a mesma matícula. Favor, corrija o cadastro em \"Base Geral\" e tente novamente.");
+            }
+
             // Se o usuário for administrador, não muda a empresa
             if (user != null && user.Perfil == Perfil.ADMINISTRADOR && funcionario != null)
             {
@@ -61,7 +71,7 @@ namespace CIPAOnLine.Services
 
             db.Funcionarios.AddOrUpdate(func);
 
-            
+
             if (user != null)
             {
                 user.FuncionarioId = func.Id;
@@ -98,7 +108,7 @@ namespace CIPAOnLine.Services
             db.SaveChanges();
             return f;
         }
-        
+
         public bool FuncionarioExiste(string matricula, int codigoEmpresa)
         {
             return db.Funcionarios.Any(x => x.MatriculaFuncionario == matricula && x.CodigoEmpresa == codigoEmpresa);
