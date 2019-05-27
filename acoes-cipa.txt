@@ -1,0 +1,7 @@
+Linha 15: Login diferente. Alterei de daniloms@algartech.com para daniloms.
+Linha 47: Funcionário na Algar TI e na Algar Tech, com logins diferentes. Removi o registro da Algar TI.
+Linha 48: Funcionário na Algar TI e na Algar Tech, com logins diferentes. Removi o registro da Algar TI.
+Linha 92: Funcionário na Algar TI e na Algar Tech, com logins diferentes. Removi o registro da Algar TI.
+Linha 93: Funcionário na Algar TI e na Algar Tech, com logins diferentes. Removi o registro da Algar TI.
+Linha 94: Funcionário na Algar TI e na Algar Tech, com logins diferentes. Removi o registro da Algar TI.
+Linha 138: Funcionário na Algar TI e na Algar Tech, com logins diferentes. Removi o registro da Algar TI.

@@ -53,10 +53,12 @@ namespace CIPAOnLine.Services
             catch (OleDbException e)
             {
                 if (e.Message.Split(new char[] { '.' })[0] != "'Gestores' is not a valid name") throw;
-            } catch (ExcelException e)
+            }
+            catch (ExcelException e)
             {
                 throw new Exception($"Ocorreu um erro ao processar os dados da linha {e.Linha}, na aba '{e.Aba}' da planilha.");
-            } catch
+            }
+            catch
             {
                 throw new Exception("Erro ao importar os gestores!");
             }
@@ -134,7 +136,7 @@ namespace CIPAOnLine.Services
                 GestoresService service = new GestoresService();
                 foreach (DataRow r in ds.Tables[0].Rows)
                 {
-                    
+
                     //Condição de parada
                     if (r[0] == null || r[0].ToString() == "")
                         return;
@@ -224,6 +226,18 @@ namespace CIPAOnLine.Services
                         CodigoEmpresa = eleicao.Unidade.CodigoEmpresa
                     };
 
+                    Funcionario funcMatricula = null;
+                    try
+                    {
+                        funcMatricula = funcService.GetFuncionario(matricula, eleicao.Unidade.CodigoEmpresa);
+
+                        if (funcMatricula.Login != login)
+                        {
+                            throw new Exception($"O funcionario {func.Nome} (matrícula {matricula}) já está cadastrado com o login {funcMatricula.Login}. Altere a planilha ou altere o registro atual em \"Base Geral\".");
+                        }
+                    }
+                    catch (FuncionarioNaoEncontradoException) { }
+
                     Funcionario atual = funcService.GetByLogin(login);
 
                     if (atual == null || atual.MatriculaFuncionario == matricula)
@@ -232,7 +246,9 @@ namespace CIPAOnLine.Services
                         funcService.AddOrUpdateFuncionario(func);
                     }
                     else
+                    {
                         throw new Exception($"Já existe um funcionário cadastrado com o login {login}! Matrícula: {atual.MatriculaFuncionario}.");
+                    }
 
                     Usuario usuario = null;
                     try

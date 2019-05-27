@@ -42,8 +42,9 @@ namespace CIPAOnLine.Services
                 funcionario = GetByLogin(func.Login);
                 if (funcionario != null)
                 {
-                    if (func.MatriculaFuncionario != funcionario.MatriculaFuncionario)
+                    if (func.MatriculaFuncionario != funcionario.MatriculaFuncionario) { 
                         throw new Exception($"Já existe um funcionário cadastrado com esse mesmo login ({func.Login}) porém com matrícula diferente: {funcionario.MatriculaFuncionario}, empresa {funcionario.Empresa?.Codigo} - {funcionario.Empresa?.RazaoSocial}.");
+                    }
 
                     func.Id = funcionario.Id;
                     if (func.Thumbnail == null)
