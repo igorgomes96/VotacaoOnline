@@ -56,13 +56,13 @@ namespace CIPAOnLine.Services
             Usuario user = db.Usuarios.Find(func.Login);
 
             // Verifica se já há um funcionário com a mesma matrícula em outra empresa
-            var mesmaMatricula = db.Funcionarios.Where(f => f.MatriculaFuncionario == func.MatriculaFuncionario).ToList();
-            if (mesmaMatricula.Count() > 1)
-            {
-                var empresas = mesmaMatricula.Select(f => f.CodigoEmpresa.ToString()).Aggregate("", (acc, curr) => acc + ", " + curr).Substring(2);
-                var logins = mesmaMatricula.Select(f => f.Login).Aggregate("", (acc, curr) => acc + ", " + curr).Substring(2);
-                throw new Exception($"O funcionário {func.Nome} ({func.MatriculaFuncionario}) está cadastrado em diferentes empresas ({empresas}), com diferente logins ({logins}), porém com a mesma matícula. Favor, corrija o cadastro em \"Base Geral\" e tente novamente.");
-            }
+            //var mesmaMatricula = db.Funcionarios.Where(f => f.MatriculaFuncionario == func.MatriculaFuncionario).ToList();
+            //if (mesmaMatricula.Count() > 1)
+            //{
+            //    var empresas = mesmaMatricula.Select(f => f.CodigoEmpresa.ToString()).Aggregate("", (acc, curr) => acc + ", " + curr).Substring(2);
+            //    var logins = mesmaMatricula.Select(f => f.Login).Aggregate("", (acc, curr) => acc + ", " + curr).Substring(2);
+            //    throw new Exception($"O funcionário {func.Nome} ({func.MatriculaFuncionario}) está cadastrado em diferentes empresas ({empresas}), com diferente logins ({logins}), porém com a mesma matícula. Favor, corrija o cadastro em \"Base Geral\" e tente novamente.");
+            //}
 
             // Se o usuário for administrador, não muda a empresa
             if (user != null && user.Perfil == Perfil.ADMINISTRADOR && funcionario != null)
