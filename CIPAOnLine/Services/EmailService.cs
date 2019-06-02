@@ -1,18 +1,12 @@
 ﻿using CIPAOnLine.DTO;
+using CIPAOnLine.Exceptions;
+using CIPAOnLine.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net.Mail;
-using CIPAOnLine.Resources;
-using CIPAOnLine.Models;
 using System.Configuration;
-using CIPAOnLine.Exceptions;
+using System.Linq;
 using System.Net;
-using System.Drawing;
-using System.Threading;
-using NReco.ImageGenerator;
-using System.IO;
-using System.Net.Mime;
+using System.Net.Mail;
 
 namespace CIPAOnLine.Services
 {
@@ -69,12 +63,14 @@ namespace CIPAOnLine.Services
             mMailMessage.IsBodyHtml = true;
             mMailMessage.Body = body;
             //send the message 
-            SmtpClient smtp = new SmtpClient(ConfigurationManager.AppSettings["EmailHost"]);
+            using (SmtpClient smtp = new SmtpClient(ConfigurationManager.AppSettings["EmailHost"]))
+            {
 
-            //IMPORANT:  Your smtp login email MUST be same as your FROM address. 
-            NetworkCredential Credentials = new NetworkCredential(from, ConfigurationManager.AppSettings["EmailPassword"]);
-            smtp.Credentials = Credentials;
-            smtp.Send(mMailMessage);
+                //IMPORANT:  Your smtp login email MUST be same as your FROM address. 
+                NetworkCredential Credentials = new NetworkCredential(from, ConfigurationManager.AppSettings["EmailPassword"]);
+                smtp.Credentials = Credentials;
+                smtp.Send(mMailMessage);
+            }
         }
 
         public static string ReplaceParams(string texto, params Tuple<string, string>[] parametros)

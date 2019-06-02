@@ -53,10 +53,26 @@ namespace CIPAOnLine.Services
             db.SaveChanges();
         }
 
-        public IEnumerable<Funcionario> GetFuncionarios(int codEleicao)
+        public IEnumerable<Funcionario> GetFuncionarios(int codEleicao, string pesquisa = null)
         {
             Eleicao eleicao = GetEleicao(codEleicao);
-            return eleicao.Funcionarios;
+            if (string.IsNullOrWhiteSpace(pesquisa))
+            {
+                return eleicao.Funcionarios;
+            } else
+            {
+                pesquisa = pesquisa.ToLower().Trim();
+                return eleicao.Funcionarios.Where(f => f.Nome.ToLower().Contains(pesquisa));
+            }
+        }
+
+        public PaginationInfoDTO GetFuncionariosPaginationInfo(int codEleicao, string pesquisa, int pageSize)
+        {
+            PaginationInfoDTO pagination = new PaginationInfoDTO { PageSize = pageSize, PageNumber = 1 };
+            var funcionarios = GetFuncionarios(codEleicao, pesquisa);
+            pagination.Total = funcionarios.Count();
+            pagination.TotalPages = (pagination.Total + pagination.PageSize - 1) / pagination.PageSize;
+            return pagination;
         }
 
         public ICollection<FiltroEleicaoDTO> GetFiltroEleicoes(ClaimsPrincipal claims, int codigoModulo)
@@ -279,8 +295,8 @@ namespace CIPAOnLine.Services
         {
             Eleicao eleicao = GetEleicao(prazoEtapa.CodigoEleicao);
             return eleicao.PrazosEtapas
-                .Where(x => x.Etapa.CodigoEtapa > prazoEtapa.CodigoEtapa)
-                .OrderBy(x => x.Etapa.CodigoEtapa).FirstOrDefault();
+                .Where(x => x.Ordem > prazoEtapa.Ordem)
+                .OrderBy(x => x.Ordem).FirstOrDefault();
 
         }
 

@@ -11,6 +11,7 @@ using CIPAOnLine.Filters;
 using CIPAOnLine.Services;
 using CIPAOnLine.Exceptions;
 using System.Security.Claims;
+using PagedList;
 
 namespace CIPAOnLine.Controllers
 {
@@ -108,11 +109,32 @@ namespace CIPAOnLine.Controllers
 
         [Route("api/Eleicoes/{codEleicao}/Funcionarios")]
         [ResponseType(typeof(IEnumerable<FuncionarioDTO>))]
-        public IHttpActionResult GetFuncionarios(int codEleicao)
+        public IHttpActionResult GetFuncionarios(int codEleicao, string pesquisa = null, int pageNumber = 1, int pageSize = 200)
         {
             try
             {
-                return Ok(eleicoesService.GetFuncionarios(codEleicao).Select(x => new FuncionarioDTO(x)));
+                return Ok(eleicoesService.GetFuncionarios(codEleicao, pesquisa)
+                    .OrderBy(f => f.Nome)
+                    .ToPagedList(pageNumber, pageSize)
+                    .Select(x => new FuncionarioDTO(x)));
+            }
+            catch (EleicaoNaoEncontradaException)
+            {
+                return Content(HttpStatusCode.NotFound, "Eleição não cadastrada!");
+            }
+            catch
+            {
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
+            }
+        }
+
+        [Route("api/Eleicoes/{codEleicao}/Funcionarios/PaginationInfo")]
+        [ResponseType(typeof(PaginationInfoDTO))]
+        public IHttpActionResult GetFuncionariosPaginationInfo(int codEleicao, string pesquisa = null, int pageSize = 200)
+        {
+            try
+            {
+                return Ok(eleicoesService.GetFuncionariosPaginationInfo(codEleicao, pesquisa, pageSize));
             }
             catch (EleicaoNaoEncontradaException)
             {

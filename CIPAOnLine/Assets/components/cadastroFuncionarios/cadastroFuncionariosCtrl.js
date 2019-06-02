@@ -6,24 +6,60 @@ angular.module('cipaApp').controller('cadastroFuncionariosCtrl', ['$state', '$sc
 	self.editando = false;
 	self.perfis = ['Administrador', 'Eleitor'];
 	self.inconsistencias = null;
+	self.filtro = null;
 	self.funcionarios = [];
-	self.qtdaFuncionarios = 0;
 	self.gestores = [];
 	self.editandoGestor = false;
 	self.gestorSelecionado = null;
 	self.novoGestor = null;
 	self.error = null;
+	self.pageNumber = 1;
+	self.pagination = { Total: 0, PageSize: 200, TotalPages: 0 };
 	var preventEvent = false;
 
+	$scope.$watch('filtro', function(newValue) {
+		if (newValue !== self.filtro && self.codEleicao) {
+			self.filtro = newValue;
+			loadFuncionarios();
+		}
+	});
+
+	var loadPaginationInfo = function () {
+		eleicoesAPI.getFuncionariosPaginationInfo(self.codEleicao, self.filtro)
+			.then(function (dado) {
+				self.pagination = dado.data;
+			}, function (error) {
+				console.error(error);
+			});
+	}
+
 	var loadFuncionarios = function () {
-		eleicoesAPI.getFuncionarios(self.codEleicao)
+		loadPaginationInfo();
+		eleicoesAPI.getFuncionarios(self.codEleicao, self.filtro, self.pageNumber)
 			.then(function (dado) {
 				self.funcionarios = dado.data;
-				self.qtdaFuncionarios = dado.data.length;
 			}, function (error) {
 				self.error = (error.Message && error.Message) || error;
 				console.log(error);
 			});
+	}
+
+	self.proximaPagina = function () {
+		if (self.pagination.TotalPages > self.pageNumber) {
+			self.pageNumber++;
+		} else {
+			self.pageNumber = 1;
+		}
+		loadFuncionarios();
+	}
+
+	self.paginaAnterior = function () {
+		if (self.pageNumber <= 1) {
+			self.pageNumber = self.pagination.TotalPages;
+		} else {
+			self.pageNumber--;
+		}
+		loadFuncionarios();
 	}
 
 	// ************* COMPARTILHADO *************
@@ -60,6 +96,7 @@ angular.module('cipaApp').controller('cadastroFuncionariosCtrl', ['$state', '$sc
 				messagesService.exibeMensagemErro(error.status, 'Erro ao carregar os filtros.');
 			});
 	}
+
 
 	var findEleicao = function (codigo) {
 		var eleicoes = null;

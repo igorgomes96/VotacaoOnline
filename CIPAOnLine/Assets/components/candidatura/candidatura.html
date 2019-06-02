@@ -26,8 +26,8 @@
 	<div class="row" ng-show="ct.error">
 		<div class="col-md-12">
 			<div class="alert alert-danger">
-		        <p class="alert-link" style="display: inline;">Erro!</p> {{ct.error}}
-		    </div>
+				<p class="alert-link" style="display: inline;">Erro!</p> {{ct.error}}
+			</div>
 		</div>
 	</div>
 
@@ -44,24 +44,33 @@
 					<div class="ibox-content profile-content">
 						<h4><strong>{{ct.usuario.Nome}}</strong></h4>
 						<p><i class="fa fa-briefcase"></i> {{ct.usuario.Cargo}}</p>
-						<h4>
-							Objetivos
-						</h4>
-						<textarea rows="3" class="form-control" placeholder="Fale um pouco sobre seus objetivos como membro da CIPA..." ng-model="ct.usuario.Sobre" ng-disabled="ct.candidato.Validado"></textarea>
-						<span class="help-block m-b-none">{{ct.usuario.Sobre.length || '0'}}/255</span>
-						
+						<form name="formObjetivos">
+							<div class="form-group" ng-class="{'has-error': formObjetivos.$invalid}">
+								<label class="control-label">Objetivos</label>
+								<textarea rows="3" ng-maxlength="255" class="form-control"
+									placeholder="Fale um pouco sobre seus objetivos como membro da CIPA..."
+									ng-model="ct.usuario.Sobre" ng-disabled="ct.candidato.Validado"></textarea>
+								<span class="help-block m-b-none">{{ct.usuario.Sobre.length || '0'}}/255</span>
+							</div>
 
+						</form>
 
 						<div class="user-button">
 							<div class="row">
 								<div class="col-md-6">
-									<label class="custom-image-upload btn-success btn-sm btn-block" ng-hide="ct.candidato.Validado">
-										<input ng-if="!ct.candidato.Validado" type="file" name="file" onchange="previewFile()">
+									<label class="custom-image-upload btn-success btn-sm btn-block"
+										ng-hide="ct.candidato.Validado">
+										<input ng-if="!ct.candidato.Validado" type="file" name="file"
+											onchange="previewFile()">
 										<i class="fa fa-camera"></i> Foto
 									</label>
 								</div>
 								<div class="col-md-6">
-									<button type="button" class="btn btn-primary btn-sm btn-block" ng-hide="ct.candidato.Validado" ng-click="ct.candidatar()" ng-disabled="formCandidatura.$invalid"><i class="fa fa-floppy-o"></i> Salvar</button>
+									<button type="button" class="btn btn-primary btn-sm btn-block"
+										ng-hide="ct.candidato.Validado" ng-click="ct.candidatar()"
+										ng-disabled="formCandidatura.$invalid || formObjetivos.$invalid"><i
+											class="fa fa-floppy-o"></i>
+										Salvar</button>
 								</div>
 							</div>
 						</div>
@@ -87,48 +96,59 @@
 
 								<div class="form-group" ng-class="{'has-error': formCandidatura.inputCPF.$invalid}">
 									<label for="inputCPF">Login</label>
-									<input type="text" class="form-control" name="inputCPF" required id="inputCPF" ng-model="ct.usuario.Login" disabled>
+									<input type="text" class="form-control" name="inputCPF" required id="inputCPF"
+										ng-model="ct.usuario.Login" disabled>
 								</div>
 
 								<div class="form-group" ng-class="{'has-error': formCandidatura.inputNome.$invalid}">
 									<label for="inputNome">Nome</label>
-									<input type="text" class="form-control" name="inputNome" required id="inputNome" ng-model="ct.usuario.Nome" ng-disabled="ct.candidato.Validado">
+									<input type="text" class="form-control" name="inputNome" required id="inputNome"
+										ng-model="ct.usuario.Nome" ng-disabled="ct.candidato.Validado">
 								</div>
 
 								<div class="form-group" ng-class="{'has-error': formCandidatura.inputEmail.$invalid}">
 									<label for="inputEmail">E-mail</label>
-									<input type="text" class="form-control" name="inputEmail" required id="inputEmail" ng-model="ct.usuario.Email" ng-disabled="ct.candidato.Validado">
+									<input type="text" class="form-control" name="inputEmail" required id="inputEmail"
+										ng-model="ct.usuario.Email" ng-disabled="ct.candidato.Validado">
 								</div>
 
 
 								<div class="form-group" ng-class="{'has-error': formCandidatura.inputCargo.$invalid}">
 									<label for="inputCargo">Cargo Atual</label>
-									<input type="text" class="form-control" name="inputCargo" required id="inputCargo" ng-model="ct.usuario.Cargo" disabled>
+									<input type="text" class="form-control" name="inputCargo" required id="inputCargo"
+										ng-model="ct.usuario.Cargo" disabled>
 								</div>
 
 								<div class="form-group" ng-class="{'has-error': formCandidatura.inputArea.$invalid}">
 									<label for="inputArea">Área / Departamento</label>
-									<input type="text" class="form-control" name="inputArea" required id="inputArea" ng-model="ct.usuario.Area" disabled>
+									<input type="text" class="form-control" name="inputArea" required id="inputArea"
+										ng-model="ct.usuario.Area" disabled>
 								</div>
 
 								<div class="row">
 									<div class="col-md-6">
-										<div class="form-group" ng-class="{'has-error': formCandidatura.inputDataAdmissao.$invalid}">
+										<div class="form-group"
+											ng-class="{'has-error': formCandidatura.inputDataAdmissao.$invalid}">
 											<label for="inputDataAdmissao">Data de Admissão</label>
-											<input type="date" class="form-control" name="inputDataAdmissao" required id="inputDataAdmissao" ng-model="ct.usuario.DataAdmissao" disabled>
+											<input type="date" class="form-control" name="inputDataAdmissao" required
+												id="inputDataAdmissao" ng-model="ct.usuario.DataAdmissao" disabled>
 										</div>
 									</div>
 								</div>
 
 								<hr>
 
-								<h3 ng-if="ct.candidato.Validado" style="color: green;"><i class="fa fa-check"></i> Candidatura Aprovada.</h3>
-								<h3 ng-if="ct.candidato.Validado === false" style="color: red;"><i class="fa fa-times"></i> Candidatura Reprovada.</h3>
-								<h3 ng-if="ct.candidato.Validado === null"><i class="fa fa-hourglass-half"></i> Aguardando Aprovação.</h3>
+								<h3 ng-if="ct.candidato.Validado" style="color: green;"><i class="fa fa-check"></i>
+									Candidatura Aprovada.</h3>
+								<h3 ng-if="ct.candidato.Validado === false" style="color: red;"><i
+										class="fa fa-times"></i> Candidatura Reprovada.</h3>
+								<h3 ng-if="ct.candidato.Validado === null"><i class="fa fa-hourglass-half"></i>
+									Aguardando Aprovação.</h3>
 
 								<div class="form-group" ng-if="ct.candidato.Validado === false">
 									<label for="inputReprovacao">Motivo Reprovação</label>
-									<textarea class="form-control" name="inputReprovacao" id="inputReprovacao" disabled ng-model="ct.candidato.MotivoReprovacao"></textarea>
+									<textarea class="form-control" name="inputReprovacao" id="inputReprovacao" disabled
+										ng-model="ct.candidato.MotivoReprovacao"></textarea>
 								</div>
 
 							</form>

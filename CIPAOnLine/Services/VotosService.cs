@@ -1,5 +1,6 @@
 ﻿using CIPAOnLine.DTO;
 using CIPAOnLine.Exceptions;
+using CIPAOnLine.Helpers;
 using CIPAOnLine.Models;
 using System;
 using System.Collections.Generic;
@@ -96,7 +97,7 @@ namespace CIPAOnLine.Services
         {
             EleicoesService eleicoesService = new EleicoesService();
             voto.IP = HttpContext.Current.Request.UserHostAddress;
-            voto.DataHorario = DateTime.Now;
+            voto.DataHorario = HelpersMethods.HorarioBrasilia();
 
             if (!eleicoesService.FuncionarioExiste(voto.CodigoEleicao, voto.FuncionarioIdCandidato))
                 throw new CandidatoNaoEncontradoException();
@@ -114,7 +115,7 @@ namespace CIPAOnLine.Services
         {
             EleicoesService eleicoesService = new EleicoesService();
             voto.IP = HttpContext.Current.Request.UserHostAddress;
-            voto.DataHorario = DateTime.Now;
+            voto.DataHorario = HelpersMethods.HorarioBrasilia();
 
             if (!eleicoesService.FuncionarioExiste(voto.CodigoEleicao, voto.FuncionarioIdEleitor))
                 throw new FuncionarioNaoEncontradoException(voto.FuncionarioIdEleitor);

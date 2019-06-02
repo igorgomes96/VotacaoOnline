@@ -16,6 +16,7 @@ using CIPAOnLine.Filters;
 using System.Drawing;
 using CIPAOnLine.Services;
 using CIPAOnLine.Exceptions;
+using CIPAOnLine.Helpers;
 
 namespace CIPAOnLine.Controllers
 {
@@ -199,7 +200,7 @@ namespace CIPAOnLine.Controllers
                 {
                     FuncionarioId = funcionarioId,
                     CodigoEleicao = int.Parse(obj["CodigoEleicao"].ToString()),
-                    HorarioCandidatura = DateTime.Now,
+                    HorarioCandidatura = HelpersMethods.HorarioBrasilia(),
                     Validado = validado
                 };
 

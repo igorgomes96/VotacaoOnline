@@ -7,8 +7,12 @@ angular.module('cipaApp').service('eleicoesAPI', ['$http', 'config', function($h
         return $http({method: 'GET', url:config.baseUrl + resource, params:{codigoModulo:codigoModulo, aberta:aberta}});
     }
 
-    self.getFuncionarios = function(codEleicao) {
-        return $http({method: 'GET', url:config.baseUrl + resource + '/' + codEleicao + '/Funcionarios'});
+    self.getFuncionarios = function(codEleicao, pesquisa = null, pageNumber = 1) {
+        return $http({method: 'GET', url:config.baseUrl + resource + '/' + codEleicao + '/Funcionarios', params: { pesquisa: pesquisa, pageNumber: pageNumber }});
+    }
+
+    self.getFuncionariosPaginationInfo = function(codEleicao, pesquisa) {
+        return $http({method: 'GET', url:config.baseUrl + resource + '/' + codEleicao + '/Funcionarios/PaginationInfo', params: { pesquisa: pesquisa }});
     }
 
     self.getGestoes = function(codigoModulo) {
