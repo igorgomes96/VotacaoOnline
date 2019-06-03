@@ -17,9 +17,9 @@ namespace CIPAOnLine.DTO
             Bcc = new List<string>();
         }
 
-        public ICollection<string> To { get; set; }
-        public ICollection<string> Copy { get; set; }
-        public ICollection<string> Bcc { get; set; }
+        public List<string> To { get; set; }
+        public List<string> Copy { get; set; }
+        public List<string> Bcc { get; set; }
         public string Subject { get; set; }
         public string Message { get; set; }
     }

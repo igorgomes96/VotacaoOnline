@@ -19,7 +19,39 @@ namespace CIPAOnLine.Services
             EmailDTO email = (EmailDTO)obj;
             try
             {
+                // O limite de envio de mensagens é 10 destinatários.
+                // Provisoriamente, para contornar isso, criar threads para
+                // cada grupo de 10 emails
+
+                /*if (email.To.Count + email.Bcc.Count + email.Copy.Count > 10)
+                {
+                    List<string> to = email.To.Distinct().ToList();
+                    email.Bcc.Clear();
+                    email.Copy.Clear();
+
+                    foreach (var bcc in email.Bcc)
+                        to.Add(bcc);
+
+                    foreach (var copy in email.Copy)
+                        to.Add(copy);
+
+                    //(pagination.Total + pagination.PageSize - 1) / pagination.PageSize
+                    int grupos = (to.Count + 9) / 10;
+                    for (int i = 0; i < grupos; i++)
+                    {
+                        if (i == (grupos - 1))
+                        {
+
+                        }
+                        email.To.Clear();
+                        email.To.AddRange(to.GetRange(i * 10, 10));
+                        EnviaEmail(email.To, email.Bcc, email.Copy, email.Subject, email.Message);
+                    }
+                }
+                else
+                {*/
                 EnviaEmail(email.To, email.Bcc, email.Copy, email.Subject, email.Message);
+                //}
             }
             catch (Exception ex)
             {

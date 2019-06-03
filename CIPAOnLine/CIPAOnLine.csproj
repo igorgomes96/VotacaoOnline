@@ -193,6 +193,7 @@
     <Content Include="Assets\components\navContainer\navContainerCtrl.js" />
     <Content Include="Assets\components\usuarios\administradores.html" />
     <Content Include="Assets\components\usuarios\administradoresCtrl.js" />
+    <Content Include="Assets\components\usuarios\modalEmpresas.html" />
     <Content Include="Assets\components\validacaoCandidaturas\aprovados.html" />
     <Content Include="Assets\components\validacaoCandidaturas\modalReprovacao.html" />
     <Content Include="Assets\components\validacaoCandidaturas\pendentes.html" />
