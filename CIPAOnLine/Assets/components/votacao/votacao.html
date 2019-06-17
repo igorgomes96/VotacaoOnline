@@ -31,6 +31,11 @@
 		</div>
 	</div>
 
+    <p ng-hide="!ct.loading">
+        <i class="fa fa-refresh fa-spin fa-fw"></i> 
+        Aguarde... Estamos carregando todos os candidatos. Esse processo pode demorar um pouco.
+    </p>
+
 	<div class="row" ng-show="!ct.error && ct.candidatos && ct.candidatos.length > 0">
 		<div class="col-sm-8">
 			<div class="form-group">

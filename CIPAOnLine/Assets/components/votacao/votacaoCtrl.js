@@ -3,7 +3,8 @@ angular.module('cipaApp').controller('votacaoCtrl', ['votosBrancosAPI', '$scope'
 
 	self.codEleicao = null;
 	self.candidatos = null;
-	self.error = null;
+    self.error = null;
+    self.loading = true;
 	var usuario = sharedDataService.getUsuario();
 	
 
@@ -11,7 +12,8 @@ angular.module('cipaApp').controller('votacaoCtrl', ['votosBrancosAPI', '$scope'
 		candidatosAPI.getCandidatosVotos(self.codEleicao)
 		.then(function(dado) {
 			self.error = null;
-			self.candidatos = dado.data;
+            self.candidatos = dado.data;
+            self.loading = false;
 		}, function(error) {
 			self.error = error.data;
 		});

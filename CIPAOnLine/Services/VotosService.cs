@@ -44,7 +44,7 @@ namespace CIPAOnLine.Services
             return votos;
         }
 
-        public ICollection<EleitorDTO> RelatorioEleitores(int codEleicao)
+        public ICollection<EleitorDTO> RelatorioEleitores(int codEleicao, string pesquisa = null)
         {
             EleicoesService eleicoesService = new EleicoesService();
             if (!eleicoesService.EleicaoExiste(codEleicao))
@@ -61,7 +61,16 @@ namespace CIPAOnLine.Services
 
             ICollection<EleitorDTO> union = votos.Union(emBranco).ToList();
 
-            return union;
+            if (string.IsNullOrWhiteSpace(pesquisa))
+            {
+                return union;
+            }
+            else
+            {
+                pesquisa = pesquisa.ToLower().Trim();
+                return union.Where(e => e.Nome.ToLower().Contains(pesquisa)).ToList();
+            }
+
         }
 
         public ICollection<VotoDTO> GetVotosBrancos(int codEleicao)
@@ -138,6 +147,15 @@ namespace CIPAOnLine.Services
         {
             return db.Votos.Count(e => e.FuncionarioIdEleitor == eleitor && e.CodigoEleicao == codEleicao) +
                 db.VotosBrancos.Count(e => e.FuncionarioIdEleitor == eleitor && e.CodigoEleicao == codEleicao) > 0;
+        }
+
+        public PaginationInfoDTO GetEleitoresPaginationInfo(int codEleicao, string pesquisa, int pageSize)
+        {
+            PaginationInfoDTO pagination = new PaginationInfoDTO { PageSize = pageSize, PageNumber = 1 };
+            var eleitores = RelatorioEleitores(codEleicao, pesquisa);
+            pagination.Total = eleitores.Count();
+            pagination.TotalPages = (pagination.Total + pagination.PageSize - 1) / pagination.PageSize;
+            return pagination;
         }
 
         public void Dispose()

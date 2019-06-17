@@ -7,7 +7,8 @@ angular.module('cipaApp').service('eleicoesAPI', ['$http', 'config', function($h
         return $http({method: 'GET', url:config.baseUrl + resource, params:{codigoModulo:codigoModulo, aberta:aberta}});
     }
 
-    self.getFuncionarios = function(codEleicao, pesquisa = null, pageNumber = 1) {
+    self.getFuncionarios = function(codEleicao, pesquisa, pageNumber) {
+        if (!pageNumber) pageNumber = 1;
         return $http({method: 'GET', url:config.baseUrl + resource + '/' + codEleicao + '/Funcionarios', params: { pesquisa: pesquisa, pageNumber: pageNumber }});
     }
 

@@ -17,7 +17,7 @@ angular.module('cipaApp').controller('cadastroFuncionariosCtrl', ['$state', '$sc
 	self.pagination = { Total: 0, PageSize: 200, TotalPages: 0 };
 	var preventEvent = false;
 
-	$scope.$watch('filtro', function(newValue) {
+	$scope.$watch('filtro', function (newValue) {
 		if (newValue !== self.filtro && self.codEleicao) {
 			self.filtro = newValue;
 			loadFuncionarios();
@@ -28,6 +28,13 @@ angular.module('cipaApp').controller('cadastroFuncionariosCtrl', ['$state', '$sc
 		eleicoesAPI.getFuncionariosPaginationInfo(self.codEleicao, self.filtro)
 			.then(function (dado) {
 				self.pagination = dado.data;
+				if (self.pagination.TotalPages < self.pageNumber && self.pagination.TotalPages != 0) {
+					self.pageNumber = self.pagination.TotalPages;
+					eleicoesAPI.getFuncionarios(self.codEleicao, self.filtro, self.pageNumber)
+						.then(function (dado) {
+							self.funcionarios = dado.data;
+						});
+				}
 			}, function (error) {
 				console.error(error);
 			});

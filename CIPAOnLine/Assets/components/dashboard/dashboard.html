@@ -29,21 +29,26 @@
 		<div class="col-sm-3">
 			<div class="form-group">
 				<label class="control-label" for="inputFiltroStatus">Status</label>
-				<select ng-model="ct.statusSelecionado" class="form-control" name="inputFiltroStatus" id="inputFiltroStatus" ng-options="s.Label for s in ct.eleicoesFiltro"></select>
+				<select ng-model="ct.statusSelecionado" class="form-control" name="inputFiltroStatus"
+					id="inputFiltroStatus" ng-options="s.Label for s in ct.eleicoesFiltro"></select>
 			</div>
 		</div>
 
 		<div class="col-sm-5">
 			<div class="form-group">
 				<label class="control-label" for="inputFiltroUnidade">Unidade</label>
-				<select ng-model="ct.unidadeSelecionada" name="inputFiltroUnidade" class="form-control" id="inputFiltroUnidade" ng-options="('#' + u.Unidade.Codigo + ' - ' + u.Unidade.RazaoSocial + ' (' + u.Unidade.Estabelecimento + ')') for u in ct.statusSelecionado.Unidades"></select>
+				<select ng-model="ct.unidadeSelecionada" name="inputFiltroUnidade" class="form-control"
+					id="inputFiltroUnidade"
+					ng-options="('#' + u.Unidade.Codigo + ' - ' + u.Unidade.RazaoSocial + ' (' + u.Unidade.Estabelecimento + ')') for u in ct.statusSelecionado.Unidades"></select>
 			</div>
 		</div>
 
 		<div class="col-sm-4">
 			<div class="form-group">
 				<label class="control-label" for="inputFiltroGestao">Gestão</label>
-				<select ng-options="('#' + g.Codigo + ' - ' + g.Gestao) for g in ct.unidadeSelecionada.Eleicoes" ng-model="ct.gestaoSelecionada" class="form-control" ng-change="ct.alteraGestao()" name="inputFiltroGestao" id="inputFiltroGestao"></select>
+				<select ng-options="('#' + g.Codigo + ' - ' + g.Gestao) for g in ct.unidadeSelecionada.Eleicoes"
+					ng-model="ct.gestaoSelecionada" class="form-control" ng-change="ct.alteraGestao()"
+					name="inputFiltroGestao" id="inputFiltroGestao"></select>
 			</div>
 		</div>
 
@@ -53,8 +58,8 @@
 	<div class="row" ng-show="ct.error">
 		<div class="col-md-12">
 			<div class="alert alert-danger">
-		        <p class="alert-link" style="display: inline;">Erro!</p> {{ct.error}}
-		    </div>
+				<p class="alert-link" style="display: inline;">Erro!</p> {{ct.error}}
+			</div>
 		</div>
 	</div>
 
@@ -62,8 +67,8 @@
 	<div class="row" ng-show="!ct.votantes.Votantes && !ct.error && ct.gestaoSelecionada">
 		<div class="col-md-12">
 			<div class="alert alert-danger">
-		        <p class="alert-link" style="display: inline;">Inválido!</p> Ainda não houveram votos para esta eleição!
-		    </div>
+				<p class="alert-link" style="display: inline;">Inválido!</p> Ainda não houveram votos para esta eleição!
+			</div>
 		</div>
 	</div>
 
@@ -118,7 +123,8 @@
 				<div class="widget style1" ng-class="ct.votantes.PercentualVotantes < 50 ? 'red-bg' : 'navy-bg'">
 					<div class="row">
 						<div class="col-xs-4 text-center">
-							<i class="fa fa-5x" ng-class="ct.votantes.PercentualVotantes < 50 ? 'fa-times' : 'fa-check'"></i>
+							<i class="fa fa-5x"
+								ng-class="ct.votantes.PercentualVotantes < 50 ? 'fa-times' : 'fa-check'"></i>
 						</div>
 						<div class="col-xs-8 text-right">
 							<span> Perc. de Votos </span>
@@ -154,152 +160,183 @@
 
 		<div class="row" ng-show="ctNav.user.Perfil == 'Administrador'">
 
-			<!-- <div class="col-sm-12 col-lg-4">
+
+			<div class="col-xs-12">
 				<div class="ibox float-e-margins">
 					<div class="ibox-title">
-						<h5>% de Votantes</h5>
+						<h5>Relatório de Eleitores</h5>
+						<div class="ibox-tools">
+							<a class="collapse-link">
+								<i class="fa fa-chevron-up"></i>
+							</a>
+						</div>
 					</div>
 
 					<div class="ibox-content">
-						<div id="graficoPercVotantes"></div>
-					</div> 
-				</div>
-			</div> -->
-
-			<div class="col-xs-12">
-			<!-- <div class="panel-card" style="height: 435px;">
-				<div class="panel-card-title"> -->
-					<div class="ibox float-e-margins">
-						<div class="ibox-title">
-							<h5>Relatório de Eleitores</h5>
-							<div class="ibox-tools">
-								<a class="collapse-link">
-									<i class="fa fa-chevron-up"></i>
-								</a>
+						<div id="relatorio-eleitores">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="form-group">
+										<label for="inputFiltroEleitores">Filtro</label>
+										<input type="text" name="inputFiltroEleitores" id="inputFiltroEleitores"
+											class="form-control" ng-model="filtroEleitores"
+											placeholder="Digite uma expressão para filtrar..."
+											ng-model-options="{debounce:500}">
+									</div>
+								</div>
 							</div>
-						</div>
 
-					<!-- <div class="panel-card-options">
-						<button id="btnRelatorioEleitores">
-							<i class="fa fa-download fa-lg"></i>
-						</button>	
-					</div> -->
-
-					<!-- <div class="panel-card-body"> -->
-						<div class="ibox-content">
-							<div id="relatorio-eleitores">
+							<div ng-show="ct.pagination.TotalPages > 1">
+								<nav aria-label="...">
+									<ul class="pager">
+										<li><a ng-click="ct.paginaAnterior()">Anterior</a></li>
+										<li><a ng-click="ct.proximaPagina()">Próxima</a></li>
+									</ul>
+								</nav>
 								<div class="row">
-									<div class="col-md-8">
-										<div class="form-group">
-											<label for="inputFiltroEleitores">Filtro</label>
-											<input type="text" name="inputFiltroEleitores" id="inputFiltroEleitores" class="form-control" ng-model="ct.filtroEleitores" placeholder="Digite uma expressão para filtrar..." ng-model-options="{debounce:500}">
-										</div>
+									<div class="col-md-12">
+										<p class="text-center">
+											<small>Página {{ ct.pageNumber }} de {{ ct.pagination.TotalPages }}
+											</small>
+										</p>
 									</div>
 								</div>
+							</div>
 
-								<div class="table-responsive" style="overflow: auto;padding:5px;height: 75%;" id="tblRelatorioEleitores">
-									<table class="table table-condensed table-striped">
-										<thead>
-											<tr>
-												<th>Nome</th>
-												<th>Cargo</th>
-												<th>Horário</th>
-												<th>IP</th>
-											</tr>
-										</thead>
+							<small ng-show="ct.pagination.Total && !filtroEleitores"
+								style="margin-bottom: 20px;">{{ct.pagination.Total}}
+								eleitores votaram.</small>
+							<small ng-show="ct.pagination.Total && filtroEleitores"
+								style="margin-bottom: 20px;">{{ct.pagination.Total}}
+								eleitores filtrados.</small>
+							<br>
+							<small ng-show="ct.pagination.TotalPages > 1 && ct.eleitores.length">
+								{{ ct.eleitores.length }} registros sendo exibidos nesta página.
+							</small>
 
-										<tbody>
-											<tr ng-repeat="e in ct.eleitores | filter:ct.filtroEleitores">
-												<td>{{e.Nome}}</td>
-												<td>{{e.Cargo}}</td>
-												<td>{{e.DataHorario | date:'dd/MM/yy HH:mm'}}</td>
-												<td>{{e.IP}}</td>
-											</tr>
-										</tbody>
-									</table>
-								</div> 
+							<div class="table-responsive" style="overflow: auto;padding:5px;height: 75%;"
+								id="tblRelatorioEleitores">
+								<table class="table table-condensed table-striped">
+									<thead>
+										<tr>
+											<th>Nome</th>
+											<th>Cargo</th>
+											<th>Horário</th>
+											<th>IP</th>
+										</tr>
+									</thead>
+
+									<tbody>
+										<tr ng-repeat="e in ct.eleitores">
+											<td>{{e.Nome}}</td>
+											<td>{{e.Cargo}}</td>
+											<td>{{e.DataHorario | date:'dd/MM/yy HH:mm'}}</td>
+											<td>{{e.IP}}</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+
+							<div ng-show="ct.pagination.TotalPages > 1">
+								<nav aria-label="...">
+									<ul class="pager">
+										<li><a ng-click="ct.paginaAnterior()">Anterior</a></li>
+										<li><a ng-click="ct.proximaPagina()">Próxima</a></li>
+									</ul>
+								</nav>
+								<div class="row">
+									<div class="col-md-12">
+										<p class="text-center">
+											<small>Página {{ ct.pageNumber }} de {{ ct.pagination.TotalPages }}
+											</small>
+										</p>
+									</div>
+								</div>
 							</div>
 						</div>
-
 					</div>
+
 				</div>
-
-
-
-
 			</div>
 
 
-			<div class="row" ng-if="ct.votantes.PercentualVotantes >= 50">
-				<div class="col-sm-6">
-					<div class="ibox float-e-margins">
-						<div class="ibox-title">
-							<h5>Representantes Efetivos</h5>
-							<div class="ibox-tools">
-								<span class="label label-primary pull-right">Apuração</span>
-							</div>
+
+
+		</div>
+
+
+		<div class="row" ng-if="ct.votantes.PercentualVotantes >= 50">
+			<div class="col-sm-6">
+				<div class="ibox float-e-margins">
+					<div class="ibox-title">
+						<h5>Representantes Efetivos</h5>
+						<div class="ibox-tools">
+							<span class="label label-primary pull-right">Apuração</span>
 						</div>
-						<div class="ibox-content">
+					</div>
+					<div class="ibox-content">
 
-							<div>
-								<div class="feed-activity-list">
+						<div>
+							<div class="feed-activity-list">
 
-									<div class="feed-element" ng-repeat="c in ct.apuracaoEleitos.Efetivos">
+								<div class="feed-element" ng-repeat="c in ct.apuracaoEleitos.Efetivos">
 
-										<div class="pull-left">
-											<img alt="image" class="img-circle" data-ng-src="data:image/png;base64,{{c.Thumbnail}}">
-										</div>
-
-										<div class="media-body ">
-											<small class="pull-right">{{c.QtdaVotos}} Votos</small>
-											<strong>{{$index + 1}}º</strong> - {{c.Nome}}<br>
-											<p class="text-muted">{{c.Cargo}}</p>
-										</div>
+									<div class="pull-left">
+										<img alt="image" class="img-circle"
+											data-ng-src="data:image/png;base64,{{c.Thumbnail}}">
 									</div>
 
+									<div class="media-body ">
+										<small class="pull-right">{{c.QtdaVotos}} Votos</small>
+										<strong>{{$index + 1}}º</strong> - {{c.Nome}}<br>
+										<p class="text-muted">{{c.Cargo}}</p>
+									</div>
 								</div>
 
 							</div>
 
 						</div>
+
 					</div>
 				</div>
-
-				<div class="col-sm-6">
-					<div class="ibox float-e-margins">
-						<div class="ibox-title">
-							<h5>Representantes Suplentes</h5>
-							<div class="ibox-tools">
-								<span class="label label-primary pull-right">Apuração</span>
-							</div>
-						</div>
-						<div class="ibox-content">
-
-							<div>
-								<div class="feed-activity-list">
-
-									<div class="feed-element" ng-repeat="c in ct.apuracaoEleitos.Suplentes">
-
-										<div class="pull-left">
-											<img alt="image" class="img-circle" data-ng-src="data:image/png;base64,{{c.Thumbnail}}">
-										</div>
-
-										<div class="media-body ">
-											<small class="pull-right">{{c.QtdaVotos}} Votos</small>
-											<strong>{{$index + 1}}º</strong> - {{c.Nome}}<br>
-											<p class="text-muted">{{c.Cargo}}</p>
-										</div>
-									</div>
-
-								</div>
-
-							</div>
-
-						</div>
-					</div>
-				</div>
-
 			</div>
+
+			<div class="col-sm-6">
+				<div class="ibox float-e-margins">
+					<div class="ibox-title">
+						<h5>Representantes Suplentes</h5>
+						<div class="ibox-tools">
+							<span class="label label-primary pull-right">Apuração</span>
+						</div>
+					</div>
+					<div class="ibox-content">
+
+						<div>
+							<div class="feed-activity-list">
+
+								<div class="feed-element" ng-repeat="c in ct.apuracaoEleitos.Suplentes">
+
+									<div class="pull-left">
+										<img alt="image" class="img-circle"
+											data-ng-src="data:image/png;base64,{{c.Thumbnail}}">
+									</div>
+
+									<div class="media-body ">
+										<small class="pull-right">{{c.QtdaVotos}} Votos</small>
+										<strong>{{$index + 1}}º</strong> - {{c.Nome}}<br>
+										<p class="text-muted">{{c.Cargo}}</p>
+									</div>
+								</div>
+
+							</div>
+
+						</div>
+
+					</div>
+				</div>
+			</div>
+
+		</div>
 
 
 
@@ -320,34 +357,37 @@
 							<div class="col-sm-8">
 								<div class="form-group">
 									<label for="inputFiltroVotos">Filtro</label>
-									<input type="text" name="inputFiltroVotos" id="inputFiltroVotos" class="form-control" ng-model="ct.filtroVotos" placeholder="Digite uma expressão para filtrar..." ng-model-options="{debounce:500}">
+									<input type="text" name="inputFiltroVotos" id="inputFiltroVotos"
+										class="form-control" ng-model="ct.filtroVotos"
+										placeholder="Digite uma expressão para filtrar..."
+										ng-model-options="{debounce:500}">
 								</div>
-								</div>	
 							</div>
-							<br>
-							<div class="table-responsive">
-								<table class="table table-striped">
-									<thead>
-										<tr>
-											<!-- <th>Matrícula</th> -->
-											<th>Nome</th>
-											<th>Cargo</th>
-											<th>Área</th>
-											<th>Votos</th>
-											<th></th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr ng-repeat="e in ct.votos | filter:ct.filtroVotos">
-											<!-- <td>{{e.Candidato.MatriculaFuncionario}}</td> -->
-											<td>{{e.Candidato.Nome}}</td>
-											<td>{{e.Candidato.Cargo}}</td>
-											<!-- <td>{{e.Candidato.Area | ellipsis:20:13}}</td> -->
-											<td>{{e.Candidato.Area}}</td>
-											<td>{{e.QtdaVotos}}</td>
-											<td><span class="pie">{{e.QtdaVotos}}/{{ct.votantes.Votantes}}</span></td>
-										</tr>
-										<!-- <tr>
+						</div>
+						<br>
+						<div class="table-responsive">
+							<table class="table table-striped">
+								<thead>
+									<tr>
+										<!-- <th>Matrícula</th> -->
+										<th>Nome</th>
+										<th>Cargo</th>
+										<th>Área</th>
+										<th>Votos</th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-repeat="e in ct.votos | filter:ct.filtroVotos">
+										<!-- <td>{{e.Candidato.MatriculaFuncionario}}</td> -->
+										<td>{{e.Candidato.Nome}}</td>
+										<td>{{e.Candidato.Cargo}}</td>
+										<!-- <td>{{e.Candidato.Area | ellipsis:20:13}}</td> -->
+										<td>{{e.Candidato.Area}}</td>
+										<td>{{e.QtdaVotos}}</td>
+										<td><span class="pie">{{e.QtdaVotos}}/{{ct.votantes.Votantes}}</span></td>
+									</tr>
+									<!-- <tr>
 											<td>1</td>
 											<td>Project <small>This is example of project</small></td>
 											<td>Patrick Smith</td>
@@ -369,57 +409,57 @@
 											<td>Jul 16, 2013</td>
 											<td><a href="#"><i class="fa fa-check text-navy"></i></a></td>
 										</tr> -->
-									</tbody>
-								</table>
-							</div>
-
+								</tbody>
+							</table>
 						</div>
+
 					</div>
 				</div>
 			</div>
-
-
-
-
-			<!-- <div ng-if="ct.votantes.Votantes <= 0" style="color: rgb(120, 40, 40);font-weight: bold;">
-				Até o momento, não houveram votos.
-			</div> -->
 		</div>
 
 
-		<script type="text/javascript">
-			$(document).ready(function() {
 
-				function download(tabela) {
-	        //getting data from our table
-	        var data_type = 'data:application/vnd.ms-excel';
-	        var table_div = document.getElementById(tabela);
-	        var table_html = table_div.outerHTML.replace(/ /g, '%20');
 
-	        var a = document.createElement('a');
-	        a.href = data_type + ', ' + table_html;
-	        a.download = tabela + Math.floor((Math.random() * 99999) + 10000) + '.xls';
-	        a.click();
-	    }
+		<!-- <div ng-if="ct.votantes.Votantes <= 0" style="color: rgb(120, 40, 40);font-weight: bold;">
+				Até o momento, não houveram votos.
+			</div> -->
+	</div>
 
-	    $("#btnRelatorioEleitores").click(function(e) {
-	    	e.preventDefault();
-	    	download('tblRelatorioEleitores');
-	    });
 
-	    $("#btnVotosCandidatosM").click(function(e) {
-	    	e.preventDefault();
-	    	download('tblVotosCandidatosM');
-	    });
+	<script type="text/javascript">
+		$(document).ready(function () {
 
-	    $("#btnVotosCandidatosL").click(function(e) {
-	    	e.preventDefault();
-	    	download('tblVotosCandidatosL');
-	    });
+			function download(tabela) {
+				//getting data from our table
+				var data_type = 'data:application/vnd.ms-excel';
+				var table_div = document.getElementById(tabela);
+				var table_html = table_div.outerHTML.replace(/ /g, '%20');
 
-	    $("span.pie").peity("pie", {
-	    	fill: ['#1ab394', '#d7d7d7', '#ffffff']
-	    });
+				var a = document.createElement('a');
+				a.href = data_type + ', ' + table_html;
+				a.download = tabela + Math.floor((Math.random() * 99999) + 10000) + '.xls';
+				a.click();
+			}
 
-	});
-</script>
+			$("#btnRelatorioEleitores").click(function (e) {
+				e.preventDefault();
+				download('tblRelatorioEleitores');
+			});
+
+			$("#btnVotosCandidatosM").click(function (e) {
+				e.preventDefault();
+				download('tblVotosCandidatosM');
+			});
+
+			$("#btnVotosCandidatosL").click(function (e) {
+				e.preventDefault();
+				download('tblVotosCandidatosL');
+			});
+
+			$("span.pie").peity("pie", {
+				fill: ['#1ab394', '#d7d7d7', '#ffffff']
+			});
+
+		});
+	</script>
