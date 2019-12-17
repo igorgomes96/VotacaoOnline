@@ -1,18 +1,12 @@
 ﻿using CIPAOnLine.DTO;
+using CIPAOnLine.Exceptions;
+using CIPAOnLine.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net.Mail;
-using CIPAOnLine.Resources;
-using CIPAOnLine.Models;
 using System.Configuration;
-using CIPAOnLine.Exceptions;
+using System.Linq;
 using System.Net;
-using System.Drawing;
-using System.Threading;
-using NReco.ImageGenerator;
-using System.IO;
-using System.Net.Mime;
+using System.Net.Mail;
 
 namespace CIPAOnLine.Services
 {
@@ -25,7 +19,39 @@ namespace CIPAOnLine.Services
             EmailDTO email = (EmailDTO)obj;
             try
             {
+                // O limite de envio de mensagens é 10 destinatários.
+                // Provisoriamente, para contornar isso, criar threads para
+                // cada grupo de 10 emails
+
+                /*if (email.To.Count + email.Bcc.Count + email.Copy.Count > 10)
+                {
+                    List<string> to = email.To.Distinct().ToList();
+                    email.Bcc.Clear();
+                    email.Copy.Clear();
+
+                    foreach (var bcc in email.Bcc)
+                        to.Add(bcc);
+
+                    foreach (var copy in email.Copy)
+                        to.Add(copy);
+
+                    //(pagination.Total + pagination.PageSize - 1) / pagination.PageSize
+                    int grupos = (to.Count + 9) / 10;
+                    for (int i = 0; i < grupos; i++)
+                    {
+                        if (i == (grupos - 1))
+                        {
+
+                        }
+                        email.To.Clear();
+                        email.To.AddRange(to.GetRange(i * 10, 10));
+                        EnviaEmail(email.To, email.Bcc, email.Copy, email.Subject, email.Message);
+                    }
+                }
+                else
+                {*/
                 EnviaEmail(email.To, email.Bcc, email.Copy, email.Subject, email.Message);
+                //}
             }
             catch (Exception ex)
             {
@@ -69,12 +95,14 @@ namespace CIPAOnLine.Services
             mMailMessage.IsBodyHtml = true;
             mMailMessage.Body = body;
             //send the message 
-            SmtpClient smtp = new SmtpClient(ConfigurationManager.AppSettings["EmailHost"]);
+            using (SmtpClient smtp = new SmtpClient(ConfigurationManager.AppSettings["EmailHost"]))
+            {
 
-            //IMPORANT:  Your smtp login email MUST be same as your FROM address. 
-            NetworkCredential Credentials = new NetworkCredential(from, ConfigurationManager.AppSettings["EmailPassword"]);
-            smtp.Credentials = Credentials;
-            smtp.Send(mMailMessage);
+                //IMPORANT:  Your smtp login email MUST be same as your FROM address. 
+                NetworkCredential Credentials = new NetworkCredential(from, ConfigurationManager.AppSettings["EmailPassword"]);
+                smtp.Credentials = Credentials;
+                smtp.Send(mMailMessage);
+            }
         }
 
         public static string ReplaceParams(string texto, params Tuple<string, string>[] parametros)

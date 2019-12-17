@@ -1,296 +1,379 @@
 <!-- Fixo -->
 <div class="row wrapper border-bottom white-bg page-heading">
-<div class="col-lg-10">
-	<h2>Cadastro de Funcionários</h2>
-	<ol class="breadcrumb">
-		<li>
-			<a ui-sref="navContainer.home">Home</a>
-		</li>
-		<li ng-class="{'active': !ct.codEleicao}">
-			<strong ng-hide="ct.codEleicao">Funcionários</strong>
-			<a ng-show="ct.codEleicao" ui-sref="navContainer.cadastroFuncionarios">Funcionários</a>
-		</li>
-		<li class="active" ng-show="ct.codEleicao">
-			<strong>{{ct.codEleicao}}</strong>
-		</li>
-	</ol>
-</div>
-<div class="col-lg-2">
+	<div class="col-lg-10">
+		<h2>Cadastro de Funcionários</h2>
+		<ol class="breadcrumb">
+			<li>
+				<a ui-sref="navContainer.home">Home</a>
+			</li>
+			<li ng-class="{'active': !ct.codEleicao}">
+				<strong ng-hide="ct.codEleicao">Funcionários</strong>
+				<a ng-show="ct.codEleicao" ui-sref="navContainer.cadastroFuncionarios">Funcionários</a>
+			</li>
+			<li class="active" ng-show="ct.codEleicao">
+				<strong>{{ct.codEleicao}}</strong>
+			</li>
+		</ol>
+	</div>
+	<div class="col-lg-2">
 
-</div>
+	</div>
 </div>
 
 <div class="wrapper wrapper-content animated fadeInRight">
-<!-- /Fixo -->
+	<!-- /Fixo -->
 
-<!-- Filtro -->
-<div class="row">
+	<!-- Filtro -->
+	<div class="row">
 
-	<div class="col-sm-3">
-		<div class="form-group">
-			<label class="control-label" for="inputFiltroStatus">Status</label>
-			<select ng-model="ct.statusSelecionado" class="form-control" name="inputFiltroStatus" id="inputFiltroStatus" ng-options="s.Label for s in ct.eleicoesFiltro"></select>
-		</div>
-	</div>
-
-	<div class="col-sm-5">
-		<div class="form-group">
-			<label class="control-label" for="inputFiltroUnidade">Unidade</label>
-			<select ng-model="ct.unidadeSelecionada" name="inputFiltroUnidade" class="form-control" id="inputFiltroUnidade" ng-options="('#' + u.Unidade.Codigo + ' - ' + u.Unidade.RazaoSocial + ' (' + u.Unidade.Estabelecimento + ')') for u in ct.statusSelecionado.Unidades"></select>
-		</div>
-	</div>
-
-	<div class="col-sm-4">
-		<div class="form-group">
-			<label class="control-label" for="inputFiltroGestao">Gestão</label>
-			<select ng-options="('#' + g.Codigo + ' - ' + g.Gestao) for g in ct.unidadeSelecionada.Eleicoes" ng-model="ct.gestaoSelecionada" class="form-control" ng-change="ct.alteraGestao()" name="inputFiltroGestao" id="inputFiltroGestao"></select>
-		</div>
-	</div>
-
-
-</div>
-
-
-
-<div class="row" ng-show="ct.codEleicao">
-
-	<div class="col-sm-12 col-md-4">
-		
-		<div class="ibox float-e-margins">
-			<div class="ibox-title">
-				<h5>Cadastro de Funcionários</h5>
+		<div class="col-sm-3">
+			<div class="form-group">
+				<label class="control-label" for="inputFiltroStatus">Status</label>
+				<select ng-model="ct.statusSelecionado" class="form-control" name="inputFiltroStatus"
+					id="inputFiltroStatus" ng-options="s.Label for s in ct.eleicoesFiltro"></select>
 			</div>
+		</div>
 
-			<!-- <div class="panel-card-body"> -->
+		<div class="col-sm-5">
+			<div class="form-group">
+				<label class="control-label" for="inputFiltroUnidade">Unidade</label>
+				<select ng-model="ct.unidadeSelecionada" name="inputFiltroUnidade" class="form-control"
+					id="inputFiltroUnidade"
+					ng-options="('#' + u.Unidade.Codigo + ' - ' + u.Unidade.RazaoSocial + ' (' + u.Unidade.Estabelecimento + ')') for u in ct.statusSelecionado.Unidades"></select>
+			</div>
+		</div>
+
+		<div class="col-sm-4">
+			<div class="form-group">
+				<label class="control-label" for="inputFiltroGestao">Gestão</label>
+				<select ng-options="('#' + g.Codigo + ' - ' + g.Gestao) for g in ct.unidadeSelecionada.Eleicoes"
+					ng-model="ct.gestaoSelecionada" class="form-control" ng-change="ct.alteraGestao()"
+					name="inputFiltroGestao" id="inputFiltroGestao"></select>
+			</div>
+		</div>
+
+
+	</div>
+
+
+
+	<div class="row" ng-show="ct.codEleicao">
+
+		<div class="col-sm-12 col-md-4">
+
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5>Cadastro de Funcionários</h5>
+				</div>
+
+				<!-- <div class="panel-card-body"> -->
 				<!-- <div class="row">
 					<h2 class="col-lg-4 col-sm-6 col-xs-12">Cadastro de Funcionários</h2>
 				</div>
 				<hr> -->
 
-			<div class="ibox-content">
-				<div class="sk-spinner sk-spinner-wave">
-                    <div class="sk-rect1"></div>
-                    <div class="sk-rect2"></div>
-                    <div class="sk-rect3"></div>
-                    <div class="sk-rect4"></div>
-                    <div class="sk-rect5"></div>
-                </div>
-
-				<div class="row">
-					<div class="col-xs-12">
-
-
-						<button class="btn btn-sm btn-success" ng-show="!ct.editando" ng-click="ct.novoFuncionario()">Novo <i class="fa fa-plus"></i></button>
-						<button class="btn btn-sm btn-primary" ng-show="!ct.editando && ct.atual" ng-click="ct.editar()">Editar <i class="fa fa-pencil"></i></button>
-
-						<br>
-						<br>
-
-		                <label class="custom-file-upload" style="line-height: 1.3;">
-		                    <input type="file" name="file" id="fileUpload">
-		                    <i class="fa fa-upload"></i> Importar Base
-		                </label>
-		              
-
-		            </div>
-				</div>
-			
-
-				<hr>
-
-				<form name="formFuncionarios" novalidate>
-
-					<div class="row">
-						<div class="col-sm-10 col-xs-12">
-							<label for="buscar">Buscar</label>
-						</div>
-					</div>
-					<div class="row">
-					  	<div class="col-sm-10 col-xs-12">
-					    	<div class="input-group">
-					      		<input type="text" class="form-control" id="buscar" placeholder="Digite a matrícula" ng-model="ct.busca" ng-disabled="ct.editando" ng-keydown="ct.keydownBuscaFuncionario($event, ct.busca)" style="z-index: 0">
-					      		<span class="input-group-btn">
-					        		<button class="btn btn-default" type="button" ng-click="ct.buscaFuncionario(ct.busca)" style="z-index: 0" ng-disabled="ct.editando"><i class="fa fa-search"></i></button>
-					      		</span>
-					    	</div>
-					  	</div>
-					</div>
-					
-
-				  	<hr>
-
-				  	<div class="row">
-				  		<h3 class="col-xs-12">Dados do Funcionário</h3>
-				  	</div>
-
-			  		<div class="row">
-					  	<div class="form-group col-sm-10 col-xs-12" ng-class="{'has-error': ct.editando && formFuncionarios.matricula.$invalid}">
-					    	<label for="matricula">Matricula</label>
-					      	<input type="text" class="form-control" id="matricula" name="matricula" placeholder="Matrícula do Funcionário" ng-model="ct.atual.MatriculaFuncionario" ng-disabled="!ct.novo" required>
-					  	</div>
+				<div class="ibox-content">
+					<div class="sk-spinner sk-spinner-wave">
+						<div class="sk-rect1"></div>
+						<div class="sk-rect2"></div>
+						<div class="sk-rect3"></div>
+						<div class="sk-rect4"></div>
+						<div class="sk-rect5"></div>
 					</div>
 
-
 					<div class="row">
-			            <div class="form-group col-sm-10 col-xs-12" ng-class="{'has-error': ct.editando && formFuncionarios.cpf.$invalid}">
-                            <label for="cpf">Login</label>
-			                <input type="text" class="form-control" id="cpf" name="cpf" ng-model="ct.atual.Login" placeholder="Login do Funcionário" ng-disabled="!ct.editando" required>
-			            </div>
-				    </div>
+						<div class="col-xs-12">
 
 
-				    <div class="row">
-					  	<div class="form-group col-xs-12" ng-class="{'has-error': ct.editando && formFuncionarios.nome.$invalid}">
-						    <label for="nome">Nome</label>
-						     <input type="text" class="form-control" id="nome" name="nome" ng-model="ct.atual.Nome" placeholder="Nome do Funcionário" ng-disabled="!ct.editando" required>
+							<button class="btn btn-sm btn-success" ng-show="!ct.editando"
+								ng-click="ct.novoFuncionario()">Novo <i class="fa fa-plus"></i></button>
+							<button class="btn btn-sm btn-primary" ng-show="!ct.editando && ct.atual"
+								ng-click="ct.editar()">Editar <i class="fa fa-pencil"></i></button>
+
+							<br>
+							<br>
+
+							<label class="custom-file-upload" style="line-height: 1.3;">
+								<input type="file" name="file" id="fileUpload">
+								<i class="fa fa-upload"></i> Importar Base
+							</label>
+
+
 						</div>
 					</div>
 
-					<div class="row">
-			            <div class="form-group col-xs-12" ng-class="{'has-error': ct.editando && formFuncionarios.cargo.$invalid}">
-			                <label for="cargo">Cargo</label>
-			                <input type="text" class="form-control" id="cargo" name="cargo" ng-model="ct.atual.Cargo" placeholder="Cargo do Funcionário" ng-disabled="!ct.editando" required>
-			            </div>
-				    </div>
 
-				    <div class="row">
-						<div class="col-sm-8 col-xs-12">
-							<label for="gestor">Gestor</label>
+					<hr>
+
+					<form name="formFuncionarios" novalidate>
+
+						<div class="row">
+							<div class="col-sm-10 col-xs-12">
+								<label for="buscar">Buscar</label>
+							</div>
 						</div>
-					</div>
-					<div class="row">
-					  	<div class="col-xs-12">
-					    	<div class="input-group" ng-class="{'has-error': ct.editando && formFuncionarios.gestor.$invalid}" style="margin-bottom: 15px;">
-					      		<select class="form-control" id="gestor" name="gestor" ng-model="ct.atual.CodigoGestor" ng-options="g.Codigo as g.Nome for g in ct.gestores" ng-disabled="!ct.editando" style="z-index: 0">
-				                	<option value="">(Selecione o gestor)</option>
-				                </select>
-					      		<span class="input-group-btn">
-					        		<button class="btn btn-default" ng-disabled="!ct.editando" data-toggle="modal" data-target="#modalGestores"><i class="fa fa-list"></i></button>
-					      		</span>
-					    	</div>
-					  	</div>
-					</div>
-
-				    <div class="row">
-			            <div class="form-group col-xs-12" ng-class="{'has-error': ct.editando && formFuncionarios.area.$invalid}">
-			                <label for="area">Área / Departamento</label>
-			                <input type="text" class="form-control" id="area" name="area" ng-model="ct.atual.Area" placeholder="Área onde o Funcionário trabalha" ng-disabled="!ct.editando" required>
-			            </div>
-				    </div>
-
-				    <div class="row">
-			            <div class="form-group col-xs-12" ng-class="{'has-error': ct.editando && formFuncionarios.email.$invalid}">
-			                <label for="email">Email</label>
-			                <input type="email" class="form-control" id="email" name="email" ng-model="ct.atual.Email" placeholder="Email do funcionário" ng-disabled="!ct.editando" required>
-			            </div>
-				    </div>
-
-				    <div class="row">
-			            <div class="form-group col-sm-10 col-xs-12" ng-class="{'has-error': ct.editando && formFuncionarios.nascimento.$invalid}">
-			                <label for="nascimento">Data de Nascimento</label>
-			                <input type="date" class="form-control" id="nascimento" name="nascimento" ng-model="ct.atual.DataNascimento" ng-disabled="!ct.editando" required>
-			            </div>
-				    </div>
-
-				    <div class="row">
-			            <div class="form-group col-sm-10 col-xs-12" ng-class="{'has-error': ct.editando && formFuncionarios.admissao.$invalid}">
-			                <label for="admissao">Data de Admissão</label>
-			                <input type="date" class="form-control" id="admissao" name="admissao" ng-model="ct.atual.DataAdmissao" ng-disabled="!ct.editando" required>
-			            </div>
-				    </div>
-				</form>
+						<div class="row">
+							<div class="col-sm-10 col-xs-12">
+								<div class="input-group">
+									<input type="text" class="form-control" id="buscar" placeholder="Digite a matrícula"
+										ng-model="ct.busca" ng-disabled="ct.editando"
+										ng-keydown="ct.keydownBuscaFuncionario($event, ct.busca)" style="z-index: 0">
+									<span class="input-group-btn">
+										<button class="btn btn-default" type="button"
+											ng-click="ct.buscaFuncionario(ct.busca)" style="z-index: 0"
+											ng-disabled="ct.editando"><i class="fa fa-search"></i></button>
+									</span>
+								</div>
+							</div>
+						</div>
 
 
-
-				<div class="row" ng-show="ct.editando">
-					<div class="col-sm-9">
 						<hr>
-						<button class="btn btn-sm btn-default" ng-click="ct.cancelar()">Cancelar</button>
-						<button class="btn btn-sm btn-primary" ng-click="ct.salvarFuncionario(ct.atual)" ng-disabled="formFuncionarios.$invalid">Salvar <i class="fa fa-save"></i></button>
-		            </div>
-				</div>
+
+						<div class="row">
+							<h3 class="col-xs-12">Dados do Funcionário</h3>
+						</div>
+
+						<div class="row">
+							<div class="form-group col-sm-10 col-xs-12"
+								ng-class="{'has-error': ct.editando && formFuncionarios.matricula.$invalid}">
+								<label for="matricula">Matricula</label>
+								<input type="text" class="form-control" id="matricula" name="matricula"
+									placeholder="Matrícula do Funcionário" ng-model="ct.atual.MatriculaFuncionario"
+									ng-disabled="!ct.novo" required>
+							</div>
+						</div>
 
 
-			</div>
+						<div class="row">
+							<div class="form-group col-sm-10 col-xs-12"
+								ng-class="{'has-error': ct.editando && formFuncionarios.cpf.$invalid}">
+								<label for="cpf">Login</label>
+								<input type="text" class="form-control" id="cpf" name="cpf" ng-model="ct.atual.Login"
+									placeholder="Login do Funcionário" ng-disabled="!ct.editando" required>
+							</div>
+						</div>
 
-		</div>
 
-	</div>
+						<div class="row">
+							<div class="form-group col-xs-12"
+								ng-class="{'has-error': ct.editando && formFuncionarios.nome.$invalid}">
+								<label for="nome">Nome</label>
+								<input type="text" class="form-control" id="nome" name="nome" ng-model="ct.atual.Nome"
+									placeholder="Nome do Funcionário" ng-disabled="!ct.editando" required>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="form-group col-xs-12"
+								ng-class="{'has-error': ct.editando && formFuncionarios.cargo.$invalid}">
+								<label for="cargo">Cargo</label>
+								<input type="text" class="form-control" id="cargo" name="cargo"
+									ng-model="ct.atual.Cargo" placeholder="Cargo do Funcionário"
+									ng-disabled="!ct.editando" required>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-sm-8 col-xs-12">
+								<label for="gestor">Gestor</label>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12">
+								<div class="input-group"
+									ng-class="{'has-error': ct.editando && formFuncionarios.gestor.$invalid}"
+									style="margin-bottom: 15px;">
+									<select class="form-control" id="gestor" name="gestor"
+										ng-model="ct.atual.CodigoGestor"
+										ng-options="g.Codigo as g.Nome for g in ct.gestores" ng-disabled="!ct.editando"
+										style="z-index: 0">
+										<option value="">(Selecione o gestor)</option>
+									</select>
+									<span class="input-group-btn">
+										<button class="btn btn-default" ng-disabled="!ct.editando" data-toggle="modal"
+											data-target="#modalGestores"><i class="fa fa-list"></i></button>
+									</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="form-group col-xs-12"
+								ng-class="{'has-error': ct.editando && formFuncionarios.area.$invalid}">
+								<label for="area">Área / Departamento</label>
+								<input type="text" class="form-control" id="area" name="area" ng-model="ct.atual.Area"
+									placeholder="Área onde o Funcionário trabalha" ng-disabled="!ct.editando" required>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="form-group col-xs-12"
+								ng-class="{'has-error': ct.editando && formFuncionarios.email.$invalid}">
+								<label for="email">Email</label>
+								<input type="email" class="form-control" id="email" name="email"
+									ng-model="ct.atual.Email" placeholder="Email do funcionário"
+									ng-disabled="!ct.editando" required>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="form-group col-sm-10 col-xs-12"
+								ng-class="{'has-error': ct.editando && formFuncionarios.nascimento.$invalid}">
+								<label for="nascimento">Data de Nascimento</label>
+								<input type="date" class="form-control" id="nascimento" name="nascimento"
+									ng-model="ct.atual.DataNascimento" ng-disabled="!ct.editando" required>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="form-group col-sm-10 col-xs-12"
+								ng-class="{'has-error': ct.editando && formFuncionarios.admissao.$invalid}">
+								<label for="admissao">Data de Admissão</label>
+								<input type="date" class="form-control" id="admissao" name="admissao"
+									ng-model="ct.atual.DataAdmissao" ng-disabled="!ct.editando" required>
+							</div>
+						</div>
+					</form>
 
 
-	<div class="col-sm-12 col-md-8">
-		<div class="ibox float-e-margins">
 
-			<div class="ibox-title">
-				<h5>Funcionários Cadastrados</h5>
-			</div>
-
-			<!-- <div class="panel-card-body"> -->
-			<div class="ibox-content">
-				<div class="sk-spinner sk-spinner-wave">
-                    <div class="sk-rect1"></div>
-                    <div class="sk-rect2"></div>
-                    <div class="sk-rect3"></div>
-                    <div class="sk-rect4"></div>
-                    <div class="sk-rect5"></div>
-                </div>
-				
-				<div class="row">
-					<div class="col-md-12">
-						<button class="btn btn-success btn-sm" ng-click="ct.refreshList()">Atualizar <i class="fa fa-refresh"></i></button>
-						<button class="btn btn-danger btn-sm" ng-click="ct.removerTodosFuncionarios()">Remover Todos <i class="fa fa-trash"></i></button>
+					<div class="row" ng-show="ct.editando">
+						<div class="col-sm-9">
+							<hr>
+							<button class="btn btn-sm btn-default" ng-click="ct.cancelar()">Cancelar</button>
+							<button class="btn btn-sm btn-primary" ng-click="ct.salvarFuncionario(ct.atual)"
+								ng-disabled="formFuncionarios.$invalid">Salvar <i class="fa fa-save"></i></button>
+						</div>
 					</div>
-				</div>
-				
-				<hr>
 
-				<div class="row">
-		            <div class="form-group col-xs-12">
-		                <label for="inputFiltro">Filtrar Tabela</label>
-		                <input type="text" class="form-control" id="inputFiltro" name="inputFiltro" ng-model="filtro" placeholder="Digite uma expressão para filtrar" ng-model-options="{debounce:500}">
-		            </div>
-			    </div>
 
-			    <small ng-show="ct.qtdaFuncionarios" style="margin-bottom: 20px;">{{ct.qtdaFuncionarios}} funcionários cadastrados</small>
-			    <div class="scrollable" style="overflow: auto;padding:5px;height: 85%;">
-					<table class="table table-condensed table-hover">
-						<thead>
-							<tr>
-								<th>Matrícula</th>
-								<th>Login</th>
-								<th>Nome</th>
-								<th>Cargo</th>
-								<th width="10%"></th>
-							</tr>
-						</thead>
-
-						<tbody>
-							<tr ng-repeat="f in ct.funcionarios | filter:{'Nome': filtro} | orderBy:'Nome'" ng-class="{active: f.MatriculaFuncionario == ct.atual.MatriculaFuncionario}">
-								<td>{{f.MatriculaFuncionario}}</td>
-								<td>{{f.Login}}</td>
-								<td>{{f.Nome}}</td>
-								<td>{{f.Cargo}}</td>
-                                <td class="text-right" width="8%">
-                                    <button class="btn btn-xs btn-success" ng-click="ct.buscaFuncionario(f.MatriculaFuncionario)">
-                                        <i class="fa fa-pencil"></i>
-                                    </button>
-                                    <button class="btn btn-xs btn-danger" ng-click="ct.removerFuncionario(f.Id)">
-                                        <i class="fa fa-trash"></i>
-                                    </button>
-                                </td>
-							</tr>
-						</tbody>
-					</table>
 				</div>
 
 			</div>
 
 		</div>
+
+
+		<div class="col-sm-12 col-md-8">
+			<div class="ibox float-e-margins">
+
+				<div class="ibox-title">
+					<h5>Funcionários Cadastrados</h5>
+				</div>
+
+				<!-- <div class="panel-card-body"> -->
+				<div class="ibox-content">
+					<div class="sk-spinner sk-spinner-wave">
+						<div class="sk-rect1"></div>
+						<div class="sk-rect2"></div>
+						<div class="sk-rect3"></div>
+						<div class="sk-rect4"></div>
+						<div class="sk-rect5"></div>
+					</div>
+
+					<div class="row">
+						<div class="col-md-12">
+							<button class="btn btn-success btn-sm" ng-click="ct.refreshList()">Atualizar <i
+									class="fa fa-refresh"></i></button>
+							<button class="btn btn-danger btn-sm" ng-click="ct.removerTodosFuncionarios()">Remover Todos
+								<i class="fa fa-trash"></i></button>
+						</div>
+					</div>
+
+					<hr>
+
+					<div class="row">
+						<div class="form-group col-xs-12">
+							<label for="inputFiltro">Filtrar Tabela</label>
+							<input type="text" class="form-control" id="inputFiltro" name="inputFiltro"
+								ng-model="filtro" placeholder="Digite uma expressão para filtrar"
+								ng-model-options="{debounce:500}">
+						</div>
+					</div>
+
+					<div ng-show="ct.pagination.TotalPages > 1">
+						<nav aria-label="...">
+							<ul class="pager">
+								<li><a ng-click="ct.paginaAnterior()">Anterior</a></li>
+								<li><a ng-click="ct.proximaPagina()">Próxima</a></li>
+							</ul>
+						</nav>
+						<div class="row">
+							<div class="col-md-12">
+								<p class="text-center">
+									<small>Página {{ ct.pageNumber }} de {{ ct.pagination.TotalPages }}
+									</small>
+								</p>
+							</div>
+						</div>
+					</div>
+
+					<small ng-show="ct.pagination.Total && !filtro" style="margin-bottom: 20px;">{{ct.pagination.Total}}
+						funcionários cadastrados</small>
+					<small ng-show="ct.pagination.Total && filtro" style="margin-bottom: 20px;">{{ct.pagination.Total}}
+						funcionários filtrados</small>
+					<br>
+					<small ng-show="ct.pagination.TotalPages > 1 && ct.funcionarios.length">
+						{{ ct.funcionarios.length }} registros sendo exibidos nesta página.
+					</small>
+					<div class="scrollable" style="overflow: auto;padding:5px;height: 85%;">
+						<table class="table table-condensed table-hover">
+							<thead>
+								<tr>
+									<th>Matrícula</th>
+									<th>Login</th>
+									<th>Nome</th>
+									<th>Cargo</th>
+									<th width="10%"></th>
+								</tr>
+							</thead>
+
+							<tbody>
+								<tr ng-repeat="f in ct.funcionarios"
+									ng-class="{active: f.MatriculaFuncionario == ct.atual.MatriculaFuncionario}">
+									<td>{{f.MatriculaFuncionario}}</td>
+									<td>{{f.Login}}</td>
+									<td>{{f.Nome}}</td>
+									<td>{{f.Cargo}}</td>
+									<td class="text-right" width="8%">
+										<button class="btn btn-xs btn-success"
+											ng-click="ct.buscaFuncionario(f.MatriculaFuncionario)">
+											<i class="fa fa-pencil"></i>
+										</button>
+										<button class="btn btn-xs btn-danger" ng-click="ct.removerFuncionario(f.Id)">
+											<i class="fa fa-trash"></i>
+										</button>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
+					<div ng-show="ct.pagination.TotalPages > 1">
+						<nav aria-label="...">
+							<ul class="pager">
+								<li><a ng-click="ct.paginaAnterior()">Anterior</a></li>
+								<li><a ng-click="ct.proximaPagina()">Próxima</a></li>
+							</ul>
+						</nav>
+						<div class="row">
+							<div class="col-md-12">
+								<p class="text-center">
+									<small>Página {{ ct.pageNumber }} de {{ ct.pagination.TotalPages }}</small>
+								</p>
+							</div>
+						</div>
+					</div>
+
+				</div>
+
+			</div>
+		</div>
+
 	</div>
 
-</div>
-
-<div ng-include="'Assets/components/cadastroFuncionarios/modalInconsistencias.html'"></div>
-<div ng-include="'Assets/components/cadastroFuncionarios/modalGestores.html'"></div>
+	<div ng-include="'Assets/components/cadastroFuncionarios/modalInconsistencias.html'"></div>
+	<div ng-include="'Assets/components/cadastroFuncionarios/modalGestores.html'"></div>
 
 </div>

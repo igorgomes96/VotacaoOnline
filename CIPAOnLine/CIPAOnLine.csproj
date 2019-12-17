@@ -78,6 +78,12 @@
     <Reference Include="NReco.ImageGenerator, Version=1.1.1.0, Culture=neutral, PublicKeyToken=0ef6c878974c90ac, processorArchitecture=MSIL">
       <HintPath>..\packages\NReco.ImageGenerator.1.1.1\lib\net20\NReco.ImageGenerator.dll</HintPath>
     </Reference>
+    <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
+    </Reference>
+    <Reference Include="PagedList.Mvc, Version=4.5.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.Mvc.4.5.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="System.ComponentModel" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Configuration.Install" />
@@ -187,6 +193,7 @@
     <Content Include="Assets\components\navContainer\navContainerCtrl.js" />
     <Content Include="Assets\components\usuarios\administradores.html" />
     <Content Include="Assets\components\usuarios\administradoresCtrl.js" />
+    <Content Include="Assets\components\usuarios\modalEmpresas.html" />
     <Content Include="Assets\components\validacaoCandidaturas\aprovados.html" />
     <Content Include="Assets\components\validacaoCandidaturas\modalReprovacao.html" />
     <Content Include="Assets\components\validacaoCandidaturas\pendentes.html" />
@@ -725,6 +732,7 @@
     <Content Include="Assets\js\values\configValue.js" />
     <Content Include="Assets\js\values\etapasValue.js" />
     <Content Include="Assets\js\values\stateValue.js" />
+    <Content Include="Content\PagedList.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="index.html" />
@@ -779,6 +787,7 @@
     <Compile Include="DTO\GestoresDuplicadosDTO.cs" />
     <Compile Include="DTO\GrupoDTO.cs" />
     <Compile Include="DTO\InconsistenciaFuncionarioDTO.cs" />
+    <Compile Include="DTO\PaginationInfoDTO.cs" />
     <Compile Include="DTO\PrazosEtapasDTO.cs" />
     <Compile Include="DTO\PrimeiroAcessoDTO.cs" />
     <Compile Include="DTO\QtdaEleicaoDTO.cs" />
@@ -827,6 +836,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\HelpersMethods.cs" />
     <Compile Include="Jwt\TokenServices.cs" />
     <Compile Include="Migrations\201901091010371_InitialMySQL.cs" />
     <Compile Include="Migrations\201901091010371_InitialMySQL.Designer.cs">

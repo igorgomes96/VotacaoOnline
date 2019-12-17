@@ -94,8 +94,8 @@ namespace CIPAOnLine.Services
                 Message = EmailService.ReplaceParams(Resources.Emails.EmailConfirmacaoCandidatura,
                     Tuple.Create("@MODULO", modulo), Tuple.Create("@NOME", func.Nome),
                     Tuple.Create("@CARGO", func.Cargo), Tuple.Create("@AREA", func.Area)),
-                To = new string[] { func.Email },
-                Copy = func.Gestor != null ? new string[] { func.Gestor.Email } : new string[] { },
+                To = new List<string> { func.Email },
+                Copy = func.Gestor != null ? new List<string> { func.Gestor.Email } : new List<string> { },
                 Subject = "Candidatura Realizada"
             };
 
@@ -137,9 +137,9 @@ namespace CIPAOnLine.Services
                 Message = EmailService.ReplaceParams(Resources.Emails.EmailAprovacaoCandidatura,
                     Tuple.Create("@MODULO", modulo), Tuple.Create("@NOME", candidato.Funcionario.Nome),
                     Tuple.Create("@CARGO", candidato.Funcionario.Cargo), Tuple.Create("@AREA", candidato.Funcionario.Area)),
-                To = new string[] { candidato.Funcionario.Email },
+                To = new List<string> { candidato.Funcionario.Email },
                 Copy = (candidato.Funcionario != null && candidato.Funcionario.Gestor != null) ?
-                    new string[] { candidato.Funcionario.Gestor.Email } : new string[] { },
+                    new List<string> { candidato.Funcionario.Gestor.Email } : new List<string> { },
                 Subject = "Candidatura Aprovada"
             };
 
@@ -185,9 +185,9 @@ namespace CIPAOnLine.Services
                     Tuple.Create("@MODULO", modulo), Tuple.Create("@NOME", cand.Funcionario.Nome),
                     Tuple.Create("@CARGO", cand.Funcionario.Cargo), Tuple.Create("@AREA", cand.Funcionario.Area),
                     Tuple.Create("@MOTIVO", candidatura.Motivo)),
-                    To = new string[] { cand.Funcionario.Email },
+                    To = new List<string> { cand.Funcionario.Email },
                     Copy = (cand.Funcionario != null && cand.Funcionario.Gestor != null) ?
-                        new string[] { cand.Funcionario.Gestor.Email } : new string[] { },
+                        new List<string> { cand.Funcionario.Gestor.Email } : new List<string>{ },
                     Subject = "Candidatura Reprovada"
                 };
 

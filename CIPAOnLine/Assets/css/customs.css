@@ -1,3 +1,7 @@
+.pager {
+    margin-bottom: 5px;
+}
+
 .loader {
     position: fixed;
     height: 100%;

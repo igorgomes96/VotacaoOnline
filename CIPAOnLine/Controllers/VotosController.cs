@@ -14,6 +14,7 @@ using System.Web;
 using CIPAOnLine.Filters;
 using CIPAOnLine.Services;
 using CIPAOnLine.Exceptions;
+using PagedList;
 
 namespace CIPAOnLine.Controllers
 {
@@ -62,15 +63,35 @@ namespace CIPAOnLine.Controllers
         [HttpGet]
         [Route("api/Votos/Relatorio/Eleitores/{codEleicao}")]
         [ResponseType(typeof(IEnumerable<EleitorDTO>))]
-        public IHttpActionResult GetRelatorioEleitores(int codEleicao)
+        public IHttpActionResult GetRelatorioEleitores(int codEleicao, string pesquisa = null, int pageNumber = 1, int pageSize = 50)
         {
             try
             {
-                return Ok(votosService.RelatorioEleitores(codEleicao));
+                return Ok(votosService.RelatorioEleitores(codEleicao, pesquisa)
+                    .OrderBy(f => f.Nome)
+                    .ToPagedList(pageNumber, pageSize));
             } catch (EleicaoNaoEncontradaException)
             {
                 return Content(HttpStatusCode.NotFound, "Eleição não encontrada!");
             } catch
+            {
+                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
+            }
+        }
+
+        [Route("api/Votos/Relatorio/Eleitores/{codEleicao}/PaginationInfo")]
+        [ResponseType(typeof(PaginationInfoDTO))]
+        public IHttpActionResult GetEleitoresPaginationInfo(int codEleicao, string pesquisa = null, int pageSize = 50)
+        {
+            try
+            {
+                return Ok(votosService.GetEleitoresPaginationInfo(codEleicao, pesquisa, pageSize));
+            }
+            catch (EleicaoNaoEncontradaException)
+            {
+                return Content(HttpStatusCode.NotFound, "Eleição não cadastrada!");
+            }
+            catch
             {
                 return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }

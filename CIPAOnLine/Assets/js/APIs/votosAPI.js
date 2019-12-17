@@ -32,8 +32,14 @@ angular.module('cipaApp').service('votosAPI', ['$http', 'config', function($http
         return $http.get(config.baseUrl + resource + '/Resultado/' + codEleicao);
     }
 
-    self.getRelatorioEleitores = function(codEleicao) {
-        return $http.get(config.baseUrl + resource + '/Relatorio/Eleitores/' + codEleicao);
+    self.getRelatorioEleitores = function(codEleicao, pesquisa, pageNumber) {
+        if (!pageNumber) pageNumber = 1;
+        return $http.get(config.baseUrl + resource + '/Relatorio/Eleitores/' + codEleicao,
+            { params: { pesquisa: pesquisa, pageNumber: pageNumber } });
+    }
+
+    self.getEleitoresPaginationInfo = function(codEleicao, pesquisa) {
+        return $http.get(config.baseUrl + resource + '/Relatorio/Eleitores/' + codEleicao + '/PaginationInfo', { params: { pesquisa: pesquisa } });
     }
 
 
