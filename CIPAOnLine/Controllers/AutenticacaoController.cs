@@ -1,18 +1,12 @@
 ﻿using CIPAOnLine.DTO;
 using CIPAOnLine.Exceptions;
-using CIPAOnLine.Filters;
 using CIPAOnLine.Jwt;
 using CIPAOnLine.Models;
 using CIPAOnLine.Resources;
 using CIPAOnLine.Services;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.DirectoryServices;
-using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using System.Text;
 using System.Web.Http;
@@ -22,9 +16,8 @@ namespace CIPAOnLine.Controllers
     public class AutenticacaoController : ApiController
     {
 
-        private UsuariosService usuariosService = new UsuariosService();
-        private AuthService authService = new AuthService();
-        private FuncionariosService funcionariosService = new FuncionariosService();
+        private readonly UsuariosService usuariosService = new UsuariosService();
+        private readonly FuncionariosService funcionariosService = new FuncionariosService();
 
         [HttpPost]
         [Route("api/Autenticacao/PrimeiroAcesso")]
@@ -129,10 +122,12 @@ namespace CIPAOnLine.Controllers
         [AllowAnonymous]
         public IHttpActionResult EnviarCodigo(UsuarioDTO usuario)
         {
-            Usuario usuarioDB = null;
-            try { 
+            Usuario usuarioDB;
+            try
+            {
                 usuarioDB = usuariosService.GetUsuario(usuario.Login);
-            } catch (UsuarioNaoEncontradoException)
+            }
+            catch (UsuarioNaoEncontradoException)
             {
                 return Content(HttpStatusCode.NotFound, "Usuário não encontrado!");
             }
@@ -168,13 +163,12 @@ namespace CIPAOnLine.Controllers
         public IHttpActionResult Login(UsuarioSenhaDTO usuario)
         {
             if (usuario == null || usuario.Login == null || usuario.Senha == null) return BadRequest();
-
-            Modelo db = new Modelo();
-            Usuario user = null;
-
+            Usuario user;
             try
             {
+                Modelo db = new Modelo();
                 user = db.Usuarios.Find(usuario.Login);
+
 
                 if (user == null)
                     return BadRequest("Usuário não encontrado!");
@@ -184,28 +178,27 @@ namespace CIPAOnLine.Controllers
                 if (user.Senha != senhaCrypt)
                     return BadRequest("Senha incorreta!");
 
+
+                string token = TokenServices.GenerateToken(user.Login, roles: user.Perfil);
+
+                var userObj = new
+                {
+                    Token = token,
+                    Usuario = user.Nome,
+                    usuario.Login,
+                    user.FuncionarioId,
+                    user.Funcionario?.MatriculaFuncionario,
+                    user.Funcionario?.CodigoEmpresa,
+                    user.Perfil
+                };
+                db.Dispose();
+
+                return Ok(userObj);
             }
-            catch
+            catch (Exception ex)
             {
-                return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
-            }
-
-            string token = TokenServices.GenerateToken(user.Login, roles: user.Perfil);
-
-            var userObj = new
-            {
-                Token = token,
-                Usuario = user.Nome,
-                usuario.Login,
-                user.FuncionarioId,
-                user.Funcionario?.MatriculaFuncionario,
-                user.Funcionario?.CodigoEmpresa,
-                user.Perfil
-            };
-            db.Dispose();
-
-            return Ok(userObj);
-
+                return Content(HttpStatusCode.InternalServerError, ex);
+            } 
         }
 
 

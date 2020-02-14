@@ -161,6 +161,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\XMLFile1.xml" />
     <Content Include="Assets\components\autenticacao\autenticacaoCtrl.js" />
     <Content Include="Assets\components\autenticacao\login.html" />
     <Content Include="Assets\components\autenticacao\recuperacaoSenha.html" />
@@ -613,88 +614,6 @@
     <Content Include="Assets\js\plugins\Highcharts5.0.1.4\code\themes\sunset.js" />
     <Content Include="Assets\js\plugins\Highcharts5.0.1.4\code\themes\sunset.js.map" />
     <Content Include="Assets\js\plugins\Highcharts5.0.1.4\code\themes\sunset.src.js" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\3d-column-interactive\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\3d-column-null-values\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\3d-column-stacking-grouping\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\3d-pie-donut\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\3d-pie\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\3d-scatter-draggable\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\area-basic\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\area-inverted\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\area-missing\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\area-negative\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\area-stacked-percent\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\area-stacked\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\arearange-line\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\arearange\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\areaspline\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\bar-basic\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\bar-negative-stack\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\bar-stacked\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\box-plot\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\bubble-3d\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\bubble\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\chart-update\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\column-basic\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\column-drilldown\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\column-negative\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\column-parsed\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\column-placement\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\column-rotated-labels\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\column-stacked-and-grouped\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\column-stacked-percent\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\column-stacked\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\columnrange\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\combo-dual-axes\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\combo-histogram\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\combo-meteogram\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\combo-multi-axes\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\combo-regression\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\combo-timeline\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\combo\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\dynamic-click-to-add\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\dynamic-master-detail\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\dynamic-update\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\error-bar\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\funnel\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\gauge-activity\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\gauge-clock\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\gauge-dual\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\gauge-solid\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\gauge-speedometer\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\gauge-vu-meter\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\heatmap-canvas\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\heatmap\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\line-ajax\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\line-basic\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\line-labels\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\line-log-axis\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\line-time-series\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\pie-basic\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\pie-donut\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\pie-drilldown\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\pie-gradient\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\pie-legend\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\pie-monochrome\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\pie-semi-circle\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\polar-spider\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\polar-wind-rose\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\polar\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\polygon\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\pyramid\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\renderer\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\responsive\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\scatter\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\sparkline\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\spline-inverted\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\spline-irregular-time\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\spline-plot-bands\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\spline-symbols\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\synchronized-charts\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\treemap-coloraxis\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\treemap-large-dataset\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\treemap-with-levels\index.htm" />
-    <Content Include="Assets\js\plugins\Highcharts5.0.1.4\examples\waterfall\index.htm" />
     <Content Include="Assets\js\plugins\Highcharts5.0.1.4\gfx\vml-radial-gradient.png" />
     <Content Include="Assets\js\plugins\Highcharts5.0.1.4\graphics\earth.svg" />
     <Content Include="Assets\js\plugins\Highcharts5.0.1.4\graphics\meteogram-symbols-30px.png" />
@@ -737,6 +656,7 @@
     <Content Include="Global.asax" />
     <Content Include="index.html" />
     <None Include="Properties\PublishProfiles\Default Settings.pubxml" />
+    <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Resources\email-confirmacao-candidatura.html" />
     <Content Include="Resources\email-aprovacao-candidatura.html" />
     <None Include="Resources\email-apuracao-votos.html" />
@@ -769,6 +689,7 @@
     <Compile Include="Controllers\TemplatesEmailsController.cs" />
     <Compile Include="Controllers\UnidadesController.cs" />
     <Compile Include="Controllers\UsuariosController.cs" />
+    <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Controllers\VotosBrancosController.cs" />
     <Compile Include="Controllers\VotosController.cs" />
     <Compile Include="DTO\AcrescimoLimiteDTO.cs" />
@@ -911,7 +832,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
     <Folder Include="Assets\js\plugins\Highcharts5.0.1.4\api\css\images\" />
   </ItemGroup>
   <ItemGroup>

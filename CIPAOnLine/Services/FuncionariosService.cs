@@ -1,12 +1,9 @@
 ﻿using CIPAOnLine.Exceptions;
 using CIPAOnLine.Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Data.Entity.Migrations;
 using CIPAOnLine.DTO;
-using System.Diagnostics;
 
 namespace CIPAOnLine.Services
 {

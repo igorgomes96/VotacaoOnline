@@ -382,7 +382,7 @@ namespace CIPAOnLine.Controllers
             {
                 return Content(HttpStatusCode.Conflict, "Eleição já cadastrada!");
             }
-            catch
+            catch (Exception ex)
             {
                 return Content(HttpStatusCode.InternalServerError, "Ocorreu um erro desconhecido. Por favor, entre em contato com o suporte.");
             }

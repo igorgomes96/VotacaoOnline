@@ -2,21 +2,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Data.Entity.Migrations;
-using System.Text;
-using System.Threading;
 using CIPAOnLine.DTO;
-using CIPAOnLine.Resources;
 using CIPAOnLine.Exceptions;
-using System.Security.Principal;
 
 namespace CIPAOnLine.Services
 {
     public class UsuariosService
     {
         private Modelo db = new Modelo();
-        private AuthService authService = new AuthService();
         private FuncionariosService funcionariosService = new FuncionariosService();
         
         public IEnumerable<Usuario> GetAdministradores()
