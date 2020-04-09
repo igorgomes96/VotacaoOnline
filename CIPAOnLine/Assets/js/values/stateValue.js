@@ -48,12 +48,12 @@ angular.module('cipaApp').value('stateValue', {
 					}
 				]
 			},
-			{
-				state: 'navContainer.emails',
-				label: 'Comunicados',
-				active: false,
-				icon: 'fa fa-envelope'
-            },
+			//{
+			//	state: 'navContainer.emails',
+			//	label: 'Comunicados',
+			//	active: false,
+			//	icon: 'fa fa-envelope'
+   //         },
             {
                 state: 'navContainer.administradores',
                 label: 'Administradores',

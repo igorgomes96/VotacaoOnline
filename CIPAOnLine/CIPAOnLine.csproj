@@ -656,7 +656,6 @@
     <Content Include="Global.asax" />
     <Content Include="index.html" />
     <None Include="Properties\PublishProfiles\Default Settings.pubxml" />
-    <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Resources\email-confirmacao-candidatura.html" />
     <Content Include="Resources\email-aprovacao-candidatura.html" />
     <None Include="Resources\email-apuracao-votos.html" />
@@ -823,7 +822,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
